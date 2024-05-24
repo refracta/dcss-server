@@ -22,8 +22,8 @@ REVISION="$(git-do rev-parse HEAD | cut -c 1-10)"
 REVISION_FULL="$(git-do describe --long HEAD)"
 REVISION_OLD="$(echo "select hash from versions order by time desc limit 1;" | sqlite3 ${VERSIONS_DB})"
 
-[[ "$REVISION" == "$REVISION_OLD" ]] && \
-    abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
+# [[ "$REVISION" == "$REVISION_OLD" ]] && \
+#    abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
 prompt "start update build"
 
@@ -47,9 +47,9 @@ fi
 prompt "compile ${GAME}-${REVISION}"
 
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-trunk.sh as well if make parameters change!
-##################################################################################################
 
-ccache -s
+say-do echo "Hello World"
+say-do ccache -s
 say-do crawl-do nice make -C source \
     GAME=${GAME}-${REVISION} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
@@ -63,7 +63,7 @@ say-do crawl-do nice make -C source \
     USE_PCRE=y \
     EXTERNAL_FLAGS_L="-g"
     
-ccache -s
+say-do ccache -s
 say-do crawl-do nice make -C source \
     GAME=${GAME}-${REVISION} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
@@ -78,7 +78,7 @@ say-do crawl-do nice make -C source \
     EXTERNAL_FLAGS_L="-g"
 prompt "install ${GAME}-${REVISION}"
 
-ccache -s
+say-do ccache -s
 say-do crawl-do nice make -C source \
     GAME=${GAME}-${REVISION} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
@@ -91,7 +91,7 @@ say-do crawl-do nice make -C source \
     SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
     USE_PCRE=y \
     EXTERNAL_FLAGS_L="-g"
-ccache -s
+say-do ccache -s
 
 if [[ "$(uname)" != "Darwin" ]] && {
         ps -fC ${GAME}-${REVISION} |
