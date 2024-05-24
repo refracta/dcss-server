@@ -5,7 +5,7 @@ FROM ubuntu:24.04
 # This Dockerfile will fail if the repository is not used as the build context.
 # do an early COPY step to ensure that build is being invoked correctly.
 
-COPY server/testing-container/healthcheck.sh /
+COPY server/healthcheck.sh /
 
 ENV DGL_CHROOT=""
 ENV DGL_CONF_HOME=/home/crawl-dev/dgamelaunch-config/
@@ -51,7 +51,7 @@ RUN ccache -M 0
 
 # allow crawl-dev to run various things with sudo without a password. These
 # permissions may be too open for a production server.
-COPY server/testing-container/dgl_sudoers /etc/sudoers.d/
+COPY server/dgl_sudoers /etc/sudoers.d/
 
 WORKDIR /home/crawl-dev
 
@@ -69,7 +69,7 @@ RUN mkdir logs \
     && cd dgamelaunch && ./autogen.sh --enable-debugfile --enable-sqlite --enable-shmem && make
 
 USER root
-COPY server/testing-container/crawler_sshdconfig /tmp
+COPY server/crawler_sshdconfig /tmp
 RUN cd dgamelaunch \
     && mkdir -p $DGL_CHROOT/bin \
     && make install && cp ee virus $DGL_CHROOT/bin \
@@ -95,7 +95,7 @@ COPY --chown=crawl-dev:crawl-dev ./games.d /home/crawl-dev/dgamelaunch-config/ga
 COPY --chown=crawl-dev:crawl-dev ./config.py ./crawl-git.conf ./dgamelaunch.conf ./dgl-manage.conf sh-utils /home/crawl-dev/dgamelaunch-config/
 COPY --chown=crawl-dev:crawl-dev ./server/webtiles ./server/trigger-rebuild.pl ./server/auth-save-downloader.pl /home/crawl-dev/dgamelaunch-config/server/
 RUN ls -al && sed -i -e 's/"127.0.0.1"/"0.0.0.0"/' /home/crawl-dev/dgamelaunch-config/config.py
-COPY server/testing-container/httpd.conf /etc/apache2/sites-available
+COPY server/httpd.conf /etc/apache2/sites-available
 
 # this is taken from build-crawl-dirs to here because it's the only directory that's outside of volumes due to not storing state
 RUN mkdir -p /cores
@@ -103,12 +103,12 @@ RUN mkdir -p /cores
 
 # set up entry point -- this script starts webtiles and sshd, and sets up the
 # bind mounts.
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/docker-entrypoint.sh /
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/docker-entrypoint-build-all.sh /
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/docker-entrypoint-build-trunk.sh /
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/enable-apache.sh /
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/setup-cron.sh /
-COPY --chown=crawl-dev:crawl-dev --chmod=755 server/testing-container/install-crawl-versions.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/docker-entrypoint.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/docker-entrypoint-build-all.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/docker-entrypoint-build-trunk.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/enable-apache.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/setup-cron.sh /
+COPY --chown=crawl-dev:crawl-dev --chmod=755 server/install-crawl-versions.sh /
 
 # finally copy in utils, which will be often invalidated while working on the
 # docker setup itself.
