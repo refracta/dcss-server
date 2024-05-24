@@ -10,12 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Docker container build
-      run: |
-        utils/build-testing-container.sh
-
     - name: Docker container test
       run: |
-        cd utils/testing-container
+        cd server
         sed -i 's|entrypoint:.*|entrypoint: /docker-entrypoint-build-all.sh|' docker-compose.yaml
         docker-compose up

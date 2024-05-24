@@ -1,0 +1,19 @@
+version: "2"
+services:
+  dcss:
+    image: dcss-server:latest
+    tty: true
+    stdin_open: true
+    entrypoint: /docker-entrypoint.sh
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "2222:22"
+      - "8081:80"
+    volumes:
+      - ./data/versionsdb:/versionsdb/
+      - ./data/crawl-master:/crawl-master/
+      - ./data/dgldir:/dgldir/
+      - ./data/usr-games:/usr/games
