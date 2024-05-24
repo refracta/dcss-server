@@ -14,5 +14,5 @@ jobs:
     - name: Docker container test
       run: |
         cd server
-        sed -i 's|entrypoint:.*|entrypoint: /docker-entrypoint-trunk-all.sh|' docker-compose.yaml
+        sed -i 's|entrypoint:.*|entrypoint: /docker-entrypoint-build-all.sh|' docker-compose.yaml
         docker-compose up
