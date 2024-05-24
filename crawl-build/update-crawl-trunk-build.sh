@@ -22,8 +22,8 @@ REVISION="$(git-do rev-parse HEAD | cut -c 1-10)"
 REVISION_FULL="$(git-do describe --long HEAD)"
 REVISION_OLD="$(echo "select hash from versions order by time desc limit 1;" | sqlite3 ${VERSIONS_DB})"
 
-[[ "$REVISION" == "$REVISION_OLD" ]] && \
-    abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
+# [[ "$REVISION" == "$REVISION_OLD" ]] && \
+#    abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
 prompt "start update build"
 
