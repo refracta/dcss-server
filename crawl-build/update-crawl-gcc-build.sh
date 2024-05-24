@@ -62,7 +62,8 @@ prompt "compile ${GAME} (${REVISION})"
 
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-gcc6.sh as well if make parameters change!
 ##################################################################################################
-
+say-do echo "Hello World2"
+say-do ccache -s
 say-do crawl-do nice make -C source \
     GAME=${GAME} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
