@@ -33,9 +33,6 @@ cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/
 cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-kimchicrawl-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-kimchicrawl/$NAME.rc"
 cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/crawl-kimchicrawl/$NAME.macro"
 
-cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-testcrawl-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-testcrawl/$NAME.rc"
-cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/crawl-testcrawl/$NAME.macro"
-
 cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-bcadrencrawl-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-bcadrencrawl/$NAME.rc"
 cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/crawl-bcadrencrawl/$NAME.macro"
 

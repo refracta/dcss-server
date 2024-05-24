@@ -27,12 +27,6 @@ sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-sprint
 sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-descent
 sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-zotdef
 
-sudo mkdir /var/www/crawl/meta/testcrawl/
-cd /var/www/crawl/meta/testcrawl/
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-testcrawl/saves/logfile
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-testcrawl/saves/milestones
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-testcrawl/saves/scores
-
 sudo mkdir /var/www/crawl/meta/dcssca/
 cd /var/www/crawl/meta/dcssca/
 sudo ln -s $DGL_CHROOT/crawl-master/crawl-dcssca/saves/logfile
