@@ -6,6 +6,10 @@ source "$DGL_CONF_HOME/dgl-manage.conf"
 /home/crawl-dev/dgamelaunch-config/bin/dgl publish --confirm
 ccache -s
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
+ccache -s
+/home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
+ccache -s
+/home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
 
 if [ "$1" = '--provision-chroot' ]; then
     /install-crawl-versions.sh
