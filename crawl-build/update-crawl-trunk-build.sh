@@ -49,6 +49,7 @@ prompt "compile ${GAME}-${REVISION}"
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-trunk.sh as well if make parameters change!
 ##################################################################################################
 
+ccache -s
 say-do crawl-do nice make -C source \
     GAME=${GAME}-${REVISION} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
@@ -61,8 +62,35 @@ say-do crawl-do nice make -C source \
     SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
     USE_PCRE=y \
     EXTERNAL_FLAGS_L="-g"
-
+    
+ccache -s
+say-do crawl-do nice make -C source \
+    GAME=${GAME}-${REVISION} \
+    GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
+    INSTALL_UGRP=$CRAWL_UGRP \
+    WEBTILES=YesPlease USE_DGAMELAUNCH=YesPlease WIZARD=YesPlease \
+    STRIP=true DESTDIR=${DESTDIR} prefix= bin_prefix=/bin \
+    SAVEDIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/saves \
+    DATADIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/data \
+    WEBDIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/data/web \
+    SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
+    USE_PCRE=y \
+    EXTERNAL_FLAGS_L="-g"
 prompt "install ${GAME}-${REVISION}"
+
+ccache -s
+say-do crawl-do nice make -C source \
+    GAME=${GAME}-${REVISION} \
+    GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
+    INSTALL_UGRP=$CRAWL_UGRP \
+    WEBTILES=YesPlease USE_DGAMELAUNCH=YesPlease WIZARD=YesPlease \
+    STRIP=true DESTDIR=${DESTDIR} prefix= bin_prefix=/bin \
+    SAVEDIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/saves \
+    DATADIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/data \
+    WEBDIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/data/web \
+    SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
+    USE_PCRE=y \
+    EXTERNAL_FLAGS_L="-g"
 
 if [[ "$(uname)" != "Darwin" ]] && {
         ps -fC ${GAME}-${REVISION} |
