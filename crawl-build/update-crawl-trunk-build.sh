@@ -91,6 +91,7 @@ say-do crawl-do nice make -C source \
     SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
     USE_PCRE=y \
     EXTERNAL_FLAGS_L="-g"
+ccache -s
 
 if [[ "$(uname)" != "Darwin" ]] && {
         ps -fC ${GAME}-${REVISION} |
