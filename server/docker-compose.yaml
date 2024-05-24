@@ -7,7 +7,7 @@ services:
     entrypoint: /docker-entrypoint.sh
     build:
       context: ../
-      dockerfile: Dockerfile
+      dockerfile: server/Dockerfile
     ports:
       - "8080:8080"
       - "2222:22"
