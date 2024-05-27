@@ -6,7 +6,7 @@ split -b 100M data/ccache.tar.gz data/ccache_part_
 
 tag=$(date +v%y%m%d%H%M)
 
-gh release create $tag -R refracta/dcss-webtiles-server -t build-ccache -B ccache -n ""
+gh release create $tag -R refracta/dcss-webtiles-server --title build-ccache --target ccache -n ""
 
 gh release upload $tag data/ccache_part_* -R refracta/dcss-webtiles-server
 
