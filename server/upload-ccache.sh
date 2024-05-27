@@ -2,7 +2,7 @@
 
 tar -czf data/ccache.tar.gz -C data ccache
 
-split -b 100M data/ccache.tar.gz data/ccache_part_
+split -b 2GiB data/ccache.tar.gz data/ccache_part_
 
 tag=$(date +v%y%m%d%H%M)
 
