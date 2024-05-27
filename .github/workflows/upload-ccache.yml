@@ -17,6 +17,6 @@ jobs:
         cp docker-compose.build-all.yml docker-compose.override.yml
         docker-compose up -d
         sleep 18000
-        ./upload-ccache.sh
+        ./upload-ccache.sh "build-ccache (from Action)"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
