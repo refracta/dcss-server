@@ -53,6 +53,11 @@ if (( $(echo "$VERSION <= 0.22" | bc -l) )); then
   CXX="ccache g++-7"
 fi
 
+if (( $(echo "$VERSION <= 0.17" | bc -l) )); then
+  CC="ccache gcc-6"
+  CXX="ccache g++-6"
+fi
+
 prompt "start update build"
 
 cd $CRAWL_REPOSITORY_DIR/crawl-ref
