@@ -4,7 +4,7 @@ title=${1:-build-ccache}
 
 tar -czf data/ccache.tar.gz -C data ccache
 
-split -b 2GiB data/ccache.tar.gz data/ccache_part_
+split -b 1GiB data/ccache.tar.gz data/ccache_part_
 
 tag=$(date -u +v%y%m%d%H%M)
 
