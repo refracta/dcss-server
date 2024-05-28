@@ -60,11 +60,11 @@ if (( VERSION_INT <= 17 )); then
   CXX="ccache g++-6"
 fi
 
-if (( VERSION_INT <= 15 )); then
-    echo "Patching git://gitorious.org to https://github.com in .gitmodules..."
-    sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $CRAWL_REPOSITORY_DIR/.gitmodules
-    cd $CRAWL_REPOSITORY_DIR && git submodule update --init
-fi
+#if (( VERSION_INT <= 15 )); then
+#    echo "Patching git://gitorious.org to https://github.com in .gitmodules..."
+#    sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $CRAWL_REPOSITORY_DIR/.gitmodules
+#    cd $CRAWL_REPOSITORY_DIR && git submodule update --init
+#fi
 
 prompt "start update build"
 

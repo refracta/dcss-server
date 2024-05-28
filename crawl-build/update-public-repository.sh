@@ -40,6 +40,7 @@ update-crawl-ref() {
 
 update-submodules() {
     say "Updating git submodules in $REPO_DIR"
+    sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $REPO_DIR/.gitmodules
     ( cd $REPO_DIR && git submodule update --init )
 }
 
