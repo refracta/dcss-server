@@ -58,6 +58,11 @@ if (( $(echo "$VERSION <= 0.17" | bc -l) )); then
   CXX="ccache g++-6"
 fi
 
+if (( $(echo "$VERSION <= 0.15" | bc -l) )); then
+    echo "Patching git://gitorious.org to https://github.com in .gitmodules..."
+    sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $CRAWL_REPOSITORY_DIR/.gitmodules
+fi
+
 prompt "start update build"
 
 cd $CRAWL_REPOSITORY_DIR/crawl-ref

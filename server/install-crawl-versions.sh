@@ -25,8 +25,8 @@ cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/c
 # /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.20
 # /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.19
 # /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.18
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.17
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.16
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.17
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.16
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.15
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.14
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.13
