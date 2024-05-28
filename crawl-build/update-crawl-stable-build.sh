@@ -41,26 +41,29 @@ REVISION_OLD="${VER_STR_OLD##*-g}"
 [[ "$REVISION" == "$REVISION_OLD" || "$VER_STR" = "$VER_STR_OLD" ]] && \
     abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
+VERSION_INT=$(echo $VERSION | cut -d. -f2)
 CC="ccache gcc"
 CXX="ccache g++"
-if (( $(echo "$VERSION <= 0.24" | bc -l) )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
+
+if (( VERSION_INT <= 24 )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
     echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
     sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
 fi
 
-if (( $(echo "$VERSION <= 0.22" | bc -l) )); then
+if (( VERSION_INT <= 22 )); then
   CC="ccache gcc-7"
   CXX="ccache g++-7"
 fi
 
-if (( $(echo "$VERSION <= 0.17" | bc -l) )); then
+if (( VERSION_INT <= 17 )); then
   CC="ccache gcc-6"
   CXX="ccache g++-6"
 fi
 
-if (( $(echo "$VERSION <= 0.15" | bc -l) )); then
+if (( VERSION_INT <= 15 )); then
     echo "Patching git://gitorious.org to https://github.com in .gitmodules..."
     sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $CRAWL_REPOSITORY_DIR/.gitmodules
+    cd $CRAWL_REPOSITORY_DIR && git submodule update --init
 fi
 
 prompt "start update build"
