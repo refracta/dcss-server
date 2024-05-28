@@ -41,9 +41,16 @@ REVISION_OLD="${VER_STR_OLD##*-g}"
 [[ "$REVISION" == "$REVISION_OLD" || "$VER_STR" = "$VER_STR_OLD" ]] && \
     abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
+CC="ccache gcc"
+CXX="ccache g++"
 if (( $(echo "$VERSION <= 0.24" | bc -l) )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
     echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
     sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
+fi
+
+if (( $(echo "$VERSION <= 0.22" | bc -l) )); then
+  CC="ccache gcc-7"
+  CXX="ccache g++-7"
 fi
 
 prompt "start update build"
@@ -70,7 +77,7 @@ prompt "compile ${GAME} (${REVISION})"
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-stable.sh as well if make parameters change!
 ##################################################################################################
 
-say-do crawl-do nice make CC="ccache gcc" CXX="ccache g++" -C source \
+say-do crawl-do nice make CC="$CC" CXX="$CXX" -C source \
     GAME=${GAME} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
     INSTALL_UGRP=$CRAWL_UGRP \
