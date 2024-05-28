@@ -41,6 +41,7 @@ REVISION_OLD="${VER_STR_OLD##*-g}"
 [[ "$REVISION" == "$REVISION_OLD" || "$VER_STR" = "$VER_STR_OLD" ]] && \
     abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
+# Legacy version patch & setting
 VERSION_INT=$(echo $VERSION | cut -d. -f2)
 CC="ccache gcc"
 CXX="ccache g++"
@@ -51,20 +52,16 @@ if (( VERSION_INT <= 24 )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/
 fi
 
 if (( VERSION_INT <= 22 )); then
+  echo "Setting compiler to gcc-7 and g++-7..."
   CC="ccache gcc-7"
   CXX="ccache g++-7"
 fi
 
 if (( VERSION_INT <= 17 )); then
+  echo "Setting compiler to gcc-6 and g++-6..."
   CC="ccache gcc-6"
   CXX="ccache g++-6"
 fi
-
-#if (( VERSION_INT <= 15 )); then
-#    echo "Patching git://gitorious.org to https://github.com in .gitmodules..."
-#    sed -i 's/git:\/\/gitorious.org/https:\/\/github.com/g' $CRAWL_REPOSITORY_DIR/.gitmodules
-#    cd $CRAWL_REPOSITORY_DIR && git submodule update --init
-#fi
 
 prompt "start update build"
 
