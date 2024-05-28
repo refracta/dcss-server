@@ -41,6 +41,11 @@ REVISION_OLD="${VER_STR_OLD##*-g}"
 [[ "$REVISION" == "$REVISION_OLD" || "$VER_STR" = "$VER_STR_OLD" ]] && \
     abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
+if [[ $VERSION -le 24 && -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
+    echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
+    sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
+fi
+
 prompt "start update build"
 
 cd $CRAWL_REPOSITORY_DIR/crawl-ref

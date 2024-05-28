@@ -11,13 +11,13 @@ cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/c
 cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/crawl-kimchicrawl
 cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/crawl-bcadrencrawl
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.31
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.30
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.29
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.28
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.27
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.26
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.25
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.31
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.30
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.29
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.28
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.27
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.26
+# /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.25
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.24
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.23
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.22
