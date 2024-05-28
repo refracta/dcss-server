@@ -4,6 +4,11 @@ mkdir -p data
 
 latest_release=$(curl -s https://api.github.com/repos/refracta/dcss-webtiles-server/releases/latest)
 
+release_tag=$(echo $latest_release | jq -r '.tag_name')
+release_title=$(echo $latest_release | jq -r '.name')
+
+echo "Latest release: $release_title ($release_tag)"
+
 assets=$(echo $latest_release | jq -r '.assets[] | select(.name | test("^ccache_part_")) | .browser_download_url')
 
 for url in $assets; do
