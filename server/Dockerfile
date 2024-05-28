@@ -23,7 +23,7 @@ RUN apt-get install -y --no-install-recommends sudo git bash build-essential aut
 RUN echo "deb [trusted=yes] http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
     echo "deb [trusted=yes] http://archive.ubuntu.com/ubuntu/ focal main universe" >> /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y gcc-6 g++-6 gcc-7 g++-7 \
+    apt-get install -y gcc-6 g++-6 gcc-7 g++-7 && \
     apt-get install -y libsdl1.2-dev libsdl-image1.2-dev
 
 RUN pip3 install tornado --break-system-packages \
