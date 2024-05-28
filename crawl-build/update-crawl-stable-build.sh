@@ -41,8 +41,7 @@ REVISION_OLD="${VER_STR_OLD##*-g}"
 [[ "$REVISION" == "$REVISION_OLD" || "$VER_STR" = "$VER_STR_OLD" ]] && \
     abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
-VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2}')
-if (( $(echo "$VERSION_NUMBER < 0.25" | bc -l) )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
+if (( $(echo "$VERSION <= 0.24" | bc -l) )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
     echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
     sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
 fi
