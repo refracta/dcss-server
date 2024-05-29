@@ -49,7 +49,7 @@ CXX="ccache g++"
 if (( VERSION_INT <= 24 )); then
   if [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
     echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
-    sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $SPECIES_GEN_PATH
+    sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
   fi
 
   echo "Setting compiler to gcc-6 and g++-6..."
