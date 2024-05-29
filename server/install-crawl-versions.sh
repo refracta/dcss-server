@@ -11,7 +11,7 @@ cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/c
 cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/crawl-kimchicrawl
 cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/crawl-bcadrencrawl
 
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
+#/home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
 for version in {31..11}; do
   /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.$version
 done
