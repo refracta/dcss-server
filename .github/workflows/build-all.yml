@@ -28,3 +28,4 @@ jobs:
         cp docker-compose.build-all.yml docker-compose.override.yml
         docker-compose up -d
         ( docker-compose logs -f | awk '/Starting webtiles server webtiles/ {matched=1; start_time=systime();} matched && systime() - start_time >= 10 {exit} !matched {print} ' )
+        ls data/crawl-master
