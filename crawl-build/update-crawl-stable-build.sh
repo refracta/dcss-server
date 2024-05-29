@@ -46,17 +46,20 @@ VERSION_INT=$(echo $VERSION | cut -d. -f2)
 CC="ccache gcc"
 CXX="ccache g++"
 
-if (( VERSION_INT <= 24 )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
-  echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
-  sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
-  echo "Patching yaml.load(open(f_path)) to yaml.load(open(f_path), Loader=yaml.FullLoader) in species-gen.py..."
-  sed -i 's/yaml.load(open(f_path))/yaml.load(open(f_path), Loader=yaml.FullLoader)/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
-fi
-
 if (( VERSION_INT <= 24 )); then
+  if [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
+    echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
+    sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $SPECIES_GEN_PATH
+  fi
+
   echo "Setting compiler to gcc-6 and g++-6..."
   CC="ccache gcc-6"
   CXX="ccache g++-6"
+fi
+
+if (( VERSION_INT <= 23 )); then
+  echo "Patching yaml.load(open(f_path)) to yaml.safe_load(open(f_path)) in species-gen.py..."
+  sed -i 's/yaml.load(open(f_path))/yaml.safe_load(open(f_path))/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
 fi
 
 if (( VERSION_INT <= 16 )); then
