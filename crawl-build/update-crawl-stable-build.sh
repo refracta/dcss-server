@@ -49,6 +49,8 @@ CXX="ccache g++"
 if (( VERSION_INT <= 24 )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py ]]; then
   echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
   sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
+  echo "Patching yaml.load(open(f_path)) to yaml.load(open(f_path), Loader=yaml.FullLoader) in species-gen.py..."
+  sed -i 's/yaml.load(open(f_path))/yaml.load(open(f_path), Loader=yaml.FullLoader)/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
 fi
 
 if (( VERSION_INT <= 24 )); then
