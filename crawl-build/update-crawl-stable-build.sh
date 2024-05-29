@@ -51,13 +51,13 @@ if (( VERSION_INT <= 24 )) && [[ -f $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/
   sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $CRAWL_REPOSITORY_DIR/crawl-ref/source/util/species-gen.py
 fi
 
-if (( VERSION_INT <= 22 )); then
+if (( VERSION_INT <= 24 )); then
   echo "Setting compiler to gcc-7 and g++-7..."
   CC="ccache gcc-7"
   CXX="ccache g++-7"
 fi
 
-if (( VERSION_INT <= 17 )); then
+if (( VERSION_INT <= 20 )); then
   echo "Setting compiler to gcc-6 and g++-6..."
   CC="ccache gcc-6"
   CXX="ccache g++-6"
