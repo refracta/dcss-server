@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Docker container test
+    - name: Build test
       run: |
         cd server
         ./download-ccache.sh
