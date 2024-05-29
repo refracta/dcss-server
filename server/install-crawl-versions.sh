@@ -12,7 +12,7 @@ cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/c
 cp -a --no-clobber $DGL_CHROOT/crawl-master/crawl-git $DGL_CHROOT/crawl-master/crawl-bcadrencrawl
 
 #/home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
-for version in {16..11}; do
+for version in {31..11}; do
   /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.$version
 done
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 dcssca crawl-forks/dcssca/bugfix
