@@ -8,9 +8,9 @@ services:
       context: ../
       dockerfile: server/Dockerfile
     ports:
-      - "8080:8080"
-      - "2222:22"
-      - "8081:80"
+      - ":8080"
+      - ":22"
+      - ":80"
     volumes:
       - ./data/versionsdb:/versionsdb
       - ./data/crawl-master:/crawl-master
