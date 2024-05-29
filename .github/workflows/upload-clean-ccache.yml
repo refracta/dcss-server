@@ -26,7 +26,7 @@ jobs:
         cd server
         cp docker-compose.build-all.yml docker-compose.override.yml
         docker-compose up -d
-        ( docker-compose logs -f | awk '/Starting webtiles server webtiles/ {matched=1; start_time=systime();} matched && systime() - start_time >= 10 {exit} !matched {print} ' )
+        docker-compose logs -f | awk '/Starting webtiles server webtiles/ {matched=1; start_time=systime()} {print} matched && systime() - start_time >= 10 {exit}'
         ls data/crawl-master
         ./upload-ccache.sh "build-clean-ccache (from Action)"
       env:
