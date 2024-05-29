@@ -16,8 +16,7 @@ for version in {31..11}; do
   /home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.$version
 done
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 dcssca crawl-forks/dcssca/bugfix
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 hellcrawl crawl-forks/hellcrawl/bugfix
-/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 gnollcrawl crawl-forks/gnollcrawl/bugfix
+/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 hellcrawl crawl-forks/hellcrawl/bugfix /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc6 gnollcrawl crawl-forks/gnollcrawl/bugfix
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc7 bloatcrawl2 bloatcrawl2/master
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc stoatsoup stoatsoup/master
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc7 gooncrawl gooncrawl/gooncrawl_stable
