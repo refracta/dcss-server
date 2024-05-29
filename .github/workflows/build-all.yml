@@ -26,4 +26,5 @@ jobs:
         cd server
         ./download-ccache.sh
         cp docker-compose.build-all.yml docker-compose.override.yml
-        docker-compose up
+        docker-compose up -d
+        docker-compose logs -f | grep -m 1 "Starting webtiles server webtiles"

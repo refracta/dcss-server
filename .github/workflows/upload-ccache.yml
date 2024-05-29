@@ -27,7 +27,7 @@ jobs:
         ./download-ccache.sh
         cp docker-compose.build-all.yml docker-compose.override.yml
         docker-compose up -d
-        sleep 18000
+        docker-compose logs -f | grep -m 1 "Starting webtiles server webtiles"
         ./upload-ccache.sh "build-ccache (from Action)"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
