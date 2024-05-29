@@ -1,0 +1,33 @@
+name: upload-clean-ccache
+
+on:
+  push:
+    branches: [ upload-clean-ccache ]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@v10
+      with:
+        root-reserve-mb: 16384
+        swap-size-mb: 1024
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-docker-images: 'true'
+        remove-codeql: 'true'
+
+    - uses: actions/checkout@v2
+
+    - name: Build & upload
+      run: |
+        cd server
+        cp docker-compose.build-all.yml docker-compose.override.yml
+        docker-compose up -d
+        ( docker-compose logs -f | awk '/Starting webtiles server webtiles/ {matched=1; start_time=systime();} matched && systime() - start_time >= 10 {exit} !matched {print} ' )
+        ls data/crawl-master
+        ./upload-ccache.sh "build-clean-ccache (from Action)"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
