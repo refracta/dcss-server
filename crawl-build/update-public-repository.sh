@@ -58,6 +58,11 @@ apply-patch() {
     echo "Patching regex in gen-mi-enum... (VERSION <= 0.16)"
     sed -i 's/monster_info_flags\\n{\\n/monster_info_flags\\n\\{\\n/' $REPO_DIR/crawl-ref/source/util/gen-mi-enum
   fi
+
+  if (($BRANCH == "bcadrencrawl/bCrawl")) && [[ -f $REPO_DIR/crawl-ref/source/describe-spells.cc ]]; then
+    echo "Patching broken if condition in describe-spells.cc... (BcadrenCrawl)"
+    sed -i 's/if (!testbits(get_spell_flags(spell), spflag::MR_check) || spell == SPELL_PAIN))$/if (!testbits(get_spell_flags(spell), spflag::MR_check) || spell == SPELL_PAIN)/' $REPO_DIR/crawl-ref/source/describe-spells.cc
+  fi
 }
 
 BRANCH=$1
