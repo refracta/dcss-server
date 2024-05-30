@@ -52,6 +52,12 @@ if (( VERSION_INT <= 24 )); then
   CXX="ccache g++-7"
 fi
 
+if (( VERSION_INT <= 17 )); then
+  echo "Setting compiler to gcc-6 and g++-6..."
+  CC="ccache gcc-6"
+  CXX="ccache g++-6"
+fi
+
 prompt "start update build"
 
 cd $CRAWL_REPOSITORY_DIR/crawl-ref
