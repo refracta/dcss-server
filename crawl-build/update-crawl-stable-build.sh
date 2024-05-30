@@ -75,6 +75,7 @@ prompt "compile ${GAME} (${REVISION})"
 
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-stable.sh as well if make parameters change!
 ##################################################################################################
+
 say-do crawl-do nice make CC="$CC" CXX="$CXX" -C source \
     GAME=${GAME} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
