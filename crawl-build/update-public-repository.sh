@@ -46,9 +46,24 @@ update-submodules() {
     ( cd $REPO_DIR && git submodule update --init )
 }
 
+apply-patch() {
+  if [[ -f $REPO_DIR/crawl-ref/source/util/species-gen.py ]]; then
+    echo "Patching collections.MutableMapping to collections.abc.MutableMapping in species-gen.py..."
+    sed -i 's/collections.MutableMapping/collections.abc.MutableMapping/g' $REPO_DIR/crawl-ref/source/util/species-gen.py
+    echo "Patching yaml.load(open(f_path)) to yaml.safe_load(open(f_path)) in species-gen.py..."
+    sed -i 's/yaml.load(open(f_path))/yaml.safe_load(open(f_path))/g' $REPO_DIR/crawl-ref/source/util/species-gen.py
+  fi
+
+  if [[ -f $REPO_DIR/crawl-ref/source/util/gen-mi-enum ]]; then
+    echo "Patching regex in gen-mi-enum..."
+    sed -i 's/monster_info_flags\\n{\\n/monster_info_flags\\n\\{\\n/' $REPO_DIR/crawl-ref/source/util/gen-mi-enum
+  fi
+}
+
 BRANCH=$1
 REVISION="$2"
 [[ -n "$BRANCH" ]] || abort-saying "$0: Checkout branch not specified!"
 clone-crawl-ref
 update-crawl-ref
 update-submodules
+apply-patch
