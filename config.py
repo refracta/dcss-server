@@ -56,17 +56,20 @@ template_game = {
     "socket_path": "%%CHROOT_WEBDIR%%/sockets",
 }
 
-
 def create_game(game_key, overrides=None):
     if overrides is None:
         overrides = {}
 
+    version = game_key
+    if 'version' in overrides:
+        version = overrides['version']
+
     config = template_game.copy()
     config.update({
-        "name": overrides.get("name", game_key.replace('-', ' ').title()),
-        "rcfile_path": config["rcfile_path"].format(game_key),
-        "macro_path": config["macro_path"].format(game_key),
-        "inprogress_path": config["inprogress_path"].format(game_key)
+        "name": game_key,
+        "rcfile_path": config["rcfile_path"].format(version),
+        "macro_path": config["macro_path"].format(version),
+        "inprogress_path": config["inprogress_path"].format(version)
     })
     config.update(overrides)
 
@@ -74,36 +77,46 @@ def create_game(game_key, overrides=None):
 
 
 games = OrderedDict([
-    create_game("dcssca", {"name": "DCSS Circus Animals"}),
-    create_game("hellcrawl", {"name": "HellCrawl"}),
-    create_game("gnollcrawl", {"name": "GnollCrawl"}),
-    create_game("bloatcrawl2", {"name": "BloatCrawl 2"}),
-    create_game("gooncrawl", {"name": "GoonCrawl"}),
-    create_game("xcrawl", {"name": "X-Crawl"}),
-    create_game("stoatsoup", {"name": "Stoat Soup"}),
-    create_game("kimchicrawl", {"name": "KimchiCrawl"}),
-    create_game("bcadrencrawl", {"name": "BcadrenCrawl"}),
+    create_game("dcssca", {"name": "DCSS Circus Animals", "pre_options": ["dcssca"]}),
+    create_game("hellcrawl", {"name": "HellCrawl", "pre_options": ["hellcrawl"]}),
+    create_game("gnollcrawl", {"name": "GnollCrawl", "pre_options": ["gnollcrawl"]}),
+    create_game("bloatcrawl2", {"name": "BloatCrawl 2", "pre_options": ["bloatcrawl2"]}),
+    create_game("gooncrawl", {"name": "GoonCrawl", "pre_options": ["gooncrawl"]}),
+    create_game("xcrawl", {"name": "X-Crawl", "pre_options": ["xcrawl"]}),
+    create_game("stoatsoup", {"name": "Stoat Soup", "pre_options": ["stoatsoup"]}),
+    create_game("kimchicrawl", {"name": "KimchiCrawl", "pre_options": ["kimchicrawl"]}),
+    create_game("bcadrencrawl", {"name": "BcadrenCrawl", "pre_options": ["bcadrencrawl"]}),
     create_game("dcss-git", {
         "name": "DCSS trunk",
-        "crawl_binary": GIT_LAUNCHER
+        "crawl_binary": GIT_LAUNCHER,
+        "version": "git"
     }),
     create_game("dcss-git-descent", {
         "name": "DCSS Descent!",
         "crawl_binary": GIT_LAUNCHER,
-        "pre_options": ["descent"]
+        "options": ["-descent"],
+        "version": "git"
     }),
     create_game("dcss-git-sprint", {
         "name": "Sprint trunk",
         "crawl_binary": GIT_LAUNCHER,
-        "pre_options": ["sprint"]
+        "options": ["-sprint"],
+        "version": "git"
     }),
     create_game("dcss-git-tutorial", {
         "name": "Tutorial trunk",
         "crawl_binary": GIT_LAUNCHER,
-        "pre_options": ["tutorial"]
+        "options": ["-tutorial"],
+        "version": "git"
     }),
-    *[create_game(f'dcss-0.{version}', {"name": f'DCSS 0.{version}'}) for version in range(11, 31 + 1)]
-])
+    *[create_game(f'dcss-0.{version}',
+                  {
+                      "name": f'DCSS 0.{version}',
+                      "version": f'0.{version}',
+                      "pre_options": [f'0.{version}']
+                  }) for version in reversed(range(11, 31 + 1))]
+    ,])
+
 dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
 
 # Set to None not to read milestones
@@ -178,7 +191,7 @@ smtp_use_ssl = False
 smtp_user = "" # set to None for no auth
 smtp_password = ""
 smtp_from_addr = "noreply@crawl.example.org" # The address from which automated
-                                             # emails will be sent
+# emails will be sent
 
 # crypt() algorithm, e.g. "1" for MD5 or "6" for SHA-512; see crypt(3).
 # If false, use traditional DES (but then only the first eight characters
