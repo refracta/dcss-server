@@ -1,0 +1,14 @@
+Logged in as: $USERNAME
+
+Game selected: Dungeon Crawl Stone Soup 0.11
+
+B)ackup your save-game (for bug reports and debugging)
+
+The next option allows you to reset your options.
+ALL CHANGES YOU'VE MADE TO YOUR OPTIONS WILL BE LOST.
+
+O) Reset options
+
+q) Return to previous menu
+
+=>

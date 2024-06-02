@@ -1,0 +1,7 @@
+Logged in as: $USERNAME
+
+B) BloatCrawl 2               E) BcadrenCrawl
+C) DCSS Circus Animals        G) GnollCrawl
+H) HellCrawl                  K) KimchiCrawl
+N) GoonCrawl                  S) Stoat Soup
+X) X-Crawl

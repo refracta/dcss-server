@@ -11,21 +11,25 @@ sudo a2enmod rewrite
 sudo a2dissite 000-default #remove apache default site because it interferes with port 80
 sudo a2ensite httpd #use the simplified crawl config for serving files on port 80 inside the container
 
-sudo mkdir /var/www/crawl/meta/
-sudo mkdir /var/www/crawl/meta/git/
-cd /var/www/crawl/meta/git/
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/logfile
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/logfile-sprint
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/logfile-descent
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/logfile-zotdef
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/milestones
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/milestones-sprint
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/milestones-descent
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/milestones-zotdef
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-sprint
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-descent
-sudo ln -s $DGL_CHROOT/crawl-master/crawl-git/saves/scores-zotdef
+VERSIONS="git $(seq 11 31 | sed 's/^/0./')"
+BASE_DIR="/var/www/crawl/meta"
+
+for v in $VERSIONS; do
+    sudo mkdir -p $BASE_DIR/crawl-$v/
+    cd $BASE_DIR/crawl-$v/
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/logfile
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/logfile-sprint
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/logfile-descent
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/logfile-zotdef
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/milestones
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/milestones-sprint
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/milestones-descent
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/milestones-zotdef
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-sprint
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-descent
+    sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-zotdef
+done
 
 sudo mkdir /var/www/crawl/meta/dcssca/
 cd /var/www/crawl/meta/dcssca/

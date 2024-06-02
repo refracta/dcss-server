@@ -1,0 +1,15 @@
+Logged in as: $USERNAME
+
+Game selected: Dungeon Crawl Stone Soup 0.14
+
+P)lay Crawl    S)print    T)utorial
+
+o) Edit options    O) with Virus
+m) Edit macros     M) with Virus
+v) View changelog  V) with Virus
+
+A)dvanced options
+
+q) Return to main menu
+
+=>

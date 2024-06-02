@@ -40,164 +40,70 @@ watch_socket_dirs = True
 
 # Game configs
 # %n in paths is replaced by the current username
-games = OrderedDict([
-    ("dcssca", dict(
-        name = "DCSS Circus Animals",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "dcssca" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-dcssca/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-dcssca/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-dcssca/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("hellcrawl", dict(
-        name = "HellCrawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "hellcrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-hellcrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-hellcrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-hellcrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("gnollcrawl", dict(
-        name = "GnollCrawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "gnollcrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-gnollcrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-gnollcrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-gnollcrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("bloatcrawl2", dict(
-        name = "BloatCrawl 2",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "bloatcrawl2" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-bloatcrawl2/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-bloatcrawl2/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-bloatcrawl2/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("gooncrawl", dict(
-        name = "GoonCrawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "gooncrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-gooncrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-gooncrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-gooncrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("xcrawl", dict(
-        name = "X-Crawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "xcrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-xcrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-xcrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-xcrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("stoatsoup", dict(
-        name = "Stoat Soup",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "stoatsoup" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-stoatsoup/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-stoatsoup/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-stoatsoup/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("kimchicrawl", dict(
-        name = "KimchiCrawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "kimchicrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-kimchicrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-kimchicrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-kimchicrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("bcadrencrawl", dict(
-        name = "BcadrenCrawl",
-        crawl_binary = "/bin/crawl-stable-launcher.sh",
-        send_json_options = True,
-        pre_options  = [ "bcadrencrawl" ],
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-bcadrencrawl/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-bcadrencrawl/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-bcadrencrawl/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("dcss-git", dict(
-        name = "DCSS trunk",
-        crawl_binary = "/bin/crawl-git-launcher.sh",
-        send_json_options = True,
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-git/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets")),
-    ("descent-git", dict(
-        name = "DCSS Descent!",
-        crawl_binary = "/bin/crawl-git-launcher.sh",
-        send_json_options = True,
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-git-descent/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets",
-        options = ["-descent"])),
-    ("spr-git", dict(
-        name = "Sprint trunk",
-        crawl_binary = "/bin/crawl-git-launcher.sh",
-        send_json_options = True,
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-git-sprint/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets",
-        options = ["-sprint"])),
-    ("tut-git", dict(
-        name = "Tutorial trunk",
-        crawl_binary = "/bin/crawl-git-launcher.sh",
-        send_json_options = True,
-        rcfile_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        macro_path = "%%CHROOT_RCFILESDIR%%/crawl-git/",
-        morgue_path = "%%CHROOT_MORGUEDIR%%/%n/",
-        morgue_url = "https://archive.nemelex.cards/morgue/%n/",
-        inprogress_path = "%%CHROOT_INPROGRESSDIR%%/crawl-git-tut/",
-        ttyrec_path = "%%CHROOT_TTYRECDIR%%/%n/",
-        socket_path = "%%CHROOT_WEBDIR%%/sockets",
-        options = ["-tutorial"])),
-])
+# Constants for crawl binaries
+STABLE_LAUNCHER = "/bin/crawl-stable-launcher.sh"
+GIT_LAUNCHER = "/bin/crawl-git-launcher.sh"
 
+template_game = {
+    "crawl_binary": STABLE_LAUNCHER,
+    "send_json_options": True,
+    "rcfile_path": "%%CHROOT_RCFILESDIR%%/crawl-{}/",
+    "macro_path": "%%CHROOT_RCFILESDIR%%/crawl-{}/",
+    "morgue_path": "%%CHROOT_MORGUEDIR%%/%n/",
+    "morgue_url": "https://archive.nemelex.cards/morgue/%n/",
+    "inprogress_path": "%%CHROOT_INPROGRESSDIR%%/crawl-{}/",
+    "ttyrec_path": "%%CHROOT_TTYRECDIR%%/%n/",
+    "socket_path": "%%CHROOT_WEBDIR%%/sockets",
+}
+
+
+def create_game(game_key, overrides=None):
+    if overrides is None:
+        overrides = {}
+
+    config = template_game.copy()
+    config.update({
+        "name": overrides.get("name", game_key.replace('-', ' ').title()),
+        "rcfile_path": config["rcfile_path"].format(game_key),
+        "macro_path": config["macro_path"].format(game_key),
+        "inprogress_path": config["inprogress_path"].format(game_key)
+    })
+    config.update(overrides)
+
+    return game_key, config
+
+
+games = OrderedDict([
+    create_game("dcssca", {"name": "DCSS Circus Animals"}),
+    create_game("hellcrawl", {"name": "HellCrawl"}),
+    create_game("gnollcrawl", {"name": "GnollCrawl"}),
+    create_game("bloatcrawl2", {"name": "BloatCrawl 2"}),
+    create_game("gooncrawl", {"name": "GoonCrawl"}),
+    create_game("xcrawl", {"name": "X-Crawl"}),
+    create_game("stoatsoup", {"name": "Stoat Soup"}),
+    create_game("kimchicrawl", {"name": "KimchiCrawl"}),
+    create_game("bcadrencrawl", {"name": "BcadrenCrawl"}),
+    create_game("dcss-git", {
+        "name": "DCSS trunk",
+        "crawl_binary": GIT_LAUNCHER
+    }),
+    create_game("dcss-git-descent", {
+        "name": "DCSS Descent!",
+        "crawl_binary": GIT_LAUNCHER,
+        "pre_options": ["descent"]
+    }),
+    create_game("dcss-git-sprint", {
+        "name": "Sprint trunk",
+        "crawl_binary": GIT_LAUNCHER,
+        "pre_options": ["sprint"]
+    }),
+    create_game("dcss-git-tutorial", {
+        "name": "Tutorial trunk",
+        "crawl_binary": GIT_LAUNCHER,
+        "pre_options": ["tutorial"]
+    }),
+    *[create_game(f'dcss-0.{version}', {"name": f'DCSS 0.{version}'}) for version in range(11, 31 + 1)]
+])
 dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
 
 # Set to None not to read milestones

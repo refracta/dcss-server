@@ -1,23 +1,8 @@
-Crawl server (SERVER_REGION) hosted and maintained by SERVER_ADMIN.
-------------------------------------------------------------------------------
-Webtiles:           SERVER_URL
-Crawl information:  http://crawl.develz.org/
-Rebuild:            SERVER_REBUILD_URL
-------------------------------------------------------------------------------
-** Games on this server are recorded for in-progress viewing and playback! **
-------------------------------------------------------------------------------
-
 Logged in as: $USERNAME (admin)
-W) Watch games in progress Z) Change password  X) Change email address Q)uit
+W) Watch games in progress Z) Change password
+X) Change email address  Q)uit
 
-A) DCSS Trunk                 I) Stoat Soup
-B) DCSS TEST                  J) KimchiCrawl
-C) DCSS Circus Animals        K) BcadrenCrawl
-D) HellCrawl
-E) GnollCrawl
-F) BloatCrawl 2
-G) GoonCrawl
-H) X-Crawl
+D) DCSS Trunk                 F) DCSS Forks
+S) DCSS Stable Versions
 
-
-=> 
+=>
