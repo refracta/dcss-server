@@ -65,8 +65,9 @@ def create_game(game_key, overrides=None):
     version, inprogress = game_key, game_key
     if "version" in overrides:
         version = overrides["version"]
+        inprogress =  f"{version}"
     if "inprogress" in overrides and overrides['inprogress']:
-        inprogress = f"{version}-{overrides["inprogress"]}"
+        inprogress = f"{version}-{overrides['inprogress']}"
 
     config = template_game.copy()
     config.update(
@@ -77,8 +78,10 @@ def create_game(game_key, overrides=None):
             "inprogress_path": config["inprogress_path"].format(inprogress),
         }
     )
-    config.update(overrides)
+    del overrides['inprogress']
+    del overrides['version']
 
+    config.update(overrides)
     return game_key, config
 
 
