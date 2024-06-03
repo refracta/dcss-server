@@ -1,4 +1,5 @@
 import logging
+
 try:
     from collections import OrderedDict
 except ImportError:
@@ -56,66 +57,99 @@ template_game = {
     "socket_path": "%%CHROOT_WEBDIR%%/sockets",
 }
 
+
 def create_game(game_key, overrides=None):
     if overrides is None:
         overrides = {}
 
     version = game_key
-    if 'version' in overrides:
-        version = overrides['version']
+    if "version" in overrides:
+        version = overrides["version"]
 
     config = template_game.copy()
-    config.update({
-        "name": game_key,
-        "rcfile_path": config["rcfile_path"].format(version),
-        "macro_path": config["macro_path"].format(version),
-        "inprogress_path": config["inprogress_path"].format(version)
-    })
+    config.update(
+        {
+            "name": game_key,
+            "rcfile_path": config["rcfile_path"].format(version),
+            "macro_path": config["macro_path"].format(version),
+            "inprogress_path": config["inprogress_path"].format(version),
+        }
+    )
     config.update(overrides)
 
     return game_key, config
 
 
-games = OrderedDict([
-    create_game("dcssca", {"name": "DCSS Circus Animals", "pre_options": ["dcssca"]}),
-    create_game("hellcrawl", {"name": "HellCrawl", "pre_options": ["hellcrawl"]}),
-    create_game("gnollcrawl", {"name": "GnollCrawl", "pre_options": ["gnollcrawl"]}),
-    create_game("bloatcrawl2", {"name": "BloatCrawl 2", "pre_options": ["bloatcrawl2"]}),
-    create_game("gooncrawl", {"name": "GoonCrawl", "pre_options": ["gooncrawl"]}),
-    create_game("xcrawl", {"name": "X-Crawl", "pre_options": ["xcrawl"]}),
-    create_game("stoatsoup", {"name": "Stoat Soup", "pre_options": ["stoatsoup"]}),
-    create_game("kimchicrawl", {"name": "KimchiCrawl", "pre_options": ["kimchicrawl"]}),
-    create_game("bcadrencrawl", {"name": "BcadrenCrawl", "pre_options": ["bcadrencrawl"]}),
-    create_game("dcss-git", {
-        "name": "DCSS trunk",
-        "crawl_binary": GIT_LAUNCHER,
-        "version": "git"
-    }),
-    create_game("dcss-git-descent", {
-        "name": "DCSS Descent!",
-        "crawl_binary": GIT_LAUNCHER,
-        "options": ["-descent"],
-        "version": "git"
-    }),
-    create_game("dcss-git-sprint", {
-        "name": "Sprint trunk",
-        "crawl_binary": GIT_LAUNCHER,
-        "options": ["-sprint"],
-        "version": "git"
-    }),
-    create_game("dcss-git-tutorial", {
-        "name": "Tutorial trunk",
-        "crawl_binary": GIT_LAUNCHER,
-        "options": ["-tutorial"],
-        "version": "git"
-    }),
-    *[create_game(f'dcss-0.{version}',
-                  {
-                      "name": f'DCSS 0.{version}',
-                      "version": f'0.{version}',
-                      "pre_options": [f'0.{version}']
-                  }) for version in reversed(range(11, 31 + 1))]
-    ,])
+version_range = reversed(range(11, 31 + 1))
+mods = [
+    {"name": None, "suffix": "", "options": []},
+    {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"]},
+    {"name": "Sprint", "suffix": "-sprint", "options": ["-sprint"]},
+    {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"]},
+    {"name": "Descent", "suffix": "-descent", "options": ["-descent"]},
+    {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"]}
+]
+
+trunk = [
+    create_game(
+        f"dcss-git{mod['suffix']}",
+        {
+            "name": mod['name'] if mod['name'] else "DCSS trunk",
+            "crawl_binary": GIT_LAUNCHER,
+            "options": mod['options'],
+            "version": "git"
+        }
+    )
+    for mod in mods
+    if (mod['name'] != "Zot Defense")
+]
+
+stable_versions = [
+    create_game(
+        f"dcss-0.{version}{mod['suffix']}",
+        {
+            "name": mod['name'] if mod['name'] else f"DCSS 0.{version}",
+            "version": f"0.{version}",
+            "options": mod['options'],
+            "pre_options": [f"0.{version}"],
+        }
+    )
+    for version in version_range
+    for mod in mods
+    if (mod['name'] != "Seeded" or version >= 23) and
+       (mod['name'] != "Descent" or version >= 31) and
+       (mod['name'] != "Zot Defense" or version <= 15)
+]
+
+forks_data = [
+    ("dcssca", {"name": "DCSS Circus Animals", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("hellcrawl", {"name": "HellCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("gnollcrawl", {"name": "GnollCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("bloatcrawl2", {"name": "BloatCrawl 2", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
+    ("gooncrawl", {"name": "GoonCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("xcrawl", {"name": "X-Crawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("stoatsoup", {"name": "Stoat Soup", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("kimchicrawl", {"name": "KimchiCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
+    ("bcadrencrawl", {"name": "BcadrenCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]})
+]
+
+forks = [
+    create_game(
+        f"{key}{mod['suffix']}",
+        {
+            "name": mod['name'] if mod['name'] else data['name'],
+            "version": key,
+            "pre_options": [key],
+            "options": mod['options']
+        }
+    )
+    for key, data in forks_data
+    for mod in mods
+    if mod['name'] is None or mod['name'] in data['allowed_mods']
+]
+
+# Combine all game lists into one
+games = OrderedDict(trunk + stable_versions + forks)
 
 dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
 
