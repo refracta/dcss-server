@@ -4,6 +4,6 @@ Logged in as: $USERNAME
  3) DCSS 0.13   4) DCSS 0.14   5) DCSS 0.15
  6) DCSS 0.16   7) DCSS 0.17   8) DCSS 0.18
  9) DCSS 0.19
- Q) Quit
+ q) Return to previous menu
 
 =>

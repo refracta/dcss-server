@@ -5,3 +5,7 @@ C) DCSS Circus Animals        G) GnollCrawl
 H) HellCrawl                  K) KimchiCrawl
 N) GoonCrawl                  S) Stoat Soup
 X) X-Crawl
+
+q) Return to previous menu
+
+=>
