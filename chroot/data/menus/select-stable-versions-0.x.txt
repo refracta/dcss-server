@@ -1,5 +1,9 @@
 Logged in as: $USERNAME
 
-1) DCSS 0.1x   2) DCSS 0.2x   3) DCSS 0.3x
+ 1) DCSS 0.1x   2) DCSS 0.2x   3) DCSS 0.3x
+ Q) Quit
+
+
+
 
 =>

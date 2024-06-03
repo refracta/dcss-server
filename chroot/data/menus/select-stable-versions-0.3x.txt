@@ -1,6 +1,7 @@
 Logged in as: $USERNAME
 
  0) DCSS 0.30   1) DCSS 0.31
+ Q) Quit
 
 
 
