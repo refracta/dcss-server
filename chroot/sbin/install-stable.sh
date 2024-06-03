@@ -76,7 +76,7 @@ copy-data-files() {
 
 create-dgl-directories() {
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-sprint/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tut/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tutorial/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-zotdef/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION/"

@@ -77,7 +77,7 @@ SAVES="saves"
 
 [[ "$@" =~ -sprint$wb ]] && SAVES="$SAVES/sprint"
 [[ "$@" =~ -descent$wb ]] && SAVES="$SAVES/descent"
-[[ "$@" =~ -tut$wb ]] && SAVES="$SAVES/tut"
+[[ "$@" =~ -tutorial$wb ]] && SAVES="$SAVES/tutorial"
 [[ "$@" =~ -zotdef$wb ]] && SAVES="$SAVES/zotdef"
 
 if [[ $# == 0 || -z "$CHAR_NAME" ]]; then

@@ -76,8 +76,8 @@ copy-data-files() {
 
 create-dgl-directories() {
 	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-sprint/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
-	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tut/"
+  mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
+	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tutorial/"
 	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-zotdef/"
 	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION/"
 	mkdir -p "$CHROOT/dgldir/rcfiles/crawl-$VERSION/"
@@ -97,7 +97,7 @@ install-game() {
 	fix-chroot-directory-permissions
     copy-game-binary
     copy-data-files
-    
+
     chown -R $CRAWL_UGRP $SAVEDIR
 }
 
