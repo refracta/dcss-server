@@ -62,9 +62,11 @@ def create_game(game_key, overrides=None):
     if overrides is None:
         overrides = {}
 
-    version = game_key
+    version, inprogress = game_key, game_key
     if "version" in overrides:
         version = overrides["version"]
+    if "inprogress" in overrides:
+        inprogress = f"{version}-{overrides["inprogress"]}"
 
     config = template_game.copy()
     config.update(
@@ -72,7 +74,7 @@ def create_game(game_key, overrides=None):
             "name": game_key,
             "rcfile_path": config["rcfile_path"].format(version),
             "macro_path": config["macro_path"].format(version),
-            "inprogress_path": config["inprogress_path"].format(version),
+            "inprogress_path": config["inprogress_path"].format(inprogress),
         }
     )
     config.update(overrides)
@@ -83,11 +85,11 @@ def create_game(game_key, overrides=None):
 version_range = reversed(range(11, 31 + 1))
 mods = [
     {"name": None, "suffix": "", "options": []},
-    {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"]},
-    {"name": "Sprint", "suffix": "-sprint", "options": ["-sprint"]},
+    {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"], "inprogress": "tutorial"},
+    {"name": "Sprint", "suffix": "-sprint", "options": ["-sprint"], "inprogress": "sprint"},
     {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"]},
-    {"name": "Descent", "suffix": "-descent", "options": ["-descent"]},
-    {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"]}
+    {"name": "Descent", "suffix": "-descent", "options": ["-descent"], "inprogress": "descent"},
+    {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"], "inprogress": "zotdef"}
 ]
 
 trunk = [
@@ -95,9 +97,10 @@ trunk = [
         f"dcss-git{mod['suffix']}",
         {
             "name": mod['name'] if mod['name'] else "DCSS trunk",
+            "version": "git",
             "crawl_binary": GIT_LAUNCHER,
             "options": mod['options'],
-            "version": "git"
+            "inprogress": mod['inprogress']
         }
     )
     for mod in mods
@@ -112,6 +115,7 @@ stable_versions = [
             "version": f"0.{version}",
             "options": mod['options'],
             "pre_options": [f"0.{version}"],
+            "inprogress": mod['inprogress']
         }
     )
     for version in version_range
@@ -140,7 +144,8 @@ forks = [
             "name": mod['name'] if mod['name'] else data['name'],
             "version": key,
             "pre_options": [key],
-            "options": mod['options']
+            "options": mod['options'],
+            "inprogress": mod['inprogress']
         }
     )
     for key, data in forks_data
