@@ -22,7 +22,7 @@ jobs:
 
       - name: Print result
         run: |
-          grep -B 100 -A 3 "Error 1" docker-compose.log || true
+          grep -B 100 -A 3 -e "Error 1" -e "[fail]" docker-compose.log || true
           ls data/crawl-master | xargs
-          ! grep -q "Error 1" docker-compose.log
+          ! grep -q -e "Error 1" -e "[fail]" docker-compose.log
         working-directory: server
