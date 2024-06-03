@@ -65,7 +65,7 @@ def create_game(game_key, overrides=None):
     version, inprogress = game_key, game_key
     if "version" in overrides:
         version = overrides["version"]
-    if "inprogress" in overrides:
+    if "inprogress" in overrides and overrides['inprogress']:
         inprogress = f"{version}-{overrides["inprogress"]}"
 
     config = template_game.copy()
@@ -84,10 +84,10 @@ def create_game(game_key, overrides=None):
 
 version_range = reversed(range(11, 31 + 1))
 mods = [
-    {"name": None, "suffix": "", "options": []},
+    {"name": None, "suffix": "", "options": [], "inprogress": None},
     {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"], "inprogress": "tutorial"},
     {"name": "Sprint", "suffix": "-sprint", "options": ["-sprint"], "inprogress": "sprint"},
-    {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"]},
+    {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"], "inprogress": None},
     {"name": "Descent", "suffix": "-descent", "options": ["-descent"], "inprogress": "descent"},
     {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"], "inprogress": "zotdef"}
 ]
