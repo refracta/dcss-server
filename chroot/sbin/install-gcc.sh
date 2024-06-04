@@ -15,11 +15,11 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU Affero General Public License for more details.
 #
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ===========================================================================
 #
 
@@ -75,26 +75,26 @@ copy-data-files() {
 }
 
 create-dgl-directories() {
-	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-sprint/"
-  mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
-	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tutorial/"
-	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-zotdef/"
-	mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION/"
-	mkdir -p "$CHROOT/dgldir/rcfiles/crawl-$VERSION/"
-	mkdir -p "$CHROOT/dgldir/data/crawl-$VERSION-settings/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-sprint/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tutorial/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-zotdef/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION/"
+    mkdir -p "$CHROOT/dgldir/rcfiles/crawl-$VERSION/"
+    mkdir -p "$CHROOT/dgldir/data/crawl-$VERSION-settings/"
 }
 
 fix-chroot-directory-permissions() {
-	chown -R crawl:crawl "$CHROOT/crawl-master"
-	chown -R crawl:crawl "$CHROOT/dgldir"
+    chown -R crawl:crawl "$CHROOT/crawl-master"
+    chown -R crawl:crawl "$CHROOT/dgldir"
 }
 
 install-game() {
-    mkdir -p $SAVEDIR/{,sprint,zotdef}
+    mkdir -p $SAVEDIR/{,sprint,zotdef,descent}
     mkdir -p $DATADIR
 
-	create-dgl-directories
-	fix-chroot-directory-permissions
+    create-dgl-directories
+    fix-chroot-directory-permissions
     copy-game-binary
     copy-data-files
 
