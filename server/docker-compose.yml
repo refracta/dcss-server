@@ -20,3 +20,4 @@ services:
     environment:
       - COMMAND
       - ONLY_BUILD
+      - USE_REVERSE_PROXY
