@@ -42,4 +42,4 @@ fi
 # if you get an error, that's because the trunk version is not installed in the volumes
 # this means you should either use docker-entrypoint-build-trunk.sh
 # or docker-entrypoint-build-all.sh as entrypoint to build crawl data into volumes
-tail -f $DGL_CHROOT/crawl-master/webserver/run/webtiles.log
+tail -f "$DGL_CHROOT/crawl-master/webserver/run/webtiles.log"
