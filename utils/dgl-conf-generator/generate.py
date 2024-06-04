@@ -2,10 +2,9 @@ from jinja2 import Environment, FileSystemLoader
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
-grandparent_dir = os.path.abspath(os.path.join(current_dir, os.pardir, os.pardir))
-sys.path.append(grandparent_dir)
+parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir, os.pardir))
+sys.path.append(parent_dir)
 import config
-
 
 file_loader = FileSystemLoader('templates')
 env = Environment(loader=file_loader)
