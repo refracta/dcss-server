@@ -5,9 +5,7 @@ VERSIONS="$(seq 11 31 | sed 's/^/0./')"
 VERSIONS+=" dcssca hellcrawl gnollcrawl bloatcrawl2 gooncrawl xcrawl stoatsoup kimchicrawl bcadrencrawl"
 
 for v in $VERSIONS; do
-    if [ ! -d "$DGL_CHROOT/crawl-master/crawl-$v" ]; then
-        cp -a "$DGL_CHROOT/crawl-master/crawl-init" "$DGL_CHROOT/crawl-master/crawl-$v"
-    fi
+    cp -a --no-clobber "$DGL_CHROOT/crawl-master/crawl-init" "$DGL_CHROOT/crawl-master/crawl-$v"
 done
 
 /home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk
