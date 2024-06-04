@@ -41,5 +41,6 @@ mkdir -p "$GAME_DIR"/saves/{sprint,descent,zotdef}
 # Only the saves dir within GAME_DIR is chowned: data dir is not supposed
 # to be writable by CRAWL_UGRP.
 chown -R $CRAWL_UGRP "$GAME_DIR/saves"
+cp -R $GAME_DIR "$GAME_DIR/../crawl-init"
 
 echo "Created $GAME_DIR"

@@ -1,12 +1,12 @@
 #!/bin/bash
 source "$DGL_CONF_HOME/dgl-manage.conf"
 
-VERSIONS="git $(seq -s ' ' 0.11 0.31)"
+VERSIONS="$(seq 11 31 | sed 's/^/0./')"
 VERSIONS+=" dcssca hellcrawl gnollcrawl bloatcrawl2 gooncrawl xcrawl stoatsoup kimchicrawl bcadrencrawl"
 
 for v in $VERSIONS; do
     if [ ! -d "$DGL_CHROOT/crawl-master/crawl-$v" ]; then
-        cp -a "$DGL_CHROOT/crawl-master/crawl-git" "$DGL_CHROOT/crawl-master/crawl-$v"
+        cp -a "$DGL_CHROOT/crawl-master/crawl-init" "$DGL_CHROOT/crawl-master/crawl-$v"
     fi
 done
 
