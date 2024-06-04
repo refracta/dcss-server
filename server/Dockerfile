@@ -26,7 +26,7 @@ RUN echo "deb [trusted=yes] http://archive.ubuntu.com/ubuntu/ bionic main univer
     apt-get install -y gcc-6 g++-6 gcc-7 g++-7 && \
     apt-get install -y libsdl1.2-dev libsdl-image1.2-dev
 
-RUN pip3 install tornado --break-system-packages \
+RUN pip3 install tornado jinja2 --break-system-packages \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 && ln -s /usr/bin/python3 /usr/bin/python
 

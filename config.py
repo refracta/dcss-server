@@ -85,7 +85,8 @@ def create_game(game_key, overrides=None):
     return game_key, config
 
 
-version_range = reversed(range(11, 31 + 1))
+version_range = range(11, 31 + 1)
+versions = list(version_range)
 mods = [
     {"name": None, "suffix": "", "options": [], "inprogress": None},
     {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"], "inprogress": "tutorial"},
@@ -94,6 +95,19 @@ mods = [
     {"name": "Descent", "suffix": "-descent", "options": ["-descent"], "inprogress": "descent"},
     {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"], "inprogress": "zotdef"}
 ]
+
+forks_data = [
+    ("dcssca", {"name": "DCSS Circus Animals", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("hellcrawl", {"name": "HellCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("gnollcrawl", {"name": "GnollCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("bloatcrawl2", {"name": "BloatCrawl 2", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
+    ("gooncrawl", {"name": "GoonCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("xcrawl", {"name": "X-Crawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("stoatsoup", {"name": "Stoat Soup", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("kimchicrawl", {"name": "KimchiCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
+    ("bcadrencrawl", {"name": "BcadrenCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]})
+]
+variants = [fork[0] for fork in forks_data] + [f"0.{i}" for i in versions]
 
 trunk = [
     create_game(
@@ -121,23 +135,11 @@ stable_versions = [
             "inprogress": mod['inprogress']
         }
     )
-    for version in version_range
+    for version in reversed(version_range)
     for mod in mods
     if (mod['name'] != "Seeded" or version >= 23) and
        (mod['name'] != "Descent" or version >= 31) and
        (mod['name'] != "Zot Defense" or version <= 15)
-]
-
-forks_data = [
-    ("dcssca", {"name": "DCSS Circus Animals", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("hellcrawl", {"name": "HellCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("gnollcrawl", {"name": "GnollCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("bloatcrawl2", {"name": "BloatCrawl 2", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
-    ("gooncrawl", {"name": "GoonCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("xcrawl", {"name": "X-Crawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("stoatsoup", {"name": "Stoat Soup", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("kimchicrawl", {"name": "KimchiCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
-    ("bcadrencrawl", {"name": "BcadrenCrawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]})
 ]
 
 forks = [
@@ -245,8 +247,16 @@ crypt_salt_length = 16
 
 login_token_lifetime = 7 # Days
 
-uid = int("%%DGL_UID%%")  # If this is not None, the server will setuid to that (numeric) id
-gid = int("%%DGL_GID%%")  # after binding its sockets.
+try:
+    uid = int("%%DGL_UID%%")
+    # If this is not None, the server will setuid to that (numeric) id
+except ValueError:
+    uid = -1
+
+try:
+    gid = int("%%DGL_GID%%")  # after binding its sockets.
+except ValueError:
+    gid = -1
 
 umask = None # e.g. 0077
 
