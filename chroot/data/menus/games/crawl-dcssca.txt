@@ -2,7 +2,8 @@ Logged in as: $USERNAME
 
 Game selected: Dungeon Crawl Stone Soup Circus Animals
 
-P)lay Crawl    S)print    T)utorial
+P)lay Crawl    T)utorial    S)print
+
 
 o) Edit options    O) with Virus
 m) Edit macros     M) with Virus
