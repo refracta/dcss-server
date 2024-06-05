@@ -1,11 +1,3 @@
-Crawl server (SERVER_REGION) hosted and maintained SERVER_ADMIN.
-------------------------------------------------------------------------------
-Webtiles:           SERVER_URL
-Crawl information:  http://crawl.develz.org/
-------------------------------------------------------------------------------
-** Games on this server are recorded for in-progress viewing and playback! **
-------------------------------------------------------------------------------
-
 Logged in as: $USERNAME
 
 Game selected: Dungeon Crawl Stone Soup Trunk
@@ -19,4 +11,4 @@ O) Reset options
 
 q) Return to previous menu
 
-=> 
+=>
