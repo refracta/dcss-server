@@ -1,8 +1,8 @@
-name: upload-ccache
+name: upload-data
 
 on:
   push:
-    branches: [ upload-ccache ]
+    branches: [ upload-data ]
 
 jobs:
   upload:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Download ccache
         run: |
-          ./download-ccache.sh
+          ./release.sh download -p data/ccache -n ccache
         working-directory: server
 
       - name: Build
@@ -37,9 +37,11 @@ jobs:
           ls data/crawl-master | xargs
         working-directory: server
 
-      - name: Upload ccache
+      - name: Upload data
         run: |
-          ./upload-ccache.sh "build-ccache (from Action)"
+          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b upload-data
+          rm -rf data/ccache
+          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b upload-data
           ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

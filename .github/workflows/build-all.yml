@@ -23,7 +23,7 @@ jobs:
 
       - name: Download ccache
         run: |
-          ./download-ccache.sh
+          ./release.sh download -p data/ccache -n ccache
         working-directory: server
 
       - name: Build test
