@@ -57,6 +57,7 @@ announce() {
     echo
     echo "---------------------------------------------------------------------"
     echo "$@"
+    sudo -u crawl-dev touch $ANNOUNCEMENTS_FILE
     echo "$@" >>$ANNOUNCEMENTS_FILE
 }
 

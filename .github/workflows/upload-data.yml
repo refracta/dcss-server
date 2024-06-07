@@ -3,6 +3,8 @@ name: upload-data
 on:
   push:
     branches: [ upload-data ]
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   upload:
@@ -28,7 +30,7 @@ jobs:
 
       - name: Build
         run: |
-          ONLY_BUILD=true COMMAND=build-all docker-compose up 2>&1 | tee docker-compose.log
+          ONLY_BUILD=true COMMAND=build-all docker-compose -f docker-compose.yml -f docker-compose.build.yml up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Print result
@@ -37,11 +39,25 @@ jobs:
           ls data/crawl-master | xargs
         working-directory: server
 
+      - name: Push image
+        run: |
+          TIMESTAMP=$(date -u +"%y%m%d")
+          docker tag dcss-server:latest dcss-server:$TIMESTAMP
+          echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+          docker push dcss-server:latest
+          docker push dcss-server:$TIMESTAMP
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        working-directory: server
+
       - name: Upload data
         run: |
           ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b upload-data
+          ./release.sh delete -n ccache -l 3
           rm -rf data/ccache
           ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b upload-data
+          ./release.sh delete -n game-data -l 3
           ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

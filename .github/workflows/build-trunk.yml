@@ -26,9 +26,9 @@ jobs:
           ./release.sh download -p data/ccache -n ccache
         working-directory: server
 
-      - name: Build test
+      - name: Build
         run: |
-          ONLY_BUILD=true COMMAND=build-trunk docker-compose up 2>&1 | tee docker-compose.log
+          ONLY_BUILD=true COMMAND=build-trunk docker-compose -f docker-compose.yml -f docker-compose.build.yml up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Print result

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO="refracta/dcss-webtiles-server"
+REPO="refracta/dcss-server"
 SPLIT_SIZE="1GiB"
 KEEP_FILES=false
 
@@ -11,6 +11,9 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         upload)
             ACTION="upload"
+            ;;
+        delete)
+            ACTION="delete"
             ;;
         -r|--repo)
             REPO="$2"
@@ -47,6 +50,10 @@ while [[ "$#" -gt 0 ]]; do
         -k|--keep)
             KEEP_FILES=true
             ;;
+        -l|--last)
+            LAST="$2"
+            shift
+            ;;
         *)
             echo "Unknown parameter: $1"
             exit 1
@@ -69,7 +76,7 @@ download_files() {
         release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}")
     elif [ -n "$NAME" ]; then
         latest_tag=$(get_latest_tag "$NAME")
-        if [ -n "$latest_tag" ]; then
+        if (("$latest_tag")); then
             release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$latest_tag")
         else
             echo "No releases found for name prefix: $NAME"
@@ -137,6 +144,27 @@ upload_files() {
     echo "Compression and upload completed!"
 }
 
+delete_releases() {
+    if [ -z "$NAME" ]; then
+        echo "Name (-n) is required for delete action."
+        exit 1
+    fi
+
+    releases=$(curl -s "https://api.github.com/repos/$REPO/releases" | jq -r ".[] | select(.tag_name | startswith(\"$NAME\")) | .tag_name")
+    tags=($(echo "$releases" | sort -rV))
+    if [ -n "$LAST" ]; then
+        tags=(${tags[@]:$LAST})
+    fi
+
+    for tag in "${tags[@]}"; do
+        echo "Deleting release and tag: $tag"
+        gh release delete "$tag" -R "$REPO" -y
+        gh api -X DELETE "repos/$REPO/git/refs/tags/$tag"
+    done
+
+    echo "Deletion completed!"
+}
+
 if [ "$ACTION" == "download" ]; then
     if [ -z "$PATH_DIR" ] || [ -z "$NAME" ]; then
         echo "Path (-p) and name (-n) are required for download action."
@@ -149,7 +177,9 @@ elif [ "$ACTION" == "upload" ]; then
         exit 1
     fi
     upload_files
+elif [ "$ACTION" == "delete" ]; then
+    delete_releases
 else
-    echo "Action (download/upload) is required."
+    echo "Action (download/upload/delete) is required."
     exit 1
 fi
