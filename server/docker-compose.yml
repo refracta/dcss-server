@@ -22,3 +22,4 @@ services:
       - COMMAND
       - ONLY_BUILD
       - USE_REVERSE_PROXY
+      - USE_DWEM
