@@ -7,3 +7,5 @@ crawl-dev ALL=(root) NOPASSWD: \
   /sbin/install-gcc7.sh, \
   /etc/init.d/webtiles, \
   /sbin/remove-trunks.sh
+
+www-data ALL=(crawl-dev) NOPASSWD: /home/crawl-dev/dgamelaunch-config/bin/dgl

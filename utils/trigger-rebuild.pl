@@ -151,29 +151,29 @@ sub main() {
   my $ver = param('v');
 
   if (not $ver) {
-    do_prompt 'trunk', '0.25', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bloatcrawl2', 'xcrawl', 'gooncrawl', 'stoatsoup', 'kimchicrawl', 'bcadrencrawl';
+    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'kimchicrawl', 'bcadrencrawl', map { "0.$_" } (11 .. 31);
   } elsif ($ver eq 'trunk') {
     do_update 'trunk';
-  } elsif ($ver =~ /^0.2[5]$/) {
+  } elsif ($ver =~ /^0\.\d+$/) {
     do_update 'stable', $ver;
   } elsif ($ver eq 'dcssca') {
-    do_update 'gcc6', 'dcssca crawl-forks/dcssca/master';
+    do_update 'gcc', 'dcssca crawl-forks/dcssca/bugfix 6';
   } elsif ($ver eq 'hellcrawl') {
-    do_update 'gcc6', 'hellcrawl crawl-forks/hellcrawl/bugfix';
+    do_update 'gcc', 'hellcrawl crawl-forks/hellcrawl/bugfix 6';
   } elsif ($ver eq 'gnollcrawl') {
-    do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix';
+    do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix 6';
   } elsif ($ver eq 'bloatcrawl2') {
-    do_update 'gcc', 'bloatcrawl2 bloatcrawl2/master';
-  } elsif ($ver eq 'gooncrawl') {
-    do_update 'gcc', 'gooncrawl gooncrawl/gooncrawl_stable';
-  } elsif ($ver eq 'xcrawl') {
-    do_update 'gcc', 'xcrawl crawl-forks/xcrawl/bugfix';
+    do_update 'gcc', 'bloatcrawl2 bloatcrawl2/master 7';
   } elsif ($ver eq 'stoatsoup') {
     do_update 'gcc', 'stoatsoup stoatsoup/master';
+  } elsif ($ver eq 'gooncrawl') {
+    do_update 'gcc', 'gooncrawl gooncrawl/gooncrawl_stable 7';
+  } elsif ($ver eq 'xcrawl') {
+    do_update 'gcc', 'xcrawl crawl-forks/xcrawl/bugfix 7';
   } elsif ($ver eq 'kimchicrawl') {
-    do_update 'gcc', 'kimchicrawl crawl-forks/kimchicrawl/bugfix';
+    do_update 'gcc', 'kimchicrawl crawl-forks/kimchicrawl/bugfix 7';
   } elsif ($ver eq 'bcadrencrawl') {
-    do_update 'gcc', 'bcadrencrawl crawl-forks/bcadrencrawl/bugfix';
+    do_update 'gcc', 'bcadrencrawl crawl-forks/bcadrencrawl/bCrawl';
   } else {
     do_fail "Unknown version " . escapeHTML($ver);
   }
