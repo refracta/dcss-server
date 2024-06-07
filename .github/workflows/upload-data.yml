@@ -37,6 +37,7 @@ jobs:
         run: |
           grep -B 100 -A 3 -e "Error 1" -e "\[fail\]" docker-compose.log || true
           ls data/crawl-master | xargs
+          ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
         working-directory: server
 
       - name: Push image
@@ -44,8 +45,8 @@ jobs:
           TIMESTAMP=$(date -u +"%y%m%d")
           docker tag dcss-server:latest dcss-server:$TIMESTAMP
           echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-          docker push dcss-server:latest
-          docker push dcss-server:$TIMESTAMP
+          docker push refracta/dcss-server:latest
+          docker push refracta/dcss-server:$TIMESTAMP
         env:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -58,7 +59,6 @@ jobs:
           rm -rf data/ccache
           ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b upload-data
           ./release.sh delete -n game-data -l 3
-          ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: server

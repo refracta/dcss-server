@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -u
+# set -u
 
 # shellcheck source=crawl-git.conf
 source "$DGL_CONF_HOME/crawl-git.conf"
