@@ -71,13 +71,19 @@ RUN mkdir logs \
     && cd dgamelaunch && ./autogen.sh --enable-debugfile --enable-sqlite --enable-shmem && make
 
 USER root
-COPY server/crawler_sshdconfig /tmp
+COPY server/sshd_config /tmp
+COPY server/cao_key.pub /tmp
 RUN cd dgamelaunch \
     && mkdir -p $DGL_CHROOT/bin \
     && make install && cp ee virus $DGL_CHROOT/bin \
-    && useradd crawler --shell /usr/local/sbin/dgamelaunch \
-    && echo crawler:crawler | chpasswd \
-    && cat /tmp/crawler_sshdconfig >> /etc/ssh/sshd_config && rm /tmp/crawler_sshdconfig  \
+    && useradd nemelex --shell /usr/local/sbin/dgamelaunch \
+    && echo nemelex:xobeh | chpasswd \
+    && mkdir -p /home/nemelex/.ssh \
+    && cat /tmp/cao_key.pub >> /home/nemelex/.ssh/authorized_keys \
+    && chown -R nemelex:nemelex /home/nemelex/.ssh \
+    && chmod 700 /home/nemelex/.ssh \
+    && chmod 600 /home/nemelex/.ssh/authorized_keys \
+    && cat /tmp/sshd_config >> /etc/ssh/sshd_config && rm /tmp/sshd_config  \
     && touch $DGL_CHROOT/dgamelaunch
 
 
