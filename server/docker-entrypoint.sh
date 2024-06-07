@@ -18,6 +18,7 @@ if [ "$USE_REVERSE_PROXY" = 'true' ]; then
 fi
 
 /enable-apache.sh
+service nginx start
 
 /setup-cron.sh
 

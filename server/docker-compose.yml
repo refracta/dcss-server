@@ -11,6 +11,7 @@ services:
       - "0:8080"
       - "0:22"
       - "0:80"
+      - "0:81"
     volumes:
       - ./data/versionsdb:/versionsdb
       - ./data/crawl-master:/crawl-master
