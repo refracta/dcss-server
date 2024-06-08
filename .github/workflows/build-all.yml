@@ -1,21 +1,11 @@
-name: upload-data
+name: build-all
 
 on:
   push:
-    branches: [ develop, upload-data ]
-  schedule:
-    - cron: '0 */3 * * *'
+    branches: [ master, develop, test-* ]
 
 jobs:
-  cancel-previous-runs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-          
-  upload:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Maximize build space
@@ -46,27 +36,4 @@ jobs:
           grep -B 100 -A 3 -e "Error 1" -e "\[fail\]" docker-compose.log || true
           ls data/crawl-master | xargs
           ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
-        working-directory: server
-
-      - name: Push image
-        run: |
-          TIMESTAMP=$(date -u +"%y%m%d%H%M")
-          docker tag refracta/dcss-server:latest refracta/dcss-server:$TIMESTAMP
-          echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-          docker push refracta/dcss-server:latest
-          docker push refracta/dcss-server:$TIMESTAMP
-        env:
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        working-directory: server
-
-      - name: Upload data
-        run: |
-          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b ${{ github.ref_name }}
-          ./release.sh delete -n ccache -l 3
-          rm -rf data/ccache
-          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b ${{ github.ref_name }}
-          ./release.sh delete -n game-data -l 3
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: server
