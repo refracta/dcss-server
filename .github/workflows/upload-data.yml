@@ -1,12 +1,21 @@
+
 name: upload-data
 
 on:
   push:
-    branches: [ upload-data ]
+    branches: [ develop, upload-data ]
   schedule:
     - cron: '0 */3 * * *'
 
 jobs:
+  cancel-previous-runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          
   upload:
     runs-on: ubuntu-latest
     steps:
@@ -54,10 +63,10 @@ jobs:
 
       - name: Upload data
         run: |
-          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b upload-data
+          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b ${{ github.ref_name }}
           ./release.sh delete -n ccache -l 3
           rm -rf data/ccache
-          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b upload-data
+          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b ${{ github.ref_name }}
           ./release.sh delete -n game-data -l 3
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
