@@ -50,10 +50,10 @@ COMMAND=build-all docker compose up -f docker-compose.yml -f docker-compose.buil
 
 ### Upstream projects
 * https://github.com/crawl/dgamelaunch-config
-던전 크롤 스톤 수프 서버 운영에 필요한 스크립트입니다. `utils/testing-container`에는 크롤의 CI/CD 검증 작업을 위해 제작된 컨테이너 환경 구성이 있습니다.
+* 던전 크롤 스톤 수프 서버 운영에 필요한 스크립트입니다. `utils/testing-container`에는 크롤의 CI/CD 검증 작업을 위해 제작된 컨테이너 환경 구성이 있습니다.
 
 * https://github.com/Rytisgit/dgamelaunch-dcss-forks-server
-이 프로젝트는 dgamelaunch-config을 기반으로 하여, 여러 포크를 컨테이너로 구성된 환경에서 한번에 쉽게 구성할 수 있도록 만들어졌습니다. 본 프로젝트는  
+* 이 프로젝트는 dgamelaunch-config을 기반으로 하여, 여러 포크를 컨테이너로 구성된 환경에서 한번에 쉽게 구성할 수 있도록 만들어졌습니다. 본 프로젝트는 이 프로젝트를 기반으로 시작되었습니다.
 
 ### Thanks to
 

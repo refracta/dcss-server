@@ -25,6 +25,7 @@ fi
 
 /enable-apache.sh
 service nginx start
+spawn-fcgi -s /var/run/fcgiwrap.socket /usr/sbin/fcgiwrap
 
 /setup-cron.sh
 

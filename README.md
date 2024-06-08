@@ -54,7 +54,7 @@ If you need to add a new fork or version, you can request it through a Pull-Requ
 * Scripts necessary for operating a Dungeon Crawl Stone Soup server. In utils/testing-container, there is a container environment configuration created for the CI/CD verification work of Crawl.
 
 * https://github.com/Rytisgit/dgamelaunch-dcss-forks-server
-* This project is based on dgamelaunch-config, designed to easily configure multiple forks in a containerized environment at once. This project
+* This project is based on dgamelaunch-config, designed to easily configure multiple forks in a containerized environment at once. This project was started based on that project.
 
 ### Thanks to
 Thanks to the help of many developers on the DCSS IRC `#crawl-dev` channel, the implementation goals of this project could be successfully achieved.
