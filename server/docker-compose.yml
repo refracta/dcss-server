@@ -3,7 +3,6 @@ services:
     image: refracta/dcss-server:latest
     tty: true
     stdin_open: true
-    entrypoint: /docker-entrypoint.sh
     build:
       context: ../
       dockerfile: server/Dockerfile

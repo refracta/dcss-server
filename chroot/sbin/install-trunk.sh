@@ -90,6 +90,7 @@ create-dgl-directories() {
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-descent/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-tutorial/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-zotdef/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-seed/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-git/"
     mkdir -p "$CHROOT/dgldir/rcfiles/crawl-git/"
     mkdir -p "$CHROOT/dgldir/data/crawl-git-settings/"

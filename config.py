@@ -91,7 +91,7 @@ mods = [
     {"name": None, "suffix": "", "options": [], "inprogress": None},
     {"name": "Tutorial", "suffix": "-tutorial", "options": ["-tutorial"], "inprogress": "tutorial"},
     {"name": "Sprint", "suffix": "-sprint", "options": ["-sprint"], "inprogress": "sprint"},
-    {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"], "inprogress": None},
+    {"name": "Seeded", "suffix": "-seeded", "options": ["-seed"], "inprogress": "seed"},
     {"name": "Descent", "suffix": "-descent", "options": ["-descent"], "inprogress": "descent"},
     {"name": "Zot Defense", "suffix": "-zd", "options": ["-zotdef"], "inprogress": "zotdef"}
 ]

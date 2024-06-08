@@ -4,7 +4,7 @@ on:
   push:
     branches: [ upload-data ]
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */3 * * *'
 
 jobs:
   upload:
@@ -42,7 +42,7 @@ jobs:
 
       - name: Push image
         run: |
-          TIMESTAMP=$(date -u +"%y%m%d")
+          TIMESTAMP=$(date -u +"%y%m%d%H%M")
           docker tag refracta/dcss-server:latest refracta/dcss-server:$TIMESTAMP
           echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
           docker push refracta/dcss-server:latest
