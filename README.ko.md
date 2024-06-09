@@ -1,6 +1,6 @@
 # dcss-server
 
-`README.md` 문서는 ChatGPT로 `README.ko.md`를 자동 번역하여 생성되었습니다. 
+> [README.md](README.md) 문서는 ChatGPT로 [README.ko.md](README.ko.md)를 자동 번역하여 생성되었습니다. 
 
 이 스크립트는 던전 크롤 스톤 수프의 서버를 한번에 간단히 배포 및 관리할 수 있게 하기 위해 제작되었습니다. 최신 리눅스 환경에서 가능한 많은 포크 버전(DCSS CA, HellCrawl, GnollCrawl, BloatCrawl2, GoonCrawl, X-Crawl, StoatSoup, KimchiCrawl, BcadrenCrawl)과 정식 릴리즈 버전(0.11 ~ 0.31)을 포함합니다.
 
@@ -54,10 +54,10 @@ COMMAND=build-all docker compose -f docker-compose.yml -f docker-compose.build.y
 * 던전 크롤 스톤 수프 서버 운영에 필요한 스크립트입니다. `utils/testing-container`에는 크롤의 CI/CD 검증 작업을 위해 제작된 컨테이너 환경 구성이 있습니다.
 
 * https://github.com/Rytisgit/dgamelaunch-dcss-forks-server
-* 이 프로젝트는 dgamelaunch-config을 기반으로 하여, 여러 포크를 컨테이너로 구성된 환경에서 한번에 쉽게 구성할 수 있도록 만들어졌습니다. 본 프로젝트는 이 프로젝트를 기반으로 시작되었습니다.
+* 이 프로젝트는 dgamelaunch-config을 기반으로 하여, 여러 포크를 컨테이너로 구성된 환경에서 한번에 쉽게 구성할 수 있도록 만들어졌습니다. *본 프로젝트는 이 프로젝트를 기반으로 시작되었습니다.*
 
 ### Thanks to
 
-DCSS IRC `#crawl-dev` 채널의 많은 개발자 분의 도움으로, 본 프로젝트의 구현 목표가 성공적으로 달성될 수 있었습니다. 
-특히 서버 세팅과 관련해서 많은 도움을 주신 gammafunk, [DCSSReplay](https://github.com/rytisgit/dcssreplay)의 개발자이자 dgamelaunch-dcss-forks-server의 메인테이너로서
-서버 설정 진행 과정을 모니터링하며 아낌없는 조언과 이슈 해결을 도와준 Sentei에게 감사를 전하고 싶습니다.
+`#crawl-dev` IRC 채널의 많은 개발자 분의 도움으로, 본 프로젝트의 구현 목표가 성공적으로 달성될 수 있었습니다. 
+특히 서버 세팅과 관련해서 많은 도움을 주신 [gammafunk](https://github.com/gammafunk), [DCSSReplay](https://github.com/Rytisgit/dcssreplay)의 개발자이자 [dgamelaunch-dcss-forks-server](https://github.com/Rytisgit/dgamelaunch-dcss-forks-server)의 메인테이너로서
+서버 설정 진행 과정을 모니터링하며 아낌없는 조언과 이슈 해결을 도와준 [Sentei](https://github.com/Rytisgit)에게 감사를 전하고 싶습니다.
