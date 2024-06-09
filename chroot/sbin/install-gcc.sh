@@ -79,6 +79,7 @@ create-dgl-directories() {
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-tutorial/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-descent/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-zotdef/"
+    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION-seed/"
     mkdir -p "$CHROOT/dgldir/inprogress/crawl-$VERSION/"
     mkdir -p "$CHROOT/dgldir/rcfiles/crawl-$VERSION/"
     mkdir -p "$CHROOT/dgldir/data/crawl-$VERSION-settings/"

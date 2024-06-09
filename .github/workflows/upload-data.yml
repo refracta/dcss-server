@@ -1,12 +1,17 @@
+
 name: upload-data
 
 on:
   push:
-    branches: [ upload-data ]
+    branches: [ master, develop, upload-data ]
   schedule:
     - cron: '0 */3 * * *'
 
-jobs:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
+jobs:          
   upload:
     runs-on: ubuntu-latest
     steps:
@@ -54,10 +59,10 @@ jobs:
 
       - name: Upload data
         run: |
-          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b upload-data
+          ./release.sh upload -p data/ccache -n ccache -T "ccache (from Action)" -b ${{ github.sha }}
           ./release.sh delete -n ccache -l 3
           rm -rf data/ccache
-          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b upload-data
+          ./release.sh upload -p data -n game-data -T "game-data (from Action)" -b ${{ github.sha }}
           ./release.sh delete -n game-data -l 3
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
