@@ -1,5 +1,7 @@
 # dcss-server
 
+This document was translated using ChatGPT from README.ko.md.
+
 This script is designed to simplify the deployment and management of a Dungeon Crawl Stone Soup server, allowing you to handle everything at once. It includes as many fork versions (DCSS CA, HellCrawl, GnollCrawl, BloatCrawl2, GoonCrawl, X-Crawl, StoatSoup, KimchiCrawl, BcadrenCrawl) and official release versions (0.11 ~ 0.31) as possible on the latest Linux environment.
 
 ### First Run Guide:
