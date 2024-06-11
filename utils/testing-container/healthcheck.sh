@@ -2,7 +2,7 @@
 
 # this script assumes a default dgamelaunch-config configuration
 
-test -e /crawl-master/webserver/run/webtiles.pid || exit 1
+test -e /home/crawl/DGL/crawl-master/webserver/run/webtiles.pid || exit 1
 # if the server crashes, there may be a stale pid file.
 ps w -u crawl | grep -q server.py || exit 1
 # is server up?
