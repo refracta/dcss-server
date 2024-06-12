@@ -61,9 +61,9 @@ USER crawl-dev
 RUN mkdir logs \
     && touch announcements.log \
     && mkdir run \
-    && mkdir dgamelaunch-config dgamelaunch-config/utils/ \
     && git clone https://github.com/crawl/dgamelaunch.git \
     && cd dgamelaunch && ./autogen.sh --enable-debugfile --enable-sqlite --enable-shmem && make
+#   && mkdir dgamelaunch-config dgamelaunch-config/utils/ \
 
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 RUN git config --global url.https://github.com/.insteadOf git://gitorious.org/
