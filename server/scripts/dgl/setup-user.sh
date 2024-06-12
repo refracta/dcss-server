@@ -8,4 +8,4 @@ useradd nemelex --shell /usr/local/sbin/dgamelaunch \
 && chown -R nemelex:nemelex /home/nemelex/.ssh \
 && chmod 700 /home/nemelex/.ssh \
 && chmod 600 /home/nemelex/.ssh/authorized_keys \
-&& cat "$DGL_CONF_HOME/server/sshd_config" >> /etc/ssh/sshd_config
+&& cat "$SCRIPTS/dgl/conf/sshd_config" >> /etc/ssh/sshd_config

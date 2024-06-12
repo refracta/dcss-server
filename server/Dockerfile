@@ -56,6 +56,10 @@ ENV PATH="$DGL_CONF_HOME/bin:$PATH"
 
 WORKDIR /home/crawl-dev
 
+# allow crawl-dev to run various things with sudo without a password. These
+# permissions may be too open for a production server.
+COPY server/etc/dgl_sudoers /etc/sudoers.d/
+
 # set up dgamelaunch
 # TODO: what are these directories in ~crawl-dev used for? `run` doesn't exist
 # TODO: Fix logs, announcements.log, run

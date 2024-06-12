@@ -1,6 +1,6 @@
 #!/bin/bash
 
-copy web/confs/apache.conf /etc/apache2/sites-available
+copy web/conf/apache.conf /etc/apache2/sites-available
 
 sudo a2enmod rewrite
 sudo a2dissite 000-default #remove apache default site because it interferes with port 80

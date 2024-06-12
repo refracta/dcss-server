@@ -1,0 +1,11 @@
+crawl-dev ALL=(root) NOPASSWD: \
+  /home/crawl-dev/dgamelaunch-config/bin/dgl, \
+  /sbin/install-trunk.sh, \
+  /sbin/install-stable.sh, \
+  /sbin/install-gcc.sh, \
+  /sbin/install-gcc6.sh, \
+  /sbin/install-gcc7.sh, \
+  /etc/init.d/webtiles, \
+  /sbin/remove-trunks.sh
+
+www-data ALL=(crawl-dev) NOPASSWD: /home/crawl-dev/dgamelaunch-config/bin/dgl
