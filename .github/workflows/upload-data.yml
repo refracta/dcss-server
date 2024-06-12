@@ -30,7 +30,7 @@ jobs:
 
       - name: Download ccache
         run: |
-          CMD='$SCRIPTS/util/release.sh -p /data/ccache -n ccache' docker compose up 2>&1 | tee docker-compose.log
+          CMD='$SCRIPTS/utils/release.sh -p /data/ccache -n ccache' docker compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Build games
@@ -59,11 +59,11 @@ jobs:
 
       - name: Upload data
         run: |
-          CMD='$SCRIPTS/util/clean-ccache.sh' docker compose up
-          CMD='$SCRIPTS/util/release.sh upload -p /data/ccache -n ccache -T "ccache (from Action)" -b ${{ github.sha }}' docker compose up
-          CMD='$SCRIPTS/util/release.sh delete -n ccache -l 3' docker compose up
-          CMD='$SCRIPTS/util/release.sh upload -p /data -n game-data -T "game-data (from Action)" -b ${{ github.sha }}' docker compose up
-          CMD='$SCRIPTS/util/release.sh delete -n game-data -l 3' docker compose up
+          CMD='$SCRIPTS/utils/clean-ccache.sh' docker compose up
+          CMD='$SCRIPTS/utils/release.sh upload -p /data/ccache -n ccache -T "ccache (from Action)" -b ${{ github.sha }}' docker compose up
+          CMD='$SCRIPTS/utils/release.sh delete -n ccache -l 3' docker compose up
+          CMD='$SCRIPTS/utils/release.sh upload -p /data -n game-data -T "game-data (from Action)" -b ${{ github.sha }}' docker compose up
+          CMD='$SCRIPTS/utils/release.sh delete -n game-data -l 3' docker compose up
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: server
