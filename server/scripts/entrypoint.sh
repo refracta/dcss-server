@@ -1,26 +1,25 @@
 #!/bin/bash
 
 source "$DGL_CONF_HOME/dgl-manage.conf"
-dgl create-versions-db
-dgl create-crawl-gamedir
-dgl publish --confirm
-
-# convenience: run whatever CL arguments there are if we got to this point.
-# probably something like /bin/bash.
-if [ "$#" -gt 0 ]; then
-    exec "$@"
-fi
-if [ -n "$CMD" ]; then
+if [ -z "$CMD" ]; then
+    dgl create-versions-db
+    dgl create-crawl-gamedir
+    dgl publish --confirm
+else
+    dgl create-versions-db > /dev/null 2>&1
+    dgl create-crawl-gamedir > /dev/null 2>&1
+    dgl publish --confirm > /dev/null 2>&1
     eval "$CMD"
+    exit 0
 fi
 
 INIT_FLAG_FILE="/var/run/dcss-server-init"
 if [ ! -f "$INIT_FLAG_FILE" ]; then
-  init.sh
+  "$SCRIPTS"/init.sh
   touch "$INIT_FLAG_FILE"
 fi
 
-run.sh
+"$SCRIPTS"/run.sh
 
 #Otherwise just tail the webtiles log
 # if you get an error, that's because the trunk version is not installed in the volumes
