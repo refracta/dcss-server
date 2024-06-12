@@ -82,5 +82,5 @@ RUN mkdir -p /cores
 
 # Next steps for creating versionsdb/crawl gamedir/publishing dgl files and building crawl is done after starting,
 # because volumes need to be mounted to preserve state.
-ENTRYPOINT ["$SRC_SCRIPTS/static/entrypoint.sh"]
-HEALTHCHECK CMD ["$SRC_SCRIPTS/static/healthcheck.sh"]
+ENTRYPOINT ["sh", "-c", "$SRC_SCRIPTS/static/entrypoint.sh"]
+HEALTHCHECK CMD ["sh", "-c", "$SRC_SCRIPTS/static/healthcheck.sh"]
