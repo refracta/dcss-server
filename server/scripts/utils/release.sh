@@ -71,26 +71,34 @@ get_latest_tag() {
     curl -s "https://api.github.com/repos/$REPO/tags" | jq -r ".[].name" | grep "^${name}-" | sort -rV | head -n 1
 }
 
-download_files() {
-    mkdir -p "$PATH_DIR"
-
+get_release_info() {
     if [ -n "$TAG" ]; then
-        release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$TAG")
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/$TAG"
     elif [ -n "$NAME" ] && [ -n "$VERSION" ]; then
-        release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}")
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}"
     elif [ -n "$NAME" ]; then
         latest_tag=$(get_latest_tag "$NAME")
-        if (("$latest_tag")); then
+        while [ -n "$latest_tag" ]; do
             release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$latest_tag")
-        else
-            echo "No releases found for name prefix: $NAME"
-            exit 1
-        fi
+            release_title=$(echo $release_info | jq -r '.name')
+            if [[ "$release_title" != "[Uploading]"* ]]; then
+                echo "$release_info"
+                return
+            fi
+            latest_tag=$(curl -s "https://api.github.com/repos/$REPO/tags" | jq -r ".[].name" | grep "^${name}-" | sort -rV | grep -A 1 "^${latest_tag}$" | tail -n 1)
+        done
+        echo "No suitable releases found for name prefix: $NAME"
+        exit 1
     else
         echo "Either tag (-t) or name (-n) must be specified."
         exit 1
     fi
+}
 
+download_files() {
+    mkdir -p "$PATH_DIR"
+
+    release_info=$(get_release_info)
     release_tag=$(echo $release_info | jq -r '.tag_name')
     release_title=$(echo $release_info | jq -r '.name')
 
@@ -135,11 +143,12 @@ upload_files() {
     fi
 
     title=${TITLE:-$tag}
+    uploading_title="[Uploading] $title"
 
     if [ -n "$BRANCH" ]; then
-        gh release create "$tag" -R "$REPO" --title "$title" --target "$BRANCH" -n ""
+        gh release create "$tag" -R "$REPO" --title "$uploading_title" --target "$BRANCH" -n ""
     else
-        gh release create "$tag" -R "$REPO" --title "$title" -n ""
+        gh release create "$tag" -R "$REPO" --title "$uploading_title" -n ""
     fi
 
     gh release upload "$tag" "$PARENT_DIR/binary_"* -R "$REPO"
@@ -148,7 +157,11 @@ upload_files() {
         rm "$PARENT_DIR/binary_"*
     fi
 
-    echo "Compression and upload completed!"
+    echo "Uploaded files. Updating release title..."
+
+    gh release edit "$tag" -R "$REPO" --title "$title"
+
+    echo "Upload and release update completed!"
 }
 
 delete_releases() {
