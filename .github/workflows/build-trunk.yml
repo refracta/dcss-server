@@ -28,12 +28,12 @@ jobs:
 
       - name: Download ccache
         run: |
-          CMD="$SCRIPTS/util/release.sh -p /data/ccache -n ccache" docker compose up 2>&1 | tee docker-compose.log
+          CMD='$SCRIPTS/util/release.sh -p /data/ccache -n ccache' docker compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Build trunk
         run: |
-          CMD="dgl update-trunk" docker-compose up 2>&1 | tee docker-compose.log
+          CMD='dgl update-trunk' docker-compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Print result

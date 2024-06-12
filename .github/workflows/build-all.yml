@@ -28,12 +28,12 @@ jobs:
 
       - name: Download ccache
         run: |
-          CMD="$SCRIPTS/util/release.sh -p /data/ccache -n ccache" docker compose up 2>&1 | tee docker-compose.log
+          CMD='$SCRIPTS/util/release.sh -p /data/ccache -n ccache' docker compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Build games
         run: |
-          CMD="$SCRIPTS/game/install-crawl-versions.sh" docker-compose up 2>&1 | tee docker-compose.log
+          CMD='$SCRIPTS/game/install-crawl-versions.sh' docker-compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Print result
