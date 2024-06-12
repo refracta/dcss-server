@@ -1,0 +1,35 @@
+name: build-test
+
+on:
+  push:
+    branches: [ master, develop, test-* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@v10
+        with:
+          root-reserve-mb: 32768
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-docker-images: 'true'
+          remove-codeql: 'true'
+
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          docker compose build
+          COMMAND="ls utils" docker compose up
+        working-directory: server
+
+      - name: Print result
+        run: |
+          grep -B 100 -A 3 -e "Error 1" -e "\[fail\]" docker-compose.log || true
+          ls data/crawl-master | xargs
+          ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
+        working-directory: server
