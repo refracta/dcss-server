@@ -11,7 +11,7 @@ if [ "$#" -gt 0 ]; then
     exec "$@"
 fi
 if [ -n "$CMD" ]; then
-    exec "$CMD"
+    eval "$CMD"
 fi
 
 INIT_FLAG_FILE="/var/run/dcss-server-init"
