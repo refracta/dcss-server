@@ -50,6 +50,8 @@ RUN echo 'export PATH="/usr/lib/ccache:$PATH"' | tee -a ~/.bashrc
 RUN ccache -F 0
 RUN ccache -M 0
 
+RUN git clone https://github.com/refracta/dcss-server /usr/src/dgamelaunch-config -b test-new-structure
+chown -R crawl-dev /usr/src/dgamelaunch-config
 WORKDIR /home/crawl-dev
 
 # set up dgamelaunch
@@ -65,7 +67,6 @@ RUN mkdir logs \
 
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 RUN git config --global url.https://github.com/.insteadOf git://gitorious.org/
-RUN git clone https://github.com/refracta/dcss-server /usr/src/dgamelaunch-config -b test-new-structure
 RUN echo 'export PATH="$DGL_CONF_HOME/bin:$DGL_CONF_HOME/server/scripts:$PATH"' | tee -a ~/.bashrc
 
 USER root
