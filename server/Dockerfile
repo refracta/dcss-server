@@ -7,6 +7,7 @@ FROM ubuntu:24.04
 
 ENV DGL_CHROOT=""
 ENV DGL_CONF_HOME=/home/crawl-dev/dgamelaunch-config/
+ENV SCRIPTS="$DGL_CONF_HOME/scripts/"
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=dumb
 
@@ -50,7 +51,7 @@ RUN ccache -M 0
 
 RUN git clone https://github.com/refracta/dcss-server /usr/src/dgamelaunch-config -b test-new-structure
 RUN chown -R crawl-dev /usr/src/dgamelaunch-config
-ENV PATH="$DGL_CONF_HOME/bin:$DGL_CONF_HOME/server/scripts:$PATH"
+ENV PATH="$DGL_CONF_HOME/bin:$PATH"
 
 WORKDIR /home/crawl-dev
 
@@ -80,5 +81,5 @@ RUN mkdir -p /cores
 
 # Next steps for creating versionsdb/crawl gamedir/publishing dgl files and building crawl is done after starting,
 # because volumes need to be mounted to preserve state.
-ENTRYPOINT ["static/entrypoint.sh"]
-HEALTHCHECK CMD ["static/healthcheck.sh"]
+ENTRYPOINT ["$SCRIPTS/static/entrypoint.sh"]
+HEALTHCHECK CMD ["$SCRIPTS/static/healthcheck.sh"]
