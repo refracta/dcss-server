@@ -6,3 +6,4 @@ if [ ! -d "$DGL_CONF_HOME" ] || [ -z "$(ls -A "$DGL_CONF_HOME")" ]; then
 fi
 
 entrypoint.sh
+tail -f /dev/null
