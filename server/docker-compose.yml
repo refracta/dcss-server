@@ -17,6 +17,7 @@ services:
       - ./data/dgldir:/dgldir
       - ./data/games:/usr/games
       - ./data/ccache:/root/.cache/ccache
+      - ./data/:/data
     environment:
       - COMMAND
       - USE_REVERSE_PROXY
