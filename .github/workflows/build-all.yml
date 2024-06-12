@@ -21,14 +21,19 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Download ccache
+      - name: Build image
         run: |
-          ./release.sh download -p data/ccache -n ccache
+          docker compose build 2>&1 | tee docker-compose.log
         working-directory: server
 
-      - name: Build
+      - name: Download ccache
         run: |
-          ONLY_BUILD=true COMMAND=build-all docker-compose -f docker-compose.yml -f docker-compose.build.yml up 2>&1 | tee docker-compose.log
+          COMMAND="$SCRIPTS/util/release.sh -p /data/ccache -n ccache" docker compose up 2>&1 | tee docker-compose.log
+        working-directory: server
+
+      - name: Build games
+        run: |
+          COMMAND="$SCRIPTS/game/install-crawl-versions.sh" docker-compose up 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Print result
