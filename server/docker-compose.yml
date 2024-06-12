@@ -19,6 +19,6 @@ services:
       - ./data/ccache:/root/.cache/ccache
       - ./data/:/data
     environment:
-      - COMMAND
+      - CMD
       - USE_REVERSE_PROXY
       - USE_DWEM

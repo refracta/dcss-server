@@ -10,8 +10,8 @@ dgl publish --confirm
 if [ "$#" -gt 0 ]; then
     exec "$@"
 fi
-if [ -n "$COMMAND" ]; then
-    exec "$COMMAND"
+if [ -n "$CMD" ]; then
+    exec "$CMD"
 fi
 
 INIT_FLAG_FILE="/var/run/dcss-server-init"
