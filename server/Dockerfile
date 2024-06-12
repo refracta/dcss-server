@@ -81,5 +81,5 @@ RUN mkdir -p /cores
 
 # Next steps for creating versionsdb/crawl gamedir/publishing dgl files and building crawl is done after starting,
 # because volumes need to be mounted to preserve state.
-ENTRYPOINT ["/usr/src/dgamelaunch-config/server/scripts/static/entrypoint.sh"]
-HEALTHCHECK CMD ["/usr/src/dgamelaunch-config/server/scripts/static/healthcheck.sh"]
+ENTRYPOINT ["static/entrypoint.sh"]
+HEALTHCHECK CMD ["static/healthcheck.sh"]
