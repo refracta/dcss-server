@@ -1,7 +1,14 @@
 #!/bin/bash
 
-game/setup-cron.sh
+"$SCRIPTS"/game/setup-cron.sh
 
-web/init.sh
-web/setup-apache.sh
-web/setup-nginx.sh
+"$SCRIPTS"/web/init.sh
+"$SCRIPTS"/web/setup-apache.sh
+"$SCRIPTS"/web/setup-nginx.sh
+
+if [ "$USE_REVERSE_PROXY" = 'true' ]; then
+  "$SCRIPTS"/util/setup-reverse-proxy.sh
+fi
+if [ "$USE_DWEM" = 'true' ]; then
+  "$SCRIPTS"/util/setup-dwem.s
+fi

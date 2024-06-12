@@ -24,8 +24,8 @@ jobs:
       - name: Build
         run: |
           docker compose build
-          COMMAND="ls utils" docker compose up
-          COMMAND="game/install-crawl-versions.sh" docker compose up
+          COMMAND="dgl update-trunk" docker compose up
+          COMMAND="$SCRIPTS/game/install-crawl-versions.sh" docker compose up
         working-directory: server
 
       - name: Print result

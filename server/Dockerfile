@@ -8,6 +8,7 @@ FROM ubuntu:24.04
 ENV DGL_CHROOT=""
 ENV DGL_CONF_HOME=/home/crawl-dev/dgamelaunch-config/
 ENV SCRIPTS="$DGL_CONF_HOME/scripts/"
+ENV SRC_SCRIPTS=/usr/src/dgamelaunch-config/scripts/
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=dumb
 
@@ -81,5 +82,5 @@ RUN mkdir -p /cores
 
 # Next steps for creating versionsdb/crawl gamedir/publishing dgl files and building crawl is done after starting,
 # because volumes need to be mounted to preserve state.
-ENTRYPOINT ["$SCRIPTS/static/entrypoint.sh"]
-HEALTHCHECK CMD ["$SCRIPTS/static/healthcheck.sh"]
+ENTRYPOINT ["$SRC_SCRIPTS/static/entrypoint.sh"]
+HEALTHCHECK CMD ["$SRC_SCRIPTS/static/healthcheck.sh"]
