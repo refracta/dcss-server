@@ -52,6 +52,8 @@ RUN ccache -M 0
 
 RUN git clone https://github.com/refracta/dcss-server /usr/src/dgamelaunch-config -b test-new-structure
 chown -R crawl-dev /usr/src/dgamelaunch-config
+
+
 WORKDIR /home/crawl-dev
 
 # set up dgamelaunch
