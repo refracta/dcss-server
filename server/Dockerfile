@@ -7,8 +7,8 @@ FROM ubuntu:24.04
 
 ENV DGL_CHROOT=""
 ENV DGL_CONF_HOME=/home/crawl-dev/dgamelaunch-config/
-ENV SCRIPTS="$DGL_CONF_HOME/scripts/"
-ENV SRC_SCRIPTS=/usr/src/dgamelaunch-config/scripts/
+ENV SCRIPTS="$DGL_CONF_HOME/server/scripts/"
+ENV SRC_SCRIPTS=/usr/src/dgamelaunch-config/server/scripts/
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=dumb
 
