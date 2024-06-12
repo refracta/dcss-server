@@ -45,14 +45,12 @@ RUN useradd -m crawl \
 # Update symlinks
 RUN /usr/sbin/update-ccache-symlinks
 
-# Prepend ccache into the PATH
-RUN echo 'export PATH="/usr/lib/ccache:$PATH"' | tee -a /etc/bash.bashrc
 RUN ccache -F 0
 RUN ccache -M 0
 
 RUN git clone https://github.com/refracta/dcss-server /usr/src/dgamelaunch-config -b test-new-structure
 RUN chown -R crawl-dev /usr/src/dgamelaunch-config
-RUN echo 'export PATH="$DGL_CONF_HOME/bin:$DGL_CONF_HOME/server/scripts:$PATH"' | tee -a /etc/bash.bashrc
+ENV PATH="$DGL_CONF_HOME/bin:$DGL_CONF_HOME/server/scripts:/usr/lib/ccache:$PATH"
 
 WORKDIR /home/crawl-dev
 
