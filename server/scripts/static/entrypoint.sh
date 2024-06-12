@@ -5,4 +5,4 @@ if [ ! -d "$DGL_CONF_HOME" ] || [ -z "$(ls -A "$DGL_CONF_HOME")" ]; then
     cp -r "/usr/src/dgamelaunch-config"/* "$DGL_CONF_HOME"
 fi
 
-$TARGET_DIR/entrypoint.sh
+entrypoint.sh
