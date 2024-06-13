@@ -19,7 +19,7 @@ git clone https://github.com/refracta/dcss-server
 cd dcss-server/server
 
 # Download pre-built game binaries and configurations
-docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p data -n game-data' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
 # Run with random ports
 docker compose up -d && docker compose logs -f
 # Run on specified ports
