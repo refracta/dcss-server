@@ -10,7 +10,7 @@
 
 #### One-Line Deploy
 ```bash
-curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/one-line-deploy.sh | sudo -E sh -
+curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/stable.sh | sudo -E sh -
 ```
 
 #### Fast Deploy
@@ -21,7 +21,7 @@ cd dcss-server/server
 # 최신 설정으로 업데이트 (업데이트를 희망하는 경우 사용)
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 # 사전 빌드된 게임 바이너리와 설정 다운로드
-docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n stable-game-data' dcss-server
 # 랜덤 포트와 함께 실행
 docker compose up -d && docker compose logs -f
 # 지정된 포트에서 실행
@@ -38,7 +38,7 @@ docker compose build
 
 # 이 명령은 선택적으로 사용할 수 있습니다, ccache 파일을 다운로드하여 컴파일 속도를 가속할 수 있습니다. 
 # 미적용시 GitHub Action Runner의 ubuntu-24.04 이미지 기준, 전체 빌드에 6시간 이상이 소요되며, 적용시 45분 정도로 가속됩니다.
-docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n ccache' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n stable-ccache' dcss-server
 
 # USE_DWEM: https://github.com/refracta/dcss-webtiles-extension-module 사용을 적용합니다.
 # USE_REVERSE_PROXY: X-Forwarded-For 아이피를 로그에 기록하기 위한 패치를 적용합니다.
