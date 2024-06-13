@@ -16,7 +16,7 @@ curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/stable/server/
 <summary>develop</summary>
  
 ```bash
-curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/develop/server/scripts/deploy/stable.sh | sudo -E sh -
+curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/develop/server/scripts/deploy/develop.sh | sudo -E sh -
 ```
 
 </details>
