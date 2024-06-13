@@ -20,6 +20,8 @@ cd dcss-server/server
 
 # Download pre-built game binaries and configurations
 docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+# Update with the latest settings (use if you want to update)
+docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 # Run with random ports
 docker compose up -d && docker compose logs -f
 # Run on specified ports
