@@ -13,9 +13,9 @@ services:
       - "0:81"
     volumes:
       - ./data/config:/home/crawl-dev/dgamelaunch-config
-      - ./data/versionsdb:/versionsdb
-      - ./data/crawl-master:/crawl-master
-      - ./data/dgldir:/dgldir
+      - ./data/versionsdb:/home/crawl/DGL/versionsdb
+      - ./data/crawl-master:/home/crawl/DGL/crawl-master
+      - ./data/dgldir:/home/crawl/DGL/dgldir
       - ./data/games:/usr/games
       - ./data/ccache:/root/.cache/ccache
       - ./data/:/data
