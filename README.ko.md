@@ -23,7 +23,7 @@ curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/develop.
 
 #### Fast Deploy
 ```bash
-git clone https://github.com/refracta/dcss-server -b master
+git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
 
 # 최신 설정으로 업데이트 (업데이트를 희망하는 경우 사용)
@@ -52,7 +52,7 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 
 #### Deploy with Build
 ```bash
-git clone https://github.com/refracta/dcss-server -b master
+git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
 
 # Docker Hub에 저장된 이미지를 다운로드하지 않고 빌드가 필요한 경우 다음 명령어를 사용할 수 있습니다.
