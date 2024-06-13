@@ -12,10 +12,18 @@
 ```bash
 curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/stable.sh | sudo -E sh -
 ```
+<details>
+<summary>develop</summary>
+ 
+```bash
+curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/develop.sh | sudo -E sh -
+```
+
+</details>
 
 #### Fast Deploy
 ```bash
-git clone https://github.com/refracta/dcss-server
+git clone https://github.com/refracta/dcss-server -b master
 cd dcss-server/server
 
 # 최신 설정으로 업데이트 (업데이트를 희망하는 경우 사용)
@@ -27,10 +35,24 @@ docker compose up -d && docker compose logs -f
 # 지정된 포트에서 실행
 docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker compose logs -f
 ```
+<details>
+<summary>develop</summary>
+ 
+```bash
+git clone https://github.com/refracta/dcss-server -b develop
+cd dcss-server/server
+
+docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+docker compose up -d && docker compose logs -f
+docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker compose logs -f
+```
+
+</details>
 
 #### Deploy with Build
 ```bash
-git clone https://github.com/refracta/dcss-server
+git clone https://github.com/refracta/dcss-server -b master
 cd dcss-server/server
 
 # Docker Hub에 저장된 이미지를 다운로드하지 않고 빌드가 필요한 경우 다음 명령어를 사용할 수 있습니다.
@@ -47,6 +69,21 @@ docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccac
 docker compose run --rm -e CMD='$SCRIPTS/game/install-crawl-versions.sh' dcss-server
 USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs -f
 ```
+
+<details>
+<summary>develop</summary>
+ 
+```bash
+git clone https://github.com/refracta/dcss-server -b develop
+cd dcss-server/server
+
+docker compose build
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n ccache' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/game/install-crawl-versions.sh' dcss-server
+USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs -f
+```
+
+</details>
 
 #### Notes
  - 모든 서버 데이터는 `server/data/{config,versionsdb,crawl-master,dgldir,games}`에 저장됩니다.
