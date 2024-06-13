@@ -30,7 +30,7 @@ jobs:
 
       - name: Download ccache
         run: |
-          docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n ccache' dcss-server 2>&1 | tee docker-compose.log
+          docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n stable-ccache' dcss-server 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Build games
