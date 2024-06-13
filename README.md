@@ -10,7 +10,7 @@ This script is designed to simplify the deployment and management of a Dungeon C
 
 #### One-Line Deploy
 ```bash
-curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/one-line-deploy.sh | sudo -E sh -
+curl -fsSL https://refracta.github.io/dcss-server/server/scripts/deploy/stable.sh | sudo -E sh -
 ```
 
 #### Fast Deploy
@@ -19,7 +19,7 @@ git clone https://github.com/refracta/dcss-server
 cd dcss-server/server
 
 # Download pre-built game binaries and configurations
-docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n stable-game-data' dcss-server
 # Update with the latest settings (use if you want to update)
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 # Run with random ports
@@ -38,7 +38,7 @@ docker compose build
 
 # This command is optional. You can download ccache files to speed up the compilation process.
 # Without this, the full build takes over 6 hours based on the ubuntu-24.04 image of the GitHub Action Runner, but with it, it speeds up to about 45 minutes.
-docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n ccache' dcss-server
+docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n stable-ccache' dcss-server
 
 # USE_DWEM: Apply https://github.com/refracta/dcss-webtiles-extension-module.
 # USE_REVERSE_PROXY: Apply a patch to log the X-Forwarded-For IP.
