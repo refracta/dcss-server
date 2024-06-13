@@ -1,8 +1,8 @@
-name: upload-data
+name: upload-stable-data
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, upload-stable-data ]
   schedule:
     - cron: '0 * * * *'
 
