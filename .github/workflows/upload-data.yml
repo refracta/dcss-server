@@ -2,7 +2,7 @@ name: upload-data
 
 on:
   push:
-    branches: [ master, develop, upload-data ]
+    branches: [ stable, develop, upload-data ]
   schedule:
     - cron: '0 */3 * * *'
 
