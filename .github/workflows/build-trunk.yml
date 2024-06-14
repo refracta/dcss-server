@@ -36,6 +36,11 @@ jobs:
           docker compose run --rm -e CMD='dgl update-trunk' dcss-server 2>&1 | tee docker-compose.log
         working-directory: server
 
+      - name: Run test
+        run: |
+          docker compose run --rm -e CMD='$SCRIPTS/init.sh && $SCRIPTS/run.sh && sleep 30 && cat $DGL_CHROOT/crawl-master/webserver/run/webtiles.log' dcss-server 2>&1 | tee docker-compose.log
+        working-directory: server
+
       - name: Print result
         run: |
           grep -B 100 -A 3 -e "Error:" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log || true
