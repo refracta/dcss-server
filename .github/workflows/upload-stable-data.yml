@@ -42,12 +42,12 @@ jobs:
 
       - name: Print result
         run: |
-          grep -B 100 -A 3 -e "Error 1" -e "\[fail\]" docker-compose.log || true
-          echo 'crawl-master'
+          grep -B 100 -A 3 -e "Error:" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log || true
+          echo '[crawl-master]'
           ls data/crawl-master | xargs
-          echo 'games'
+          echo '[games]'
           ls data/games | xargs
-          ! grep -q -e "Error 1" -e "\[fail\]" docker-compose.log
+          ! grep -q -e "Error:" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log
         working-directory: server
 
       - name: Push image
@@ -66,10 +66,10 @@ jobs:
       - name: Upload data
         run: |
           GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/clean-ccache.sh' dcss-server
-          GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh upload -p /data/ccache -n stable-ccache -T "stable-ccache (from Action)" -b ${{ github.sha }}' dcss-server
+          GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh upload -p /data/ccache -n stable-ccache -T "stable-ccache (from Action)" -b stable' dcss-server
           GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh delete -n stable-ccache -l 3' dcss-server
           sudo rm -rf data/{ccache,config}
-          GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh upload -p /data -n stable-game-data -T "stable-game-data (from Action)" -b ${{ github.sha }}' dcss-server
+          GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh upload -p /data -n stable-game-data -T "stable-game-data (from Action)" -b stable' dcss-server
           GH_TOKEN=$GH_TOKEN docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh delete -n stable-game-data -l 3' dcss-server
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

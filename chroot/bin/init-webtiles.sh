@@ -2,8 +2,7 @@
 
 NAME=$1
 
-VERSIONS="git $(seq 11 31 | sed 's/^/0./')"
-VERSIONS+=" dcssca hellcrawl gnollcrawl bloatcrawl2 gooncrawl xcrawl stoatsoup bcadrencrawl kimchicrawl addedcrawl"
+source "$DGL_CONF_HOME/versions.conf"
 
 for v in $VERSIONS; do
     cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-$v-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-$v/$NAME.rc"

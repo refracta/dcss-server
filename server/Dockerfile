@@ -60,22 +60,21 @@ WORKDIR /home/crawl-dev
 # permissions may be too open for a production server.
 COPY server/etc/dgl_sudoers /etc/sudoers.d/
 
+USER crawl
+RUN mkdir -p $DGL_CHROOT/bin $DGL_CHROOT/run \
+    && touch $DGL_CHROOT/dgamelaunch
+
 # set up dgamelaunch
-# TODO: what are these directories in ~crawl-dev used for? `run` doesn't exist
-# TODO: Fix logs, announcements.log, run
 USER crawl-dev
-RUN mkdir logs run \
-    && touch logs/announcements.log \
-    && git clone https://github.com/crawl/dgamelaunch.git \
+RUN mkdir logs && touch logs/announcements.log
+RUN git clone https://github.com/crawl/dgamelaunch.git \
     && cd dgamelaunch && ./autogen.sh --enable-debugfile --enable-sqlite --enable-shmem && make
 
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
 USER root
 RUN cd dgamelaunch \
-    && mkdir -p $DGL_CHROOT/bin \
-    && make install && cp ee virus $DGL_CHROOT/bin \
-    && touch $DGL_CHROOT/dgamelaunch
+    && make install && cp ee virus $DGL_CHROOT/bin
 
 # this is taken from build-crawl-dirs to here because it's the only directory that's outside of volumes due to not storing state
 RUN mkdir -p /cores

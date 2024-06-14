@@ -16,7 +16,7 @@ services:
       - ./data/versionsdb:/home/crawl/DGL/versionsdb
       - ./data/crawl-master:/home/crawl/DGL/crawl-master
       - ./data/dgldir:/home/crawl/DGL/dgldir
-      - ./data/games:/usr/games
+      - ./data/games:/home/crawl/DGL/usr/games
       - ./data/ccache:/root/.cache/ccache
       - ./data/:/data
     environment:

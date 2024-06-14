@@ -1,8 +1,6 @@
 #!/bin/bash
 source "$DGL_CONF_HOME/dgl-manage.conf"
-
-VERSIONS="$(seq 11 31 | sed 's/^/0./')"
-VERSIONS+=" dcssca hellcrawl gnollcrawl bloatcrawl2 gooncrawl xcrawl stoatsoup bcadrencrawl kimchicrawl addedcrawl"
+source "$DGL_CONF_HOME/versions.conf"
 
 for v in $VERSIONS; do
     cp -a --no-clobber "$DGL_CHROOT/crawl-master/crawl-init" "$DGL_CHROOT/crawl-master/crawl-$v"

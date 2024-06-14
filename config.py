@@ -42,8 +42,8 @@ watch_socket_dirs = True
 # Game configs
 # %n in paths is replaced by the current username
 # Constants for crawl binaries
-STABLE_LAUNCHER = "/bin/crawl-stable-launcher.sh"
-GIT_LAUNCHER = "/bin/crawl-git-launcher.sh"
+STABLE_LAUNCHER = "%%DGL_CHROOT%%/bin/crawl-stable-launcher.sh"
+GIT_LAUNCHER = "%%DGL_CHROOT%%/bin/crawl-git-launcher.sh"
 
 template_game = {
     "crawl_binary": STABLE_LAUNCHER,
@@ -51,7 +51,7 @@ template_game = {
     "rcfile_path": "%%CHROOT_RCFILESDIR%%/crawl-{}/",
     "macro_path": "%%CHROOT_RCFILESDIR%%/crawl-{}/",
     "morgue_path": "%%CHROOT_MORGUEDIR%%/%n/",
-    "morgue_url": "https://archive.nemelex.cards/morgue/%n/",
+    "morgue_url": "CONFIG_MORGUE_URL",
     "inprogress_path": "%%CHROOT_INPROGRESSDIR%%/crawl-{}/",
     "ttyrec_path": "%%CHROOT_TTYRECDIR%%/%n/",
     "socket_path": "%%CHROOT_WEBDIR%%/sockets",
@@ -163,8 +163,7 @@ forks = [
 games = OrderedDict(trunk + stable_versions + forks)
 
 dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
-# TODO: version support
-milestone_file = [
+forks_milestones = [
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-dcssca/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-hellcrawl/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-gnollcrawl/saves/milestones",
@@ -174,12 +173,21 @@ milestone_file = [
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-stoatsoup/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-bcadrencrawl/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-kimchicrawl/saves/milestones",
-    "%%CHROOT_CRAWL_BASEDIR%%/crawl-addedcrawl/saves/milestones",
+    "%%CHROOT_CRAWL_BASEDIR%%/crawl-addedcrawl/saves/milestones"
+]
+
+version_milestones = [
+    f"%%CHROOT_CRAWL_BASEDIR%%/crawl-0.{version}/saves/milestones"
+    for version in version_range
+]
+
+trunk_milestones = [
     "%%CHROOT_CRAWL_GAMEDIR%%/saves/milestones",
     "%%CHROOT_CRAWL_GAMEDIR%%/saves/milestones-tutorial",
     "%%CHROOT_CRAWL_GAMEDIR%%/saves/milestones-sprint",
     "%%CHROOT_CRAWL_GAMEDIR%%/saves/milestones-descent"
 ]
+milestone_file = [*forks_milestones, *version_milestones, *trunk_milestones]
 
 # Set to None not to read milestones
 
@@ -192,7 +200,7 @@ max_connections = 500
 # Script to initialize a user, e.g. make sure the paths
 # and the rc file exist. This is not done by the server
 # at the moment.
-init_player_program = "/bin/init-webtiles.sh"
+init_player_program = "%%DGL_CHROOT%%/bin/init-webtiles.sh"
 
 ssl_options = None # No SSL
 # in a production server, you really do want to use SSL...
