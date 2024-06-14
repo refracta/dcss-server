@@ -1,5 +1,7 @@
 #!/bin/bash
 
+"$SCRIPTS"/dgl/patch-server.sh
+
 "$SCRIPTS"/dgl/setup-user.sh
 "$SCRIPTS"/game/setup-cron.sh
 
