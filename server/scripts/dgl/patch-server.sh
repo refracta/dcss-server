@@ -1,3 +1,4 @@
 #!/bin/bash
 
-sed -i 's/do_chroot()//g' "$CHROOT_CRAWL_BASEDIR/webserver/webtiles/server.py"
+source "$DGL_CONF_HOME/dgl-manage.conf"
+sed -i 's/do_chroot()//g' "$WEBDIR/webtiles/server.py"

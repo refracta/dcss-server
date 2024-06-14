@@ -1,5 +1,6 @@
 Logged in as: $USERNAME
 
+A) AddedCrawl
 B) BloatCrawl 2               E) BcadrenCrawl
 C) DCSS Circus Animals        G) GnollCrawl
 H) HellCrawl                  K) KimchiCrawl
