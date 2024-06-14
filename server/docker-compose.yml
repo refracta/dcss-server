@@ -8,9 +8,9 @@ services:
       dockerfile: server/Dockerfile
     ports:
       - "0:8080"
+      - "0:8081"
+      - "0:8082"
       - "0:22"
-      - "0:80"
-      - "0:81"
     volumes:
       - ./data/config:/home/crawl-dev/dgamelaunch-config
       - ./data/versionsdb:/home/crawl/DGL/versionsdb
