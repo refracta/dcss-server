@@ -20,7 +20,6 @@ clone-crawl-ref() {
     say "BloatCrawl 2" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bloatcrawl2 https://github.com/Hellmonk/bloatcrawl2.git
     say "Stoat Soup" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add stoatsoup https://github.com/damerell/crawl.git
     say "BcadrenCrawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bcadrencrawl https://github.com/Bcadren/crawl.git
-    say "AddedCrawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add addedcrawl https://github.com/FlowingWriter/addedcrawl.git
     say "Update branches for all forks"
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" submodule update --init
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" fetch --all
