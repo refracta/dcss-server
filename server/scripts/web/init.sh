@@ -1,6 +1,7 @@
 #!/bin/bash
 source "$DGL_CONF_HOME/dgl-manage.conf"
 source "$DGL_CONF_HOME/versions.conf"
+BASE_DIR="/var/www/crawl/meta"
 
 sudo mkdir /var/www/crawl
 cd /var/www/crawl
