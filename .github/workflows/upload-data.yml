@@ -45,12 +45,12 @@ jobs:
 
       - name: Print result
         run: |
-          grep -B 100 -A 3 -e "Error:" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log || true
+          grep -B 100 -A 3 -e "Error:" -e "Errno" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log || true
           echo '[crawl-master]'
           ls data/crawl-master | xargs
           echo '[games]'
           ls data/games | xargs
-          ! grep -q -e "Error:" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log
+          ! grep -q -e "Error:" -e "Errno" -e "Error 1" -e "\[fail\]" -e "failed to solve:" docker-compose.log
         working-directory: server
 
       - name: Push image
