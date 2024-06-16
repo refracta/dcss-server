@@ -170,7 +170,7 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
 
     # ABS_COMMON_DIR is the absolute path from outside the chroot
     # corresponding to COMMON_DIR
-    ABS_COMMON_DIR=$CRAWL_BASEDIR/$GAME
+    ABS_COMMON_DIR="%%CRAWL_BASEDIR%%/$GAME"
 
     if [[ ! -d "$ABS_COMMON_DIR" ]]; then
         echo -e "Expected to find common game dir $ABS_COMMON_DIR but did not find it"
