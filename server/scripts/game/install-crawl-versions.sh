@@ -3,6 +3,9 @@ source "$DGL_CONF_HOME/dgl-manage.conf"
 source "$DGL_CONF_HOME/versions.conf"
 
 for v in $VERSIONS; do
+    if [ "$v" == "git" ]; then
+        continue
+    fi
     cp -a --no-clobber "$DGL_CHROOT/crawl-master/crawl-init" "$DGL_CHROOT/crawl-master/crawl-$v"
 done
 
