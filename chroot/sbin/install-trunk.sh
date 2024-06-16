@@ -112,7 +112,7 @@ install-game() {
     link-logfiles
 
     chown -R $CRAWL_UGRP $SAVEDIR
-    ln -snf $GAME_BINARY $CHROOT$CHROOT_CRAWL_BASEDIR/crawl-latest
+    ln -snf $GAME_BINARY "%%CRAWL_BASEDIR%%/crawl-latest"
 }
 
 register-game-version() {
@@ -170,18 +170,18 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
 
     # ABS_COMMON_DIR is the absolute path from outside the chroot
     # corresponding to COMMON_DIR
-    ABS_COMMON_DIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME
+    ABS_COMMON_DIR=$CRAWL_BASEDIR/$GAME
 
-    if [[ ! -d "$CHROOT$COMMON_DIR" ]]; then
+    if [[ ! -d "$ABS_COMMON_DIR" ]]; then
         echo -e "Expected to find common game dir $ABS_COMMON_DIR but did not find it"
         exit 1
     fi
 
     GAME_BINARY=$GAME-$REVISION
-    BINARIES_DIR=$CHROOT$CHROOT_BINARIES
+    BINARIES_DIR="%%CRAWL_BINARY_PATH%%"
 
-    WEBDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/webserver
-    GAMEDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME_BINARY
+    WEBDIR="%%CRAWL_BASEDIR%%/webserver"
+    GAMEDIR="%%CRAWL_BASEDIR%%/$GAME_BINARY"
     # Absolute path to save game directory
     SAVEDIR=$GAMEDIR/saves
     DATADIR=$GAMEDIR/data

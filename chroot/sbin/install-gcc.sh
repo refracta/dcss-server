@@ -131,16 +131,16 @@ assert-not-evil "$COMMON_DIR"
 
 # ABS_COMMON_DIR is the absolute path from outside the chroot
 # corresponding to COMMON_DIR
-ABS_COMMON_DIR=$CHROOT$COMMON_DIR
+ABS_COMMON_DIR="%%CRAWL_BASEDIR%%/$GAME"
 
 if [[ ! -d "$ABS_COMMON_DIR" ]]; then
     mkdir -p "$ABS_COMMON_DIR"
 fi
 
 GAME_BINARY=$GAME
-BINARIES_DIR=$CHROOT$CHROOT_BINARIES
+BINARIES_DIR="%%CRAWL_BINARY_PATH%%"
 
-GAMEDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME
+GAMEDIR="%%CRAWL_BASEDIR%%/$GAME"
 # Absolute path to save game directory
 SAVEDIR=$GAMEDIR/saves
 DATADIR=$GAMEDIR/data
