@@ -26,14 +26,9 @@ jobs:
         with:
           ref: stable
 
-      - name: Test Stable Files (FROM SCHEDULED DEV BRANCH)
-        run: |
-          cat docker-compose.yml && cat Dockerfile
-        working-directory: server
-
       - name: Build image
         run: |
-          docker compose build 2>&1 | tee docker-compose.log
+          cp docker-compose.stable.yml docker-compose.override.yml && docker compose build 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Download ccache
