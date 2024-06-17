@@ -7,6 +7,9 @@ cd /var/www/crawl
 sudo ln -s $DGL_CHROOT/dgldir/morgue/
 sudo ln -s $DGL_CHROOT/dgldir/rcfiles/
 sudo ln -s $DGL_CHROOT/dgldir/ttyrec/
+sudo ln -s $DGL_CONF_HOME/server/etc/keys/cao_key
+sudo ln -s $DGL_CONF_HOME/server/etc/keys/cao_key.ppk
+# sudo ln -s $DGL_CONF_HOME/server/etc/code_of_conduct.txt
 
 BASE_DIR="/var/www/crawl/meta"
 for v in $VERSIONS; do
