@@ -2,7 +2,7 @@ name: upload-stable-data
 
 on:
   push:
-    branches: [ stable, upload-stable-data ]
+    branches: [ stable, develop, upload-stable-data ]
   schedule:
 #    - cron: '0 0 * * *'
     - cron: '*/15 * * * *'
@@ -34,6 +34,12 @@ jobs:
       - name: Download ccache
         run: |
           docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n stable-ccache' dcss-server 2>&1 | tee docker-compose.log
+        working-directory: server
+
+      - name: Test Stable Files
+        run: |
+          docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/Dockerfile' dcss-server 2>&1 | tee docker-compose.log
+          docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/docker-compose.yml' dcss-server 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Build games
