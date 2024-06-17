@@ -25,6 +25,8 @@ curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/develop/server
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+mv docker-compose.combine.yml docker-compose.yml
 
 # 최신 설정으로 업데이트 (업데이트를 희망하는 경우 사용)
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
@@ -41,6 +43,8 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+mv docker-compose.combine.yml docker-compose.yml
 
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
@@ -54,6 +58,8 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+mv docker-compose.combine.yml docker-compose.yml
 
 # Docker Hub에 저장된 이미지를 다운로드하지 않고 빌드가 필요한 경우 다음 명령어를 사용할 수 있습니다.
 docker compose build
@@ -76,6 +82,8 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
+docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml \ && 
+mv docker-compose.combine.yml docker-compose.yml
 
 docker compose build
 docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n ccache' dcss-server

@@ -1,3 +1,6 @@
 services:
   dcss-server:
     image: refracta/dcss-server:stable
+    build:
+      args:
+        BRANCH: stable
