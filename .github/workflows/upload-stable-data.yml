@@ -59,8 +59,7 @@ jobs:
       - name: Push image
         run: |
           TIMESTAMP=$(date -u +"%y%m%d%H%M")
-          docker tag refracta/dcss-server:latest refracta/dcss-server:stable
-          docker tag refracta/dcss-server:latest refracta/dcss-server:stable-$TIMESTAMP
+          docker tag refracta/dcss-server:stable refracta/dcss-server:stable-$TIMESTAMP
           echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
           docker push refracta/dcss-server:stable-$TIMESTAMP
           docker push refracta/dcss-server:stable
