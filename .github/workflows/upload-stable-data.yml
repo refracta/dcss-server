@@ -31,12 +31,18 @@ jobs:
           cp docker-compose.stable.yml docker-compose.override.yml && docker compose build 2>&1 | tee docker-compose.log
         working-directory: server
 
+      - name: Test Stable Files1
+        run: |
+          docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/Dockerfile' dcss-server 2>&1 | tee docker-compose.log
+          docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/docker-compose.yml' dcss-server 2>&1 | tee docker-compose.log
+        working-directory: server
+
       - name: Download ccache
         run: |
           docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -p /data/ccache -n stable-ccache' dcss-server 2>&1 | tee docker-compose.log
         working-directory: server
 
-      - name: Test Stable Files
+      - name: Test Stable Files2
         run: |
           docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/Dockerfile' dcss-server 2>&1 | tee docker-compose.log
           docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/docker-compose.yml' dcss-server 2>&1 | tee docker-compose.log
