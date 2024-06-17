@@ -78,7 +78,7 @@ RUN git config --global url.https://github.com/.insteadOf git://github.com/
 USER root
 RUN cd dgamelaunch \
     && make install && cp ee virus $DGL_CHROOT/bin \
-    && mkdir -p $DGL_CHROOT/usr/share  \
+    && mkdir -p $DGL_CHROOT/usr/share \
     && cp -rv /usr/share/terminfo $DGL_CHROOT/usr/share
 
 # this is taken from build-crawl-dirs to here because it's the only directory that's outside of volumes due to not storing state
