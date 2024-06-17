@@ -33,6 +33,7 @@ jobs:
 
       - name: Test Stable Files1
         run: |
+          docker images
           docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/Dockerfile' dcss-server 2>&1 | tee docker-compose.log
           docker compose run --rm -e CMD='cat $DGL_CONF_HOME/server/docker-compose.yml' dcss-server 2>&1 | tee docker-compose.log
         working-directory: server
