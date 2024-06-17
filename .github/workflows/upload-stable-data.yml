@@ -2,10 +2,9 @@ name: upload-stable-data
 
 on:
   push:
-    branches: [ stable, develop, upload-stable-data ]
+    branches: [ stable, upload-stable-data ]
   schedule:
-#    - cron: '0 0 * * *'
-    - cron: '*/15 * * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   upload:
