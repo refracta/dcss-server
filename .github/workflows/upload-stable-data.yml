@@ -26,6 +26,12 @@ jobs:
         with:
           ref: stable
 
+      - name: Test Stable Files0
+        run: |
+          cat Dockerfile
+          cat docker-compose.yml
+        working-directory: server
+
       - name: Build image
         run: |
           cp docker-compose.stable.yml docker-compose.override.yml && docker compose build 2>&1 | tee docker-compose.log
