@@ -7,10 +7,11 @@ services:
       context: ../
       dockerfile: server/Dockerfile
     ports:
+      - "0:22"
+      - "0:8022"
       - "0:8080"
       - "0:8081"
       - "0:8082"
-      - "0:22"
     volumes:
       - ./data/config:/home/crawl-dev/dgamelaunch-config
       - ./data/versionsdb:/versionsdb
@@ -18,6 +19,7 @@ services:
       - ./data/dgldir:/dgldir
       - ./data/games:/usr/games
       - ./data/ccache:/root/.cache/ccache
+      - ./data/ssh-keys:/etc/ssh/keys
       - ./data/:/data
     environment:
       - CMD

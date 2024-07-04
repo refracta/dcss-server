@@ -135,6 +135,9 @@ EOF
 }
 
 user-is-admin() {
+    if [ ! -f "$USER_DB" ]; then
+        return 1
+    fi
     local found="$(echo "SELECT username FROM dglusers
                          WHERE username='$CHAR_NAME' AND (flags & 1) = 1;" |
                    sqlite3 "$USER_DB")"

@@ -26,7 +26,7 @@ curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/develop/server
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.stable.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 # Update with the latest settings (use if you want to update)
@@ -44,12 +44,12 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml \ && 
-mv docker-compose.combine.yml docker-compose.yml
 
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+# Run with random ports
 docker compose up -d && docker compose logs -f
+# Run with specified ports
 docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker compose logs -f
 ```
 
@@ -59,7 +59,7 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 # If you need to build without downloading the image stored in Docker Hub, you can use the following command.
@@ -83,7 +83,7 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 docker compose build
@@ -101,7 +101,7 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 - `crawl-master` stores game settings, Milestone, Morgue, etc.
 - `dgldir` stores data used by `dgamelaunch`.
 - `games` stores the built game binaries.
-- Access Crawl WebTiles on port `8080`, game logs on `8081 (Apache)` and `8082 (Nginx)`. SSH access is available on port `12222`. (You can access using `nemelex:xobeh` or [CAO key](https://crawl.develz.org/cao_key), refer to [setup-user.sh](server/scripts/dgl/setup-user.sh))
+- Access Crawl WebTiles on port `8080`, game logs on `8081 (Apache)` and `8082 (Nginx)`. SSH access is available on port `12222`. (You can access using `nemelex:xobeh` or [CAO key](https://crawl.develz.org/cao_key), refer to [setup-user.sh](server/scripts/dgl/setup-user.sh)), You can also connect to a web terminal on port 8022.
 - You can use [trigger-rebuild.pl](utils/trigger-rebuild.pl) and [auth-save-downloader.pl](utils/auth-save-downloader.pl). (Refer to: [apache.conf](server/scripts/web/conf/apache.conf), [nginx.conf](server/scripts/web/conf/nginx.conf))
 - Build the trunk and some forks every 15 minutes. (Refer to: [setup-cron.sh](server/scripts/game/setup-cron.sh))
 - You can fork this repository to manage personalized build configurations as releases. (Refer to: [release.sh](server/scripts/utils/release.sh), [upload-data.yml](.github/workflows/upload-data.yml))

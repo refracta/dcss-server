@@ -31,7 +31,7 @@ template_path = "%%CHROOT_WEBDIR%%/templates/"
 server_socket_path = None # Uses global temp dir
 
 # Server name, so far only used in the ttyrec metadata
-server_id = ""
+server_id = "CONFIG_SERVER_ID"
 
 # Disable caching of game data files
 game_data_no_cache = False
@@ -55,6 +55,7 @@ template_game = {
     "inprogress_path": "%%CHROOT_INPROGRESSDIR%%/crawl-{}/",
     "ttyrec_path": "%%CHROOT_TTYRECDIR%%/%n/",
     "socket_path": "%%CHROOT_WEBDIR%%/sockets",
+    "show_save_info": True
 }
 
 

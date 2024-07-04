@@ -25,7 +25,7 @@ curl -fsSL https://raw.githubusercontent.com/refracta/dcss-server/develop/server
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.stable.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 # 최신 설정으로 업데이트 (업데이트를 희망하는 경우 사용)
@@ -43,12 +43,14 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 docker compose run --rm -e CMD='cd $DGL_CONF_HOME && git pull' dcss-server
 docker compose run --rm -e CMD='$SCRIPTS/utils/release.sh download -o -p /data -n game-data' dcss-server
+# 랜덤 포트와 함께 실행
 docker compose up -d && docker compose logs -f
+# 지정된 포트에서 실행
 docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker compose logs -f
 ```
 
@@ -58,7 +60,7 @@ docker compose -f docker-compose.yml -f docker-compose.ports.yml up -d && docker
 ```bash
 git clone https://github.com/refracta/dcss-server -b stable
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.ports.yml -f docker-compose.stable.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 # Docker Hub에 저장된 이미지를 다운로드하지 않고 빌드가 필요한 경우 다음 명령어를 사용할 수 있습니다.
@@ -82,7 +84,7 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 ```bash
 git clone https://github.com/refracta/dcss-server -b develop
 cd dcss-server/server
-docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml \ && 
+docker compose -f docker-compose.yml -f docker-compose.ports.yml config > docker-compose.combine.yml && \
 mv docker-compose.combine.yml docker-compose.yml
 
 docker compose build
@@ -100,7 +102,7 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
  - `crawl-master`에는 게임 설정과 Milestone, Morgue 등이 저장됩니다.
  - `dgldir`에는 `dgamelaunch`가 사용하는 데이터가 저장됩니다.
  - `games`에는 빌드된 게임 바이너리가 저장됩니다.
- - `8080`으로 크롤 웹타일, `8081 (Apache)`과 `8082 (Nginx)`번 포트로 게임 로그에 접근할 수 있습니다. `12222`번 포트로 SSH 접속이 가능합니다. (`nemelex:xobeh` 또는 [CAO 키](https://crawl.develz.org/cao_key)를 이용한 접속이 가능합니다, 참고 [setup-user.sh](server/scripts/dgl/setup-user.sh))
+ - `8080`으로 크롤 웹타일, `8081 (Apache)`과 `8082 (Nginx)`번 포트로 게임 로그에 접근할 수 있습니다. `12222`번 포트로 SSH 접속이 가능합니다. (`nemelex:xobeh` 또는 [CAO 키](https://crawl.develz.org/cao_key)를 이용한 접속이 가능합니다, 참고 [setup-user.sh](server/scripts/dgl/setup-user.sh)), 또한 8022번 포트로 웹 터미널 접속이 가능합니다.
  - [trigger-rebuild.pl](utils/trigger-rebuild.pl), [auth-save-downloader.pl](utils/auth-save-downloader.pl)의 사용이 가능합니다. (참고: [apache.conf](server/scripts/web/conf/apache.conf), [nginx.conf](server/scripts/web/conf/nginx.conf))
  - 15분마다 trunk와 일부 fork의 빌드를 실행합니다. (참고: [setup-cron.sh](server/scripts/game/setup-cron.sh))
  - 이 리포지토리를 포크하여 개인화된 빌드 구성을 릴리즈로 관리할 수 있습니다. (참고: [release.sh](server/scripts/utils/release.sh), [upload-data.yml](.github/workflows/upload-data.yml))
