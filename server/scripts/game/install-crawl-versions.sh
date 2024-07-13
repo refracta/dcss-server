@@ -16,6 +16,7 @@ done
 dgl update-gcc dcssca crawl-forks/dcssca/bugfix 6
 dgl update-gcc hellcrawl crawl-forks/hellcrawl/bugfix 6
 dgl update-gcc gnollcrawl crawl-forks/gnollcrawl/bugfix 6
+dgl update-gcc bcrawl bcrawl/master
 dgl update-gcc bloatcrawl2 bloatcrawl2/master 7
 dgl update-gcc stoatsoup stoatsoup/master
 dgl update-gcc gooncrawl gooncrawl/gooncrawl_stable 7
