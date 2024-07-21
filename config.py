@@ -86,7 +86,7 @@ def create_game(game_key, overrides=None):
     return game_key, config
 
 
-version_range = range(11, 31 + 1)
+version_range = range(11, 32 + 1)
 versions = list(version_range)
 mods = [
     {"name": None, "suffix": "", "options": [], "inprogress": None},

@@ -10,7 +10,7 @@ for v in $VERSIONS; do
 done
 
 dgl update-trunk
-for version in {31..11}; do
+for version in {32..11}; do
   dgl update-stable 0.$version
 done
 dgl update-gcc dcssca crawl-forks/dcssca/bugfix 6
