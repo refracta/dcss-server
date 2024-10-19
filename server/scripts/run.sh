@@ -12,6 +12,8 @@ sudo -u crawl nohup ttyd -p 8022 -t 'theme={"background": "#000000"}' -W dgamela
 
 # Limits CPU usage for builds performed with cron.
 nohup cpulimit -e cc1plus -l 20 &
+# Limits CPU usage for ttyrec compressing performed with cron.
+nohup cpulimit -e bzip2 -l 20 &
 
 dgl crawl-inotify-dglwhere
 

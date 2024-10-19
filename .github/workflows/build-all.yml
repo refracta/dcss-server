@@ -23,7 +23,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker compose build 2>&1 | tee docker-compose.log
+          docker compose build --build-arg BRANCH=${{ github.ref_name }} 2>&1 | tee docker-compose.log
         working-directory: server
 
       - name: Download ccache

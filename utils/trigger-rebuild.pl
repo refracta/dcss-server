@@ -151,7 +151,7 @@ sub main() {
   my $ver = param('v');
 
   if (not $ver) {
-    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', map { "0.$_" } (11 .. 31);
+    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', map { "0.$_" } (11 .. 32);
   } elsif ($ver eq 'trunk') {
     do_update 'trunk';
   } elsif ($ver =~ /^0\.\d+$/) {
@@ -162,6 +162,8 @@ sub main() {
     do_update 'gcc', 'hellcrawl crawl-forks/hellcrawl/bugfix 6';
   } elsif ($ver eq 'gnollcrawl') {
     do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix 6';
+  } elsif ($ver eq 'bcrawl') {
+    do_update 'gcc', 'bcrawl bcrawl/master';
   } elsif ($ver eq 'bloatcrawl2') {
     do_update 'gcc', 'bloatcrawl2 bloatcrawl2/master 7';
   } elsif ($ver eq 'stoatsoup') {

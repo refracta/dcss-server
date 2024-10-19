@@ -26,12 +26,29 @@ failures=()
 skip=0 succ=0 fail=0
 shopt -s nullglob
 for ttyrec in "$TTYRECDIR"/*/*.ttyrec; do
+    # Not working
     # If anyone has it open, skip it.
-    if quietly lsof "$ttyrec"; then
+    # if quietly lsof "$ttyrec"; then
+    #   verbiate -n "."
+    #   (( ++skip ))
+    #   continue
+    # fi
+
+    # It's a little messy, but it works.
+    relative_path="${ttyrec#$TTYRECDIR/}"
+    found=0
+    for subdir in "$INPROGRESSDIR"/*; do
+      inprogress_file="$subdir/${relative_path//\//:}"
+      if [ -f "$inprogress_file" ]; then
+        echo "File $ttyrec exists in progress directory $subdir as ${relative_path//\//:}. Skipping."
         verbiate -n "."
         (( ++skip ))
-        continue
-    fi
+        found=1
+        break
+      fi
+    done
+    [ $found -eq 1 ] && continue
+
     if bzip2 "$ttyrec"; then
         (( ++succ ))
         verbiate -n "+"

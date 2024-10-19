@@ -20,6 +20,7 @@ clone-crawl-ref() {
     say "BloatCrawl 2" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bloatcrawl2 https://github.com/Hellmonk/bloatcrawl2.git
     say "Stoat Soup" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add stoatsoup https://github.com/damerell/crawl.git
     say "BcadrenCrawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bcadrencrawl https://github.com/Bcadren/crawl.git
+    say "B-Crawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bcrawl https://github.com/b-crawl/bcrawl.git
     say "Update branches for all forks"
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" submodule update --init
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" fetch --all
@@ -60,6 +61,13 @@ apply-patch() {
   if [[ "$BRANCH" == "bcadrencrawl/bCrawl" ]] && [[ -f $REPO_DIR/crawl-ref/source/describe-spells.cc ]]; then
     echo "Patching broken if condition in describe-spells.cc... (BcadrenCrawl)"
     sed -i 's/if (!testbits(get_spell_flags(spell), spflag::MR_check) || spell == SPELL_PAIN))$/if (!testbits(get_spell_flags(spell), spflag::MR_check) || spell == SPELL_PAIN)/' $REPO_DIR/crawl-ref/source/describe-spells.cc
+  fi
+  if [[ "$BRANCH" == origin* ]]; then
+    echo "Patching SRC_BRANCH variable... (DCSS 'master' & 'stone_soup-%' branches)"
+    sed -i 's#git rev-parse --abbrev-ref HEAD || echo release#(git rev-parse --abbrev-ref HEAD || echo release) | sed "s|^heads/origin/||"#' $REPO_DIR/crawl-ref/source/Makefile
+  else
+    echo "Patching SRC_BRANCH variable... (Forks, Disable EXPERIMENTAL_BRANCH options)"
+    sed -i 's#git rev-parse --abbrev-ref HEAD || echo release#echo release#' $REPO_DIR/crawl-ref/source/Makefile
   fi
 }
 

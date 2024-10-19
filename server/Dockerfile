@@ -8,7 +8,6 @@ FROM ubuntu:24.04
 ENV DGL_CHROOT=""
 ENV DGL_CONF_HOME=/home/crawl-dev/dgamelaunch-config
 ENV SCRIPTS="$DGL_CONF_HOME/server/scripts"
-ENV SRC_SCRIPTS=/usr/src/dgamelaunch-config/server/scripts
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=dumb
 ARG BRANCH
@@ -20,7 +19,7 @@ ENV LANG=en_US.UTF-8
 RUN sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && update-locale LANG=$LANG
-RUN apt-get install -y --no-install-recommends sudo git gh bash build-essential autoconf automake bison libncursesw5-dev flex liblua5.1-0-dev libsqlite3-dev libz-dev locales vim nano tmux locales-all pkg-config python3 python3-pip python3-yaml ccache cpulimit libpng-dev sqlite3 libpcre3 libpcre3-dev advancecomp pngcrush openssh-server curl wget libfl-dev cron jq
+RUN apt-get install -y --no-install-recommends sudo git gh bash build-essential autoconf automake bison libncursesw5-dev flex liblua5.1-0-dev libsqlite3-dev libz-dev locales vim nano tmux locales-all pkg-config python3 python3-pip python3-yaml ccache cpulimit libpng-dev sqlite3 libpcre3 libpcre3-dev advancecomp pngcrush openssh-server curl wget libfl-dev cron jq lsof
 RUN apt-get install -y apache2 libcgi-pm-perl libdbi-perl libdbd-sqlite3-perl cpanminus && cpanm Linux::Inotify2
 RUN apt-get install -y nginx nginx-extras fcgiwrap spawn-fcgi && mkdir -p /var/run/fcgiwrap
 RUN echo "deb [trusted=yes] http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
@@ -61,7 +60,7 @@ WORKDIR /home/crawl-dev
 
 # allow crawl-dev to run various things with sudo without a password. These
 # permissions may be too open for a production server.
-COPY server/etc/dgl_sudoers /etc/sudoers.d/
+COPY --chown=root:root --chmod=440 server/etc/dgl_sudoers /etc/sudoers.d/dgl_sudoers
 
 # set up dgamelaunch
 # TODO: what are these directories in ~crawl-dev used for? `run` doesn't exist
@@ -92,5 +91,5 @@ RUN mkdir -p /cores
 
 # Next steps for creating versionsdb/crawl gamedir/publishing dgl files and building crawl is done after starting,
 # because volumes need to be mounted to preserve state.
-ENTRYPOINT ["sh", "-c", "$SRC_SCRIPTS/static/entrypoint.sh"]
-HEALTHCHECK CMD ["sh", "-c", "$SRC_SCRIPTS/static/healthcheck.sh"]
+ENTRYPOINT ["/usr/src/dgamelaunch-config/server/scripts/static/entrypoint.sh"]
+HEALTHCHECK CMD ["/usr/src/dgamelaunch-config/server/scripts/static/healthcheck.sh"]

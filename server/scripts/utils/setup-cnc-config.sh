@@ -10,7 +10,7 @@ cp -r $DGL_CONF_HOME/server/etc/webserver/* $WEBDIR
 sed -i 's|<script type="text/javascript">|<script  type="text/javascript">\
       localStorage.removeItem("DWEM");\
       localStorage.DWEM_MODULES = JSON.stringify(\
-        ["io-hook", "site-information", "websocket-factory", "rc-manager", "module-manager", "cnc-banner", "sound-support", "legacy-module-support"].map(m => "../modules/" + m + "/index.js")\
+        ["io-hook", "site-information", "websocket-factory", "rc-manager", "module-manager", "cnc-banner", "cnc-userinfo", "sound-support", "cnc-chat", "cnc-public-chat", "convenience-module", "cnc-splash-screen", "wtrec", "advanced-rc-editor"].map(m => "../modules/" + m + "/index.js")\
       );|g' "$WEBDIR/templates/client.html"
 grep -qxF '# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt || sed -i '1i# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt
 dgl publish --confirm > /dev/null 2>&1

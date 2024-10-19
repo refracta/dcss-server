@@ -20,6 +20,18 @@ if [ ! -f "$INIT_FLAG_FILE" ]; then
   touch "$INIT_FLAG_FILE"
 fi
 
+function safe-exit {
+    echo "Stopping SSH service..."
+    service ssh stop
+    echo "Restarting webtiles service..."
+    /etc/init.d/webtiles stop
+    echo "Waiting for 5 seconds..."
+    sleep 5
+    echo "Exiting script."
+    exit 0
+}
+trap 'safe-exit' EXIT
+
 "$SCRIPTS"/run.sh
 
 tail -f "$DGL_CHROOT/crawl-master/webserver/run/webtiles.log"

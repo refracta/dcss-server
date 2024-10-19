@@ -1,9 +1,9 @@
 Logged in as: $USERNAME
 
-A) AddedCrawl
-B) BloatCrawl 2               E) BcadrenCrawl
-C) DCSS Circus Animals        G) GnollCrawl
-H) HellCrawl                  K) KimchiCrawl
+A) AddedCrawl                 B) B-Crawl
+E) BcadrenCrawl               C) DCSS Circus Animals
+G) GnollCrawl                 H) HellCrawl
+K) KimchiCrawl                L) BloatCrawl 2
 N) GoonCrawl                  S) Stoat Soup
 X) X-Crawl
 
