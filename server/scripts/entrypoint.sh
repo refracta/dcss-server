@@ -1,5 +1,6 @@
 #!/bin/bash
 
+git config --global --add safe.directory '*'
 if [ -z "$CMD" ]; then
     "$SCRIPTS"/dgl/generate-conf.sh
     dgl create-versions-db
@@ -10,6 +11,7 @@ else
     dgl create-versions-db > /dev/null 2>&1
     dgl create-crawl-gamedir > /dev/null 2>&1
     dgl publish --confirm > /dev/null 2>&1
+    echo
     eval "$CMD"
     exit 0
 fi
@@ -21,10 +23,13 @@ if [ ! -f "$INIT_FLAG_FILE" ]; then
 fi
 
 function safe-exit {
+    echo "Removing crawl-update.lock..."
+    rm -rf /home/crawl-dev/dgamelaunch-config/locks/crawl-update.lock
     echo "Stopping SSH service..."
     service ssh stop
-    echo "Restarting webtiles service..."
+    echo "Stopping webtiles service..."
     /etc/init.d/webtiles stop
+    rm -rf "$DGL_CHROOT/crawl-master/webserver/run/webtiles.pid"
     echo "Waiting for 5 seconds..."
     sleep 5
     echo "Exiting script."

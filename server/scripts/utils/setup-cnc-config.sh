@@ -14,3 +14,4 @@ sed -i 's|<script type="text/javascript">|<script  type="text/javascript">\
       );|g' "$WEBDIR/templates/client.html"
 grep -qxF '# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt || sed -i '1i# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt
 dgl publish --confirm > /dev/null 2>&1
+echo

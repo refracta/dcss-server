@@ -87,7 +87,7 @@ say-do crawl-do nice make CC="$CC" CXX="$CXX" -C source \
 
 prompt "install ${GAME} (${REVISION})"
 
-say-do sudo -H $DGL_CHROOT/sbin/install-gcc.sh "$VERSION"
+say-do sudo -HE $DGL_CHROOT/sbin/install-gcc.sh "$VERSION"
 
 if [[ $VERSION = [0-9]* ]]; then
     SUPER_VER="Stable"

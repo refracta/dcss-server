@@ -1,0 +1,26 @@
+{
+	email [VALID EMAIL ADDRESS] # Used for SSL Certificate generation.
+}
+WEBTILES.DOMAIN.com { # Subdomain for webtiles access.
+	handle {
+		header Connection *Upgrade* # Support websockets
+		header Upgrade websocket
+		reverse_proxy dcss-server:8080 # MUST set up Caddy in DOCKER Container for addressing by container name.
+		# Other potential options to explore: stream_timeout, stream_close_delay, flush_interval
+	}
+}
+MORGUES.DOMAIN.com { # Subdomain for morgues access.
+	reverse_proxy dcss-server:8082
+}
+# Caddy is a lightweight reverse proxy with out-of-the-box automated SSL certificate management.
+# Instructions:
+# 1. Tested with Caddy alpine docker image: https://hub.docker.com/_/caddy
+# 2. Follow Caddy Docker guidance: https://www.docker.com/blog/deploying-web-applications-quicker-and-easier-with-caddy-2/
+# 3. Requires changes to docker-compose.yml:
+#   A. Add a docker network. Recommend "web" and "internal" for Caddy and "internal" for webtiles/nginx. This allows Caddy to address the dcss-server container by name in its configuration files.
+#   B. Internal network = "driver: bridge". Web network = "external: true".
+#   C. Give Caddy external access to ports 80 and 443.
+#   D. Create a folder with a Caddyfile and add it as a volume mount to the caddy image as /etc/Caddy/Caddyfile (see docker guide).
+#   E. Use docker network command to create networks with names "web" and "internal".
+# 4. Launch. Check Caddy container logs to confirm SSL certificate request successful and test connection.
+# NOTE: You will only be able to access internal services through the host name. You/users can only access web services via Caddy.

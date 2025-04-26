@@ -13,6 +13,7 @@ services:
       - "0:8081"
       - "0:8082"
     volumes:
+      - ./data/logs:/home/crawl-dev/logs
       - ./data/config:/home/crawl-dev/dgamelaunch-config
       - ./data/versionsdb:/versionsdb
       - ./data/crawl-master:/crawl-master
