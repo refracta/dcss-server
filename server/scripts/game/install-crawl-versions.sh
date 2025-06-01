@@ -28,4 +28,4 @@ dgl update-gcc xcrawl crawl-forks/xcrawl/bugfix 7 2>&1 | tee -a /home/crawl-dev/
 dgl update-gcc bcadrencrawl bcadrencrawl/bCrawl 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
 dgl update-gcc kimchicrawl crawl-forks/kimchicrawl/bugfix 7 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
 dgl update-gcc addedcrawl crawl-forks/addedcrawl/bugfix 7 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
-dgl update-gcc dcst dcst/test 2>&1 | tee -a /home/crawl-dev/logs/forks.log  2>&1
+dgl update-gcc dcst dcst/test 2>&1 | tee -a /home/crawl-dev/logs/forks.log
