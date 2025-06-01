@@ -114,6 +114,17 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
   configured correctly. After the update, execute `$SCRIPTS/web/init.sh` to refresh
   web symbolic links.
 
+### Container Management Tips
+If a new fork is added after the container has already been built, run the following
+commands inside the container:
+
+```bash
+cd /home/crawl-dev/dgamelaunch-config && git pull
+FORCE_CLONE=true $DGL_CONF_HOME/crawl-build/update-public-repository.sh
+update-gcc   # manually install updated dependencies
+$SCRIPTS/web/init.sh
+```
+
 ### Upstream Projects
 * https://github.com/crawl/dgamelaunch-config
 * Scripts necessary for running the Dungeon Crawl Stone Soup server. In `utils/testing-container`, there is a container environment configuration for CI/CD verification tasks of Crawl.

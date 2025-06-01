@@ -88,6 +88,10 @@ apply-patch() {
 BRANCH=$1
 REVISION="$2"
 clone-crawl-ref
+if [[ -n "$FORCE_CLONE" ]]; then
+    say "FORCE_CLONE requested; repository cloned. Exiting."
+    exit 0
+fi
 [[ -n "$BRANCH" ]] || abort-saying "$0: Checkout branch not specified!"
 update-crawl-ref
 update-submodules
