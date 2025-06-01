@@ -1,8 +1,6 @@
 
 # dcss-server
 
-> [README.md](README.md) was created based on [README.ko.md](README.ko.md), which was automatically translated via ChatGPT.
-
 This script is designed to simplify the deployment and management of a Dungeon Crawl Stone Soup server. It includes as many fork versions as possible (DCSS CA, HellCrawl, GnollCrawl, B-Crawl, BloatCrawl2, GoonCrawl, X-Crawl, StoatSoup, BcadrenCrawl, KimchiCrawl, AddedCrawl, DCST, YiufCrawl, Stone Soup Nostalgia, OOFCrawl, BoggartCrawl) and official release versions (0.11 ~ 0.33) in a latest Ubuntu image environment.
 
 ### First Run Guide:
