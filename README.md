@@ -117,7 +117,7 @@ commands inside the container:
 ```bash
 cd /home/crawl-dev/dgamelaunch-config && git pull
 FORCE_CLONE=true $DGL_CONF_HOME/crawl-build/update-public-repository.sh
-update-gcc   # manually install updated dependencies
+dgl update-gcc <FORK_NAME> <BRANCH_NAME>
 $SCRIPTS/web/init.sh
 ```
 
