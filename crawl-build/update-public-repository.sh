@@ -8,23 +8,36 @@ source $DGL_CONF_HOME/crawl-git.conf
 REPO_DIR=$PWD/$CRAWL_REPOSITORY_DIR
 
 clone-crawl-ref() {
-    if [[ -d "$CRAWL_REPOSITORY_DIR" && -d "$CRAWL_REPOSITORY_DIR/.git" ]]; then
-        return 0
+    if [[ -d "$CRAWL_REPOSITORY_DIR" && -d "$CRAWL_REPOSITORY_DIR/.git" && -z "$FORCE_CLONE" ]]; then
+        say "Repository already exists; skipping clone"
+    else
+        if [[ -n "$FORCE_CLONE" && -d "$CRAWL_REPOSITORY_DIR" ]]; then
+            say "Removing existing repository due to FORCE_CLONE"
+            rm -rf "$CRAWL_REPOSITORY_DIR"
+        fi
+        CMDLINE="git clone $CRAWL_GIT_URL $CRAWL_REPOSITORY_DIR"
+        say "$CMDLINE"
+        $CMDLINE
     fi
-    CMDLINE="git clone $CRAWL_GIT_URL $CRAWL_REPOSITORY_DIR"
-    say "$CMDLINE"
-    $CMDLINE
     say "Add Fork Remotes"
-    say "Crawl-forks" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add crawl-forks https://github.com/refracta/crawl-forks.git
-    say "GoonCrawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add gooncrawl https://github.com/Floodkiller/crawl.git
-    say "BloatCrawl 2" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bloatcrawl2 https://github.com/Hellmonk/bloatcrawl2.git
-    say "DCST" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add dcst https://github.com/Hellmonk/dcst.git
-    say "Stoat Soup" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add stoatsoup https://github.com/damerell/crawl.git
-    say "BcadrenCrawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bcadrencrawl https://github.com/Bcadren/crawl.git
-    say "B-Crawl" && git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add bcrawl https://github.com/b-crawl/bcrawl.git
+    ensure-remote crawl-forks https://github.com/refracta/crawl-forks.git
+    ensure-remote gooncrawl https://github.com/Floodkiller/crawl.git
+    ensure-remote bloatcrawl2 https://github.com/Hellmonk/bloatcrawl2.git
+    ensure-remote dcst https://github.com/Hellmonk/dcst.git
+    ensure-remote stoatsoup https://github.com/damerell/crawl.git
+    ensure-remote bcadrencrawl https://github.com/Bcadren/crawl.git
+    ensure-remote bcrawl https://github.com/b-crawl/bcrawl.git
     say "Update branches for all forks"
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" submodule update --init
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" fetch --all
+}
+
+ensure-remote() {
+    local name="$1"
+    local url="$2"
+    if ! git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote | grep -q "^$name$"; then
+        git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" remote add "$name" "$url"
+    fi
 }
 
 update-crawl-ref() {
