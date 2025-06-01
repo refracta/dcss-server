@@ -109,10 +109,6 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 ### Repository Management
 * This repository is used for the operation of [crawl.nemelex.cards](https://crawl.nemelex.cards).
 * If you need to add new forks or versions, you can request it via a Pull-Request.
-* When adding a new fork to an existing installation, run the update scripts with
-  `FORCE_CLONE=true` to force cloning the crawl repository so that new remotes are
-  configured correctly. After the update, execute `$SCRIPTS/web/init.sh` to refresh
-  web symbolic links.
 
 ### Container Management Tips
 If a new fork is added after the container has already been built, run the following
