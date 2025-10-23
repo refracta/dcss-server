@@ -1,11 +1,13 @@
 Logged in as: $USERNAME
 
 A) AddedCrawl                 B) B-Crawl
-E) BcadrenCrawl               C) DCSS Circus Animals
-G) GnollCrawl                 H) HellCrawl
-K) KimchiCrawl                L) BloatCrawl 2
-N) GoonCrawl                  S) Stoat Soup
-X) X-Crawl
+C) DCSS Circus Animals        D) DCST
+E) BcadrenCrawl               G) GnollCrawl
+H) HellCrawl                  K) KimchiCrawl
+L) BloatCrawl 2               N) GoonCrawl
+O) OOFCrawl                   R) BoggartCrawl
+T) Stone Soup Nostalgia       S) Stoat Soup
+X) X-Crawl                    Y) YiufCrawl
 
 q) Return to previous menu
 

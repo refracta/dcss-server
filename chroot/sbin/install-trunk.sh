@@ -70,7 +70,7 @@ copy-data-files() {
 
     # AFAIK current server admins have customizations in these files, so only
     # copy the other templates over if they're not already present.
-    cp --no-clobber source/webserver/templates/*.html $WEBDIR/templates/
+    cp --update=none source/webserver/templates/*.html $WEBDIR/templates/
 
     mkdir -p "$ABS_COMMON_DIR/data/docs"
     cp docs/crawl_changelog.txt "$ABS_COMMON_DIR/data/docs"
