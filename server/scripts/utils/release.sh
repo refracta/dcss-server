@@ -5,25 +5,8 @@ SPLIT_SIZE="1GiB"
 KEEP_FILES=false
 SAME_OWNER=false
 
-github_api() {
-    local url="$1"
-    local auth_header=""
-
-    if [ -n "${GH_TOKEN:-}" ]; then
-        auth_header="Authorization: Bearer $GH_TOKEN"
-    elif [ -n "${GITHUB_TOKEN:-}" ]; then
-        auth_header="Authorization: Bearer $GITHUB_TOKEN"
-    fi
-
-    if [ -n "$auth_header" ]; then
-        curl -sSfL -H "$auth_header" -H "Accept: application/vnd.github+json" "$url"
-    else
-        curl -sSfL -H "Accept: application/vnd.github+json" "$url"
-    fi
-}
-
 list_release_tags() {
-    local prefix="$1"
+    local prefix=$1
     local per_page=100
     local page=1
     local tags=""
@@ -31,10 +14,7 @@ list_release_tags() {
     while :; do
         local url="https://api.github.com/repos/$REPO/releases?per_page=$per_page&page=$page"
         local page_json
-        if ! page_json=$(github_api "$url"); then
-            echo "Failed to fetch releases from GitHub API." >&2
-            return 1
-        fi
+        page_json=$(curl -s "$url")
 
         if ! echo "$page_json" | jq -e 'type == "array"' >/dev/null 2>&1; then
             echo "Unexpected response from GitHub API while listing releases." >&2
@@ -45,7 +25,7 @@ list_release_tags() {
         local page_tags
         page_tags=$(echo "$page_json" | jq -r --arg prefix "$prefix" '.[] | select(.tag_name | startswith($prefix)) | select((.name // "") | startswith("[Uploading]") | not) | .tag_name')
         if [ -n "$page_tags" ]; then
-            tags="${tags}"$'\n'"${page_tags}"
+            tags="${tags}"$'\n'"$page_tags"
         fi
 
         local count
@@ -123,17 +103,18 @@ done
 
 get_latest_tag() {
     local name=$1
-    github_api "https://api.github.com/repos/$REPO/tags" | jq -r ".[].name" | grep "^${name}-" | sort -rV | head -n 1
+    curl -s "https://api.github.com/repos/$REPO/tags" | jq -r ".[].name" | grep "^${name}-" | sort -rV | head -n 1
 }
 
 get_release_info() {
     if [ -n "$TAG" ]; then
-        github_api "https://api.github.com/repos/$REPO/releases/tags/$TAG"
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/$TAG"
     elif [ -n "$NAME" ] && [ -n "$VERSION" ]; then
-        github_api "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}"
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}"
     elif [ -n "$NAME" ]; then
+        local prefix="${NAME}-"
         local tags
-        if ! tags=$(list_release_tags "${NAME}-"); then
+        if ! tags=$(list_release_tags "$prefix"); then
             return 1
         fi
 
@@ -144,7 +125,7 @@ get_release_info() {
             return 1
         fi
 
-        github_api "https://api.github.com/repos/$REPO/releases/tags/$latest_tag"
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/$latest_tag"
     else
         echo "Either tag (-t) or name (-n) must be specified." >&2
         return 1
@@ -157,7 +138,6 @@ download_files() {
     if ! release_info=$(get_release_info); then
         exit 1
     fi
-
     release_tag=$(echo "$release_info" | jq -r '.tag_name // empty')
     release_title=$(echo "$release_info" | jq -r '.name // empty')
 
@@ -173,12 +153,6 @@ download_files() {
     if [ -z "$assets" ]; then
         echo "No assets to download for the release $release_title ($release_tag). Exiting."
         exit 1
-    fi
-
-    if [ -n "${DRY_RUN:-}" ]; then
-        echo "$assets"
-        echo "DRY_RUN set; skipping download and extraction."
-        return 0
     fi
 
     for url in $assets; do
@@ -249,7 +223,8 @@ delete_releases() {
         exit 1
     fi
 
-    if ! releases=$(list_release_tags "$NAME"); then
+    local prefix="${NAME}-"
+    if ! releases=$(list_release_tags "$prefix"); then
         exit 1
     fi
     tags=($(echo "$releases" | sort -rV))
