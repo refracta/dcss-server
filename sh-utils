@@ -65,6 +65,11 @@ abort-saying() {
     exit 1
 }
 
+exit-saying() {
+    echo -e "$@, exiting."
+    exit 0
+}
+
 # Call with any argument to disable prompts
 enable-prompts() {
     local opt

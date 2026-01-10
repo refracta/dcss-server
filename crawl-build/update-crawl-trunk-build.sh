@@ -23,7 +23,7 @@ REVISION_FULL="$(git-do describe --long HEAD)"
 REVISION_OLD="$(echo "select hash from versions order by time desc limit 1;" | sqlite3 ${VERSIONS_DB})"
 
 [[ "$REVISION" == "$REVISION_OLD" ]] && \
-    abort-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
+    exit-saying "Nothing new to install at the moment: you asked for $REVISION_FULL and it's already installed"
 
 prompt "start update build"
 
@@ -70,7 +70,7 @@ if [[ "$(uname)" != "Darwin" ]] && {
         grep ^"$DGL_USER";
     }
 then
-    abort-saying "There are already active instances of this version (${REVISION_FULL}) running"
+    exit-saying "There are already active instances of this version (${REVISION_FULL}) running"
 fi
 
 echo "Searching for version tags..."
