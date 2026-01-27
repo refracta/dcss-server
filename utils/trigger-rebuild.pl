@@ -151,7 +151,7 @@ sub main() {
   my $ver = param('v');
 
   if (not $ver) {
-    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', 'dcst', 'nostalgia', 'yiufcrawl', 'oofcrawl', 'boggartcrawl', map { "0.$_" } (11 .. 33);
+    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', 'dcst', 'nostalgia', 'yiufcrawl', 'oofcrawl', 'boggartcrawl', map { "0.$_" } (11 .. 34);
   } elsif ($ver eq 'trunk') {
     do_update 'trunk';
   } elsif ($ver =~ /^0\.\d+$/) {
