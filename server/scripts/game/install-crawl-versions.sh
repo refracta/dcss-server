@@ -10,7 +10,7 @@ for v in $VERSIONS; do
 done
 
 dgl update-trunk | tee -a /home/crawl-dev/logs/trunk.log 
-for version in {33..11}; do
+for version in {34..11}; do
   dgl update-stable 0.$version | tee -a /home/crawl-dev/logs/stable.log 
 done
 dgl update-gcc nostalgia crawl-forks/nostalgia/bugfix 6 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
