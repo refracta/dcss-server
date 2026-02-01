@@ -7,10 +7,10 @@ if [ -z "$CMD" ]; then
     dgl create-crawl-gamedir
     dgl publish --confirm
 else
-    "$SCRIPTS"/dgl/generate-conf.sh > /dev/null 2>&1
-    dgl create-versions-db > /dev/null 2>&1
-    dgl create-crawl-gamedir > /dev/null 2>&1
-    dgl publish --confirm > /dev/null 2>&1
+    "$SCRIPTS"/dgl/generate-conf.sh 
+    dgl create-versions-db 
+    dgl create-crawl-gamedir
+    dgl publish --confirm
     echo
     eval "$CMD"
     exit 0

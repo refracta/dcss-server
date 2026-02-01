@@ -5,6 +5,41 @@ SPLIT_SIZE="1GiB"
 KEEP_FILES=false
 SAME_OWNER=false
 
+list_release_tags() {
+    local prefix=$1
+    local per_page=100
+    local page=1
+    local tags=""
+
+    while :; do
+        local url="https://api.github.com/repos/$REPO/releases?per_page=$per_page&page=$page"
+        local page_json
+        page_json=$(curl -s "$url")
+
+        if ! echo "$page_json" | jq -e 'type == "array"' >/dev/null 2>&1; then
+            echo "Unexpected response from GitHub API while listing releases." >&2
+            echo "$page_json" >&2
+            return 1
+        fi
+
+        local page_tags
+        page_tags=$(echo "$page_json" | jq -r --arg prefix "$prefix" '.[] | select(.tag_name | startswith($prefix)) | select((.name // "") | startswith("[Uploading]") | not) | .tag_name')
+        if [ -n "$page_tags" ]; then
+            tags="${tags}"$'\n'"$page_tags"
+        fi
+
+        local count
+        count=$(echo "$page_json" | jq 'length')
+        if [ "$count" -lt "$per_page" ]; then
+            break
+        fi
+
+        page=$((page + 1))
+    done
+
+    echo "$tags" | sed '/^$/d'
+}
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         download)
@@ -77,29 +112,34 @@ get_release_info() {
     elif [ -n "$NAME" ] && [ -n "$VERSION" ]; then
         curl -s "https://api.github.com/repos/$REPO/releases/tags/${NAME}-${VERSION}"
     elif [ -n "$NAME" ]; then
-        tags=$(curl -s "https://api.github.com/repos/$REPO/tags" | jq -r ".[].name" | grep "^${NAME}-" | sort -rV)
-        for latest_tag in $tags; do
-            release_info=$(curl -s "https://api.github.com/repos/$REPO/releases/tags/$latest_tag")
-            release_title=$(echo $release_info | jq -r '.name')
-            if [[ "$release_title" != "[Uploading]"* ]]; then
-                echo "$release_info"
-                return
-            fi
-        done
-        echo "No suitable releases found for name prefix: $NAME"
-        exit 1
+        local prefix="${NAME}-"
+        local tags
+        if ! tags=$(list_release_tags "$prefix"); then
+            return 1
+        fi
+
+        local latest_tag
+        latest_tag=$(echo "$tags" | sort -rV | head -n 1)
+        if [ -z "$latest_tag" ]; then
+            echo "No suitable releases found for name prefix: $NAME" >&2
+            return 1
+        fi
+
+        curl -s "https://api.github.com/repos/$REPO/releases/tags/$latest_tag"
     else
-        echo "Either tag (-t) or name (-n) must be specified."
-        exit 1
+        echo "Either tag (-t) or name (-n) must be specified." >&2
+        return 1
     fi
 }
 
 download_files() {
     mkdir -p "$PATH_DIR"
 
-    release_info=$(get_release_info)
-    release_tag=$(echo $release_info | jq -r '.tag_name')
-    release_title=$(echo $release_info | jq -r '.name')
+    if ! release_info=$(get_release_info); then
+        exit 1
+    fi
+    release_tag=$(echo "$release_info" | jq -r '.tag_name // empty')
+    release_title=$(echo "$release_info" | jq -r '.name // empty')
 
     if [ -z "$release_tag" ]; then
         echo "No valid release found. Exiting."
@@ -108,7 +148,7 @@ download_files() {
 
     echo "Release: $release_title ($release_tag)"
 
-    assets=$(echo $release_info | jq -r '.assets[] | select(.name | test("^binary_")) | .browser_download_url')
+    assets=$(echo "$release_info" | jq -r '.assets[]? | select(.name | test("^binary_")) | .browser_download_url')
 
     if [ -z "$assets" ]; then
         echo "No assets to download for the release $release_title ($release_tag). Exiting."
@@ -183,7 +223,10 @@ delete_releases() {
         exit 1
     fi
 
-    releases=$(curl -s "https://api.github.com/repos/$REPO/releases" | jq -r ".[] | select(.tag_name | startswith(\"$NAME\")) | .tag_name")
+    local prefix="${NAME}-"
+    if ! releases=$(list_release_tags "$prefix"); then
+        exit 1
+    fi
     tags=($(echo "$releases" | sort -rV))
     if [ -n "$LAST" ]; then
         tags=(${tags[@]:$LAST})

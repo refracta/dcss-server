@@ -151,7 +151,7 @@ sub main() {
   my $ver = param('v');
 
   if (not $ver) {
-    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', map { "0.$_" } (11 .. 33);
+    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', 'dcst', 'nostalgia', 'yiufcrawl', 'oofcrawl', 'boggartcrawl', map { "0.$_" } (11 .. 34);
   } elsif ($ver eq 'trunk') {
     do_update 'trunk';
   } elsif ($ver =~ /^0\.\d+$/) {
@@ -162,6 +162,14 @@ sub main() {
     do_update 'gcc', 'hellcrawl crawl-forks/hellcrawl/bugfix 6';
   } elsif ($ver eq 'gnollcrawl') {
     do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix 6';
+  } elsif ($ver eq 'nostalgia') {
+    do_update 'gcc', 'nostalgia crawl-forks/nostalgia/bugfix 6';
+  } elsif ($ver eq 'yiufcrawl') {
+    do_update 'gcc', 'yiufcrawl crawl-forks/yiufcrawl/bugfix 6';
+  } elsif ($ver eq 'oofcrawl') {
+    do_update 'gcc', 'oofcrawl crawl-forks/oofcrawl/bugfix 6';
+  } elsif ($ver eq 'boggartcrawl') {
+    do_update 'gcc', 'boggartcrawl crawl-forks/boggartcrawl/bugfix 6';
   } elsif ($ver eq 'bcrawl') {
     do_update 'gcc', 'bcrawl bcrawl/master';
   } elsif ($ver eq 'bloatcrawl2') {
@@ -178,6 +186,8 @@ sub main() {
     do_update 'gcc', 'kimchicrawl crawl-forks/kimchicrawl/bugfix 7';
   } elsif ($ver eq 'addedcrawl') {
     do_update 'gcc', 'addedcrawl crawl-forks/addedcrawl/bugfix 7';
+  } elsif ($ver eq 'dcst') {
+    do_update 'gcc', 'dcst dcst/test';
   } else {
     do_fail "Unknown version " . escapeHTML($ver);
   }

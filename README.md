@@ -1,9 +1,7 @@
 
 # dcss-server
 
-> [README.md](README.md) was created based on [README.ko.md](README.ko.md), which was automatically translated via ChatGPT.
-
-This script is designed to simplify the deployment and management of a Dungeon Crawl Stone Soup server. It includes as many fork versions as possible (DCSS CA, HellCrawl, GnollCrawl, B-Crawl, BloatCrawl2, GoonCrawl, X-Crawl, StoatSoup, BcadrenCrawl, KimchiCrawl, AddedCrawl) and official release versions (0.11 ~ 0.33) in a latest Ubuntu image environment.
+This script is designed to simplify the deployment and management of a Dungeon Crawl Stone Soup server. It includes as many fork versions as possible (DCSS CA, HellCrawl, GnollCrawl, B-Crawl, BloatCrawl2, GoonCrawl, X-Crawl, StoatSoup, BcadrenCrawl, KimchiCrawl, AddedCrawl, DCST, YiufCrawl, Stone Soup Nostalgia, OOFCrawl, BoggartCrawl) and official release versions (0.11 ~ 0.34) in a latest Ubuntu image environment.
 
 ### First Run Guide:
 #### Prerequisites
@@ -109,6 +107,17 @@ USE_DWEM=true USE_REVERSE_PROXY=true docker compose up -d && docker compose logs
 ### Repository Management
 * This repository is used for the operation of [crawl.nemelex.cards](https://crawl.nemelex.cards).
 * If you need to add new forks or versions, you can request it via a Pull-Request.
+
+### Container Management Tips
+If a new fork is added after the container has already been built, run the following
+commands inside the container:
+
+```bash
+cd /home/crawl-dev/dgamelaunch-config && git pull
+FORCE_CLONE=true $DGL_CONF_HOME/crawl-build/update-public-repository.sh
+dgl update-gcc <FORK_NAME> <BRANCH_NAME>
+$SCRIPTS/web/init.sh
+```
 
 ### Upstream Projects
 * https://github.com/crawl/dgamelaunch-config

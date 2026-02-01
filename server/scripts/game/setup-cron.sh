@@ -14,10 +14,14 @@ command4="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc bcrawl bcrawl/ma
 schedule4="0 8 * * *"
 
 command5="/home/crawl-dev/dgamelaunch-config/bin/dgl compress-ttyrecs"
-schedule5="*/15 * * * *"
+schedule5="15,30,45 * * * *"
 
-command6="/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.33 >> /home/crawl-dev/logs/0.33.log 2>&1"
-schedule6="0 2-23/3 3-17 5 *"
+command6="/home/crawl-dev/dgamelaunch-config/bin/dgl update-stable 0.34 >> /home/crawl-dev/logs/0.34.log 2>&1"
+schedule6="0 9 * * *"
+
+command7="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc dcst dcst/test >> /home/crawl-dev/logs/dcst.log 2>&1"
+schedule7="0 10 * * *"
+
 
 # Check if a crontab file exists for the user, create one if not
 if [ ! -e "$HOME/crontab.txt" ]; then
@@ -31,6 +35,7 @@ fi
 { echo "$schedule4 $command4"; } >> "$HOME/crontab.txt"
 { echo "$schedule5 $command5"; } >> "$HOME/crontab.txt"
 { echo "$schedule6 $command6"; } >> "$HOME/crontab.txt"
+{ echo "$schedule7 $command7"; } >> "$HOME/crontab.txt"
 
 crontab -r
 # Install the updated crontab file
