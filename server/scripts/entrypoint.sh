@@ -25,6 +25,8 @@ fi
 function safe-exit {
     echo "Removing crawl-update.lock..."
     rm -rf /home/crawl-dev/dgamelaunch-config/locks/crawl-update.lock
+    echo "Removing git index.lock..."
+    rm -rf /home/crawl-dev/dgamelaunch-config/crawl-build/crawl-git-repository/.git/index.lock
     echo "Stopping SSH service..."
     service ssh stop
     echo "Stopping webtiles service..."
