@@ -174,28 +174,13 @@ games = OrderedDict(trunk + stable_versions + forks)
 # Filter out games whose installation directories are missing. Without this
 # check the webserver can hang while loading games when a version was not
 # installed correctly.
-def _configured_value(name, default):
-    return os.environ.get(name) or default
-
-
-def _unresolved_template(value):
-    return value.startswith("%%") and value.endswith("%%")
-
-
-def _crawl_base_dir():
-    base_dir = _configured_value('CHROOT_CRAWL_BASEDIR',
-                                 '%%CHROOT_CRAWL_BASEDIR%%')
-    root = _configured_value('DGL_CHROOT', '%%DGL_CHROOT%%')
-    if _unresolved_template(base_dir) or _unresolved_template(root):
-        return None
-    return os.path.join(root, base_dir.lstrip(os.sep))
-
-
 def _filter_installed(game_dict):
-    base_dir = _crawl_base_dir()
-    if base_dir is None:
+    base_dir = os.environ.get('CHROOT_CRAWL_BASEDIR') or '%%CHROOT_CRAWL_BASEDIR%%'
+    root = os.environ.get('DGL_CHROOT') or '%%DGL_CHROOT%%'
+    if base_dir.startswith("%%") or root.startswith("%%"):
         return game_dict
 
+    base_dir = os.path.join(root, base_dir.lstrip(os.sep))
     filtered = OrderedDict()
     for key, cfg in game_dict.items():
         game_dir = os.path.join(base_dir, f"crawl-{cfg['version']}")
