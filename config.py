@@ -63,6 +63,8 @@ template_game = {
 def create_game(game_key, overrides=None):
     if overrides is None:
         overrides = {}
+    else:
+        overrides = overrides.copy()
 
     version, inprogress = game_key, game_key
     if "version" in overrides:
@@ -80,8 +82,7 @@ def create_game(game_key, overrides=None):
             "inprogress_path": config["inprogress_path"].format(inprogress),
         }
     )
-    del overrides['inprogress']
-    del overrides['version']
+    overrides.pop('inprogress', None)
 
     config.update(overrides)
     return game_key, config
@@ -178,7 +179,8 @@ def _filter_installed(game_dict):
     root = os.environ.get('DGL_CHROOT', '%%DGL_CHROOT%%')
     filtered = OrderedDict()
     for key, cfg in game_dict.items():
-        game_dir = os.path.join(root, base_dir, f"crawl-{cfg['version']}")
+        game_dir = os.path.join(root, base_dir.lstrip(os.sep),
+                                f"crawl-{cfg['version']}")
         if os.path.isdir(game_dir):
             filtered[key] = cfg
         else:
