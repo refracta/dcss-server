@@ -175,12 +175,15 @@ games = OrderedDict(trunk + stable_versions + forks)
 # check the webserver can hang while loading games when a version was not
 # installed correctly.
 def _filter_installed(game_dict):
-    base_dir = os.environ.get('CHROOT_CRAWL_BASEDIR', '%%CHROOT_CRAWL_BASEDIR%%')
-    root = os.environ.get('DGL_CHROOT', '%%DGL_CHROOT%%')
+    base_dir = os.environ.get('CHROOT_CRAWL_BASEDIR') or '%%CHROOT_CRAWL_BASEDIR%%'
+    root = os.environ.get('DGL_CHROOT') or '%%DGL_CHROOT%%'
+    if base_dir.startswith("%%") or root.startswith("%%"):
+        return game_dict
+
+    base_dir = os.path.join(root, base_dir.lstrip(os.sep))
     filtered = OrderedDict()
     for key, cfg in game_dict.items():
-        game_dir = os.path.join(root, base_dir.lstrip(os.sep),
-                                f"crawl-{cfg['version']}")
+        game_dir = os.path.join(base_dir, f"crawl-{cfg['version']}")
         if os.path.isdir(game_dir):
             filtered[key] = cfg
         else:
