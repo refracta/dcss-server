@@ -1,4 +1,5 @@
 import logging
+import os
 
 try:
     from collections import OrderedDict
@@ -62,6 +63,8 @@ template_game = {
 def create_game(game_key, overrides=None):
     if overrides is None:
         overrides = {}
+    else:
+        overrides = overrides.copy()
 
     version, inprogress = game_key, game_key
     if "version" in overrides:
@@ -79,8 +82,7 @@ def create_game(game_key, overrides=None):
             "inprogress_path": config["inprogress_path"].format(inprogress),
         }
     )
-    del overrides['inprogress']
-    del overrides['version']
+    overrides.pop('inprogress', None)
 
     config.update(overrides)
     return game_key, config
@@ -168,6 +170,24 @@ forks = [
 
 # Combine all game lists into one
 games = OrderedDict(trunk + stable_versions + forks)
+
+# Filter out games whose installation directories are missing. Without this
+# check the webserver can hang while loading games when a version was not
+# installed correctly.
+def _filter_installed(game_dict):
+    base_dir = os.environ.get('CHROOT_CRAWL_BASEDIR', '%%CHROOT_CRAWL_BASEDIR%%')
+    root = os.environ.get('DGL_CHROOT', '%%DGL_CHROOT%%')
+    filtered = OrderedDict()
+    for key, cfg in game_dict.items():
+        game_dir = os.path.join(root, base_dir.lstrip(os.sep),
+                                f"crawl-{cfg['version']}")
+        if os.path.isdir(game_dir):
+            filtered[key] = cfg
+        else:
+            logging.warning("Skipping game %s: missing directory %s", key, game_dir)
+    return filtered
+
+games = _filter_installed(games)
 
 dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
 forks_milestones = [
