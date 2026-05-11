@@ -6,18 +6,26 @@
 source "$DGL_CONF_HOME/crawl-git.conf"
 
 LATEST_GAME_HASH="$(latest-game-hash)"
-PREFIX="$DGL_CHROOT/$CRAWL_GIT_DIR"
+PREFIX="$DGL_CHROOT$CHROOT_CRAWL_BASEDIR"
 
-SAVEBASE="${PREFIX}/${BINARY_BASE_NAME}-*/saves"
-ALL_CHARS="$(ls -1rt "$SAVEBASE"/*-"${DGL_UID}".sav \
-                     "$SAVEBASE"/*-"${DGL_UID}".chr \
-                     "$SAVEBASE"/*.cs \
-                     "$SAVEBASE"/sprint/*-"${DGL_UID}".chr \
-                     "$SAVEBASE"/sprint/*.cs \
-                     "$SAVEBASE"/zotdef/*.cs 2>/dev/null | \
-             grep -v "$LATEST_GAME_HASH" | \
-             sed "s|${PREFIX}/${BINARY_BASE_NAME}-.*/saves/\(.*\)\..*|\1|;s|-${DGL_UID}||" | \
-             sort -f)"
+shopt -s nullglob
+SAVEFILES=(
+    "$PREFIX"/"$GAME"-*/saves/*-"${DGL_UID}".sav
+    "$PREFIX"/"$GAME"-*/saves/*-"${DGL_UID}".chr
+    "$PREFIX"/"$GAME"-*/saves/*.cs
+    "$PREFIX"/"$GAME"-*/saves/sprint/*-"${DGL_UID}".chr
+    "$PREFIX"/"$GAME"-*/saves/sprint/*.cs
+    "$PREFIX"/"$GAME"-*/saves/zotdef/*.cs
+)
+
+if ((${#SAVEFILES[@]})); then
+    ALL_CHARS="$(ls -1rt "${SAVEFILES[@]}" 2>/dev/null | \
+                 grep -v "/${GAME}-${LATEST_GAME_HASH}/" | \
+                 sed "s|${PREFIX}/${GAME}-.*/saves/\(.*\)\..*|\1|;s|-${DGL_UID}||" | \
+                 sort -f)"
+else
+    ALL_CHARS=""
+fi
 
 echo "Trying to transfer these chars to a newer version:"
 echo "${ALL_CHARS}"
