@@ -27,6 +27,7 @@ clone-crawl-ref() {
     ensure-remote stoatsoup https://github.com/damerell/crawl.git
     ensure-remote bcadrencrawl https://github.com/Bcadren/crawl.git
     ensure-remote bcrawl https://github.com/b-crawl/bcrawl.git
+    ensure-remote chili https://github.com/DungeonCrawl-org/DungeonCrawlChili.git
     say "Update branches for all forks"
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" submodule update --init
     git --git-dir="./$CRAWL_REPOSITORY_DIR/.git" fetch --all
