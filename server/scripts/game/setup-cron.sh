@@ -25,7 +25,7 @@ schedule6="0 5 * * *"
 command7="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc dcst dcst/test >> /home/crawl-dev/logs/dcst.log 2>&1"
 schedule7="0 4 * * *"
 
-command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc housing refracta/housing >> /home/crawl-dev/logs/housing.log 2>&1"
+command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc housing housing/housing >> /home/crawl-dev/logs/housing.log 2>&1"
 schedule8="0 6 * * *"
 
 

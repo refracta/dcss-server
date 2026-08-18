@@ -20,7 +20,7 @@ clone-crawl-ref() {
         $CMDLINE
     fi
     say "Add Fork Remotes"
-    ensure-remote refracta https://github.com/refracta/crawl.git
+    ensure-remote housing https://github.com/refracta/crawl.git
     ensure-remote crawl-forks https://github.com/refracta/crawl-forks.git
     ensure-remote gooncrawl https://github.com/Floodkiller/crawl.git
     ensure-remote bloatcrawl2 https://github.com/Hellmonk/bloatcrawl2.git

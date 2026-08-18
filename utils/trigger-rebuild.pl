@@ -161,7 +161,7 @@ sub main() {
   } elsif ($ver eq 'hellcrawl') {
     do_update 'gcc', 'hellcrawl crawl-forks/hellcrawl/bugfix 6';
   } elsif ($ver eq 'housing') {
-    do_update 'gcc', 'housing', 'refracta/housing';
+    do_update 'gcc', 'housing', 'housing/housing';
   } elsif ($ver eq 'gnollcrawl') {
     do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix 6';
   } elsif ($ver eq 'nostalgia') {
