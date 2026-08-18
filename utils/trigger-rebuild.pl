@@ -87,10 +87,10 @@ sub serve_file() {
         file_bytes($absfile));
 }
 
-sub do_update($;$) {
+sub do_update($;@) {
   my $branch = shift;
 
-  my $specific = $_[0] or $branch;
+  my $specific = @_ ? join(' ', @_) : $branch;
 
   local $| = 1;
   print(header(-type => 'text/html',
@@ -151,7 +151,7 @@ sub main() {
   my $ver = param('v');
 
   if (not $ver) {
-    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', 'dcst', 'nostalgia', 'yiufcrawl', 'oofcrawl', 'boggartcrawl', map { "0.$_" } (11 .. 34);
+    do_prompt 'trunk', 'dcssca', 'hellcrawl', 'housing', 'gnollcrawl', 'bcrawl', 'bloatcrawl2', 'gooncrawl', 'xcrawl', 'stoatsoup', 'bcadrencrawl', 'kimchicrawl', 'addedcrawl', 'dcst', 'nostalgia', 'yiufcrawl', 'oofcrawl', 'boggartcrawl', map { "0.$_" } (11 .. 34);
   } elsif ($ver eq 'trunk') {
     do_update 'trunk';
   } elsif ($ver =~ /^0\.\d+$/) {
@@ -160,6 +160,8 @@ sub main() {
     do_update 'gcc', 'dcssca crawl-forks/dcssca/bugfix 6';
   } elsif ($ver eq 'hellcrawl') {
     do_update 'gcc', 'hellcrawl crawl-forks/hellcrawl/bugfix 6';
+  } elsif ($ver eq 'housing') {
+    do_update 'gcc', 'housing', 'refracta/housing';
   } elsif ($ver eq 'gnollcrawl') {
     do_update 'gcc', 'gnollcrawl crawl-forks/gnollcrawl/bugfix 6';
   } elsif ($ver eq 'nostalgia') {

@@ -66,9 +66,10 @@ savedir-containing() {
 
 SAVES="$(savedir-containing "$CHAR_NAME")"
 SPRINT_SAVES="$(savedir-containing sprint/"$CHAR_NAME")"
+HOUSING_SAVES="$(savedir-containing housing/"$CHAR_NAME")"
 ZOTDEF_SAVES="$(savedir-containing zotdef/"$CHAR_NAME")"
 
-if [[ -z "$SAVES" && -z "$SPRINT_SAVES" && -z "$ZOTDEF_SAVES" ]]; then
+if [[ -z "$SAVES" && -z "$SPRINT_SAVES" && -z "$HOUSING_SAVES" && -z "$ZOTDEF_SAVES" ]]; then
     echo "No saves to backup for $CHAR_NAME"
 fi
 
@@ -83,6 +84,7 @@ C_RED="\033[1;31m"
 PROMPT="Backup"
 [[ -n "$SAVES" ]] && PROMPT="$PROMPT [n]ormal save"
 [[ -n "$SPRINT_SAVES" ]] && PROMPT="$PROMPT [s]print"
+[[ -n "$HOUSING_SAVES" ]] && PROMPT="$PROMPT [h]ousing"
 [[ -n "$ZOTDEF_SAVES" ]] && PROMPT="$PROMPT [z]otdef"
 PROMPT="$PROMPT character?"
 
@@ -95,6 +97,10 @@ if [[ -n "$SPRINT_SAVES" && ( "$REPLY" = "s" ) ]]; then
     SAVE_QUALIFIER="-sprint"
     SAVES="$SPRINT_SAVES"
     CHAR="Sprint character"
+elif [[ -n "$HOUSING_SAVES" && ( "$REPLY" = "h" ) ]]; then
+    SAVE_QUALIFIER="-housing"
+    SAVES="$HOUSING_SAVES"
+    CHAR="Housing character"
 elif [[ -n "$ZOTDEF_SAVES" && ( "$REPLY" = "z" ) ]]; then
     SAVE_QUALIFIER="-zotdef"
     SAVES="$ZOTDEF_SAVES"
@@ -116,6 +122,7 @@ SAVE_FOUND=${SAVE_MATCHES[0]}
 if [[ -n "$SAVE_FOUND" && -f "$SAVE_FOUND" ]]; then
     GAME_NAME="${SAVES%/zotdef}"
     GAME_NAME="${GAME_NAME%/sprint}"
+    GAME_NAME="${GAME_NAME%/housing}"
     GAME_NAME="$(dirname "$GAME_NAME")"
     GAME_NAME="${GAME_NAME##*/}"
 

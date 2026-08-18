@@ -102,6 +102,7 @@ mods = [
 forks_data = [
     ("dcssca", {"name": "DCSS Circus Animals", "allowed_mods": ["Tutorial", "Sprint"]}),
     ("hellcrawl", {"name": "HellCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("housing", {"name": "Housing", "allowed_mods": [], "options": ["-housing"]}),
     ("gnollcrawl", {"name": "GnollCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
     ("bcrawl", {"name": "B-Crawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
     ("bloatcrawl2", {"name": "BloatCrawl 2", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
@@ -159,7 +160,7 @@ forks = [
             "name": mod['name'] if mod['name'] else data['name'],
             "version": key,
             "pre_options": [key],
-            "options": mod['options'],
+            "options": data.get('options', []) + mod['options'],
             "inprogress": mod['inprogress']
         }
     )
@@ -196,6 +197,7 @@ dgl_status_file = "%%CHROOT_WEBDIR%%/run/status"
 forks_milestones = [
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-dcssca/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-hellcrawl/saves/milestones",
+    "%%CHROOT_CRAWL_BASEDIR%%/crawl-housing/saves/milestones-housing",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-gnollcrawl/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-bcrawl/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-bloatcrawl2/saves/milestones",

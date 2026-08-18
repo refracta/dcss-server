@@ -92,6 +92,12 @@ fix-chroot-directory-permissions() {
 
 install-game() {
     mkdir -p $SAVEDIR/{,sprint,zotdef,descent}
+    if [[ "$VERSION" == "housing" ]]; then
+        mkdir -p "$SAVEDIR/housing" "$SAVEDIR/housing-points"
+        touch "$SAVEDIR/logfile-housing" \
+              "$SAVEDIR/milestones-housing" \
+              "$SAVEDIR/scores-housing"
+    fi
     mkdir -p $DATADIR
 
     create-dgl-directories

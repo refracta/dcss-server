@@ -27,4 +27,9 @@ for v in $VERSIONS; do
     sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-sprint
     sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-descent
     sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-zotdef
+    if [[ "$v" == "housing" ]]; then
+        sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/logfile-housing
+        sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/milestones-housing
+        sudo ln -s $DGL_CHROOT/crawl-master/crawl-$v/saves/scores-housing
+    fi
 done

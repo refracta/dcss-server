@@ -4,8 +4,8 @@
 command1="env - \$(cat /proc/1/environ | tr '\\0' '\\n') /home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk >> /home/crawl-dev/logs/trunk.log 2>&1"
 # Container cron runs in UTC. During fork update hours, let the fork take the
 # build lock at :00 and have trunk make a single attempt at :01.
-schedule1="*/15 0,6-23 * * *"
-schedule1_fork_hours="1 1-5 * * *"
+schedule1="*/15 0,7-23 * * *"
+schedule1_fork_hours="1 1-6 * * *"
 
 command2="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc stoatsoup stoatsoup/master >> /home/crawl-dev/logs/stoatsoup.log 2>&1"
 schedule2="0 1 * * *"
@@ -25,6 +25,9 @@ schedule6="0 5 * * *"
 command7="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc dcst dcst/test >> /home/crawl-dev/logs/dcst.log 2>&1"
 schedule7="0 4 * * *"
 
+command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc housing refracta/housing >> /home/crawl-dev/logs/housing.log 2>&1"
+schedule8="0 6 * * *"
+
 
 # Check if a crontab file exists for the user, create one if not
 if [ ! -e "$HOME/crontab.txt" ]; then
@@ -40,6 +43,7 @@ fi
 { echo "$schedule5 $command5"; } >> "$HOME/crontab.txt"
 { echo "$schedule6 $command6"; } >> "$HOME/crontab.txt"
 { echo "$schedule7 $command7"; } >> "$HOME/crontab.txt"
+{ echo "$schedule8 $command8"; } >> "$HOME/crontab.txt"
 
 crontab -r
 # Install the updated crontab file
