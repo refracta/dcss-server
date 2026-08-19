@@ -15,8 +15,9 @@ if ! command -v patch >/dev/null 2>&1; then
     echo "patch is required to install WebTiles overlays" >&2
     exit 1
 fi
-for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
-    [ -f "$patch_file" ] || continue
+
+apply_webtiles_patch() {
+    local patch_file="$1"
     if patch --batch -d "$WEBDIR" --dry-run --forward -p0 < "$patch_file" >/dev/null 2>&1; then
         patch --batch -d "$WEBDIR" --forward -p0 < "$patch_file" || exit 1
     elif patch --batch -d "$WEBDIR" --dry-run --reverse -p0 < "$patch_file" >/dev/null 2>&1; then
@@ -25,7 +26,17 @@ for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
         echo "WebTiles patch does not apply cleanly: $patch_file" >&2
         exit 1
     fi
+}
+
+housing_patch="$DGL_CONF_HOME/server/etc/webserver-patches/housing-session.patch"
+# Site-local WebTiles patches can touch the same import and lifecycle blocks.
+# Apply them first, then place the Housing isolation boundary on top.
+for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
+    [ -f "$patch_file" ] || continue
+    [ "$patch_file" = "$housing_patch" ] && continue
+    apply_webtiles_patch "$patch_file"
 done
+[ ! -f "$housing_patch" ] || apply_webtiles_patch "$housing_patch"
 # TODO: delete localStorage.removeItem("DWEM"); should be removed (temporal setting)
 if ! python3 "$(dirname "${BASH_SOURCE[0]}")/update_cnc_dwem_modules.py" "$WEBDIR/templates/client.html"; then
     exit 1

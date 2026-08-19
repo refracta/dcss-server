@@ -655,7 +655,12 @@ class HousingSessionTest(unittest.TestCase):
             patch.index("self.process = TerminalRecorder"))
         self.assertNotIn("housing_session_id", patch)
         self.assertNotIn("session_token", patch)
-        self.assertEqual(SETUP.read_text().count("patch --batch"), 3)
+        setup = SETUP.read_text()
+        self.assertEqual(setup.count("patch --batch"), 3)
+        self.assertIn('[ "$patch_file" = "$housing_patch" ] && continue',
+                      setup)
+        self.assertLess(setup.index('for patch_file in'),
+                        setup.index('apply_webtiles_patch "$housing_patch"'))
 
     def test_housing_metadata_probe_does_not_require_a_real_account(self):
         probe_root = self.root / "launcher-probe"
