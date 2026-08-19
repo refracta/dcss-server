@@ -62,9 +62,10 @@ fi
 # its 0600 immutable bindings remain readable by the game process.  The utility
 # opens the live account database read-only and is safe to repeat on updates.
 housing_maps_dir="${DGL_CHROOT%/}${CHROOT_CRAWL_BASEDIR}/crawl-housing/saves/housing-maps"
+housing_backfill_script="$(dirname "${BASH_SOURCE[0]}")/backfill_housing_bindings.py"
 if ! sudo -u "$DGL_USER" -- python3 \
-    "$(dirname "${BASH_SOURCE[0]}")/backfill_housing_bindings.py" \
-    --database "$LOGIN_DB" --maps-dir "$housing_maps_dir"; then
+    - --database "$LOGIN_DB" --maps-dir "$housing_maps_dir" \
+    < "$housing_backfill_script"; then
     exit 1
 fi
 

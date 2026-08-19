@@ -18,8 +18,14 @@ fi
 
 INIT_FLAG_FILE="/var/run/dcss-server-init"
 if [ ! -f "$INIT_FLAG_FILE" ]; then
-  "$SCRIPTS"/init.sh
-  touch "$INIT_FLAG_FILE"
+  if ! "$SCRIPTS"/init.sh; then
+    echo "DCSS server initialization failed; refusing to start services." >&2
+    exit 1
+  fi
+  if ! touch "$INIT_FLAG_FILE"; then
+    echo "Could not record successful DCSS server initialization." >&2
+    exit 1
+  fi
 fi
 
 function safe-exit {

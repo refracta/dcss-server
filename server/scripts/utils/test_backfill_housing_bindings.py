@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 import sqlite3
 import stat
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -78,6 +80,41 @@ class HousingBindingBackfillTest(unittest.TestCase):
         self.assertEqual(self.binding("Owner").read_text(), "17")
         self.assertEqual(list(self.binding("Owner").parent.glob(
             ".account-id.tmp.*")), [])
+
+    def test_stdin_execution_runs_main_without_script_path_traversal(self):
+        self.add_user(17, "Owner")
+        self.add_snapshot(17)
+
+        # Reproduce a root-readable script below a directory that the target
+        # account cannot traverse.  The launching shell reads it first; Python
+        # receives only stdin and still executes __main__ with argparse.
+        blocked_parent = self.root / "root-only"
+        blocked_parent.mkdir(mode=0o700)
+        blocked_script = blocked_parent / "backfill.py"
+        blocked_script.write_text(Path(backfill.__file__).read_text())
+        script_input = blocked_script.read_text()
+        blocked_parent.chmod(0)
+        try:
+            if os.geteuid() != 0:
+                direct = subprocess.run(
+                    [sys.executable, str(blocked_script),
+                     "--database", str(self.database),
+                     "--maps-dir", str(self.maps)],
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                    text=True, check=False)
+                self.assertNotEqual(direct.returncode, 0)
+
+            via_stdin = subprocess.run(
+                [sys.executable, "-", "--database", str(self.database),
+                 "--maps-dir", str(self.maps)],
+                input=script_input, stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE, text=True, check=False)
+        finally:
+            blocked_parent.chmod(0o700)
+
+        self.assertEqual(via_stdin.returncode, 0, via_stdin.stderr)
+        self.assertIn("1 eligible account(s), 1 created", via_stdin.stdout)
+        self.assertEqual(self.binding("Owner").read_text(), "17")
 
     def test_empty_numeric_directory_is_not_bound(self):
         self.add_user(17, "Owner")

@@ -833,6 +833,8 @@ class HousingSessionTest(unittest.TestCase):
         self.assertTrue(LEGACY_PATCH.is_file())
         self.assertIn("backfill_housing_bindings.py", setup)
         self.assertIn('sudo -u "$DGL_USER"', setup)
+        self.assertIn('python3 \\\n    - --database "$LOGIN_DB"', setup)
+        self.assertIn('< "$housing_backfill_script"', setup)
         self.assertLess(setup.index('upgrade_webtiles_patch.sh'),
                         setup.index("backfill_housing_bindings.py"))
         self.assertLess(setup.index("update_cnc_dwem_modules.py"),
