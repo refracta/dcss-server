@@ -18,9 +18,9 @@ fi
 
 apply_webtiles_patch() {
     local patch_file="$1"
-    if patch --batch -d "$WEBDIR" --dry-run --forward -p0 < "$patch_file" >/dev/null 2>&1; then
-        patch --batch -d "$WEBDIR" --forward -p0 < "$patch_file" || exit 1
-    elif patch --batch -d "$WEBDIR" --dry-run --reverse -p0 < "$patch_file" >/dev/null 2>&1; then
+    if patch --batch --fuzz=0 -d "$WEBDIR" --dry-run --forward -p0 < "$patch_file" >/dev/null 2>&1; then
+        patch --batch --fuzz=0 -d "$WEBDIR" --forward -p0 < "$patch_file" || exit 1
+    elif patch --batch --fuzz=0 -d "$WEBDIR" --dry-run --reverse -p0 < "$patch_file" >/dev/null 2>&1; then
         echo "WebTiles patch already applied: $(basename "$patch_file")"
     else
         echo "WebTiles patch does not apply cleanly: $patch_file" >&2

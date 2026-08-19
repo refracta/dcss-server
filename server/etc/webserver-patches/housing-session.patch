@@ -183,7 +183,11 @@
  from webtiles.config import dgl_format_str
  from webtiles.connection import WebtilesSocketConnection
  from webtiles.game_data_handler import GameDataHandler
-@@ -719,12 +720,20 @@
+@@ -643 +644,2 @@
+-    interesting_info = ("xl", "char", "place", "turn", "dur", "god", "title")
++    interesting_info = ("xl", "char", "place", "turn", "dur", "god", "title",
++                        "housing_place")
+@@ -719,12 +721,20 @@
          game = self.game_params
          call = game.get_call_base()
  
@@ -209,7 +213,7 @@
  
          if self.account_restricted():
              call += ["-no-player-bones"]
-@@ -735,6 +744,9 @@
+@@ -735,6 +745,9 @@
          if "dir_path" in game:
              call += ["-dir", self.config_path("dir_path")]
  
@@ -219,7 +223,7 @@
          return call
  
      def note_activity(self):
-@@ -745,8 +757,16 @@
+@@ -745,8 +758,16 @@
          raise NotImplementedError()
  
  class CrawlProcessHandler(CrawlProcessHandlerBase):
@@ -237,7 +241,7 @@
          self.socketpath = None
          self.conn = None
          self.ttyrec_filename = None
-@@ -756,6 +776,8 @@
+@@ -756,6 +777,8 @@
          self.exit_reason = None
          self.exit_message = None
          self.exit_dump_url = None
@@ -246,7 +250,7 @@
  
          self._stale_pid = None
          self._stale_lockfile = None
-@@ -834,8 +856,13 @@
+@@ -834,8 +857,13 @@
          for path in os.listdir(self.config_path("inprogress_path")):
              if (path.startswith(self.username + ":") and
                  path.endswith(".ttyrec")):
@@ -262,7 +266,7 @@
          return None
  
      def _kill_stale_process(self, sig=signal.SIGHUP, check_pid_only=False):
-@@ -912,7 +939,24 @@
+@@ -912,7 +940,24 @@
  
          self._purge_locks_and_start(False)
  
@@ -287,7 +291,7 @@
          self.socketpath = os.path.join(self.config_path("socket_path"),
                                         self.username + ":" +
                                         self.formatted_time + ".sock")
-@@ -942,10 +986,14 @@
+@@ -942,10 +987,14 @@
          connected = False
  
          try:
@@ -303,7 +307,7 @@
                                              game_cwd = game.templated("cwd", username=self.username, default=None),)
              self.process.end_callback = self._on_process_end
              self.process.output_callback = self._on_process_output
-@@ -953,6 +1001,8 @@
+@@ -953,6 +1002,8 @@
              self.process.error_callback = self._on_process_error
  
              self.process.start(self.ttyrec_filename, self._ttyrec_id_header())
@@ -312,7 +316,7 @@
  
              self.gen_inprogress_lock()
  
-@@ -1028,10 +1078,45 @@
+@@ -1028,10 +1079,45 @@
      def _on_process_end(self):
          if self.process:
              self.logger.debug("Crawl PID %s terminated.", self.process.pid)
@@ -359,7 +363,7 @@
  
          try:
              del processes[os.path.abspath(self.socketpath)]
-@@ -1040,7 +1125,13 @@
+@@ -1040,7 +1126,13 @@
  
          self.process = None
  
@@ -374,7 +378,7 @@
  
      def _on_socket_close(self):
          self.conn = None
-@@ -1191,6 +1282,18 @@
+@@ -1191,6 +1283,18 @@
                      self.exit_message = msgobj["message"]
                  else:
                      self.exit_message = None
@@ -393,6 +397,21 @@
              elif msgobj["msg"] == "milestone":
                  # milestone/whereis update: milestone fields are right in the
                  # message
+--- webtiles/status.py
++++ webtiles/status.py
+@@ -5 +5 @@
+-from webtiles import config, ws_handler, server
++from webtiles import config, housing_session, ws_handler, server
+@@ -31 +31,2 @@
++            where = s.process.where
+-            for k in ('v', 'vlong', 'tiles', 'race', 'cls', 'char', 'xl',
++            for k in ('v', 'vlong', 'tiles', 'race', 'cls', 'char', 'xl',
+@@ -36 +37,4 @@
+-                game[k] = s.process.where.get(k, "")
++                game[k] = where.get(k, "")
++            if "housing_place" in where:
++                game["housing_place"] = where["housing_place"]
++            game["place"] = housing_session.display_place(where)
 --- static/scripts/client.js
 +++ static/scripts/client.js
 @@ -21,6 +21,10 @@
@@ -406,7 +425,19 @@
      var exit_reason, exit_message, exit_dump;
      var normal_exit = ["saved", "cancel", "quit", "won", "bailed out", "dead"];
      next_loading_img = 0;
-@@ -1401,6 +1405,19 @@
+@@ -1160 +1164,7 @@
+-    function lobby_entry(data)
++    function housing_lobby_place(data)
++    {
++        return typeof data.housing_place === "string" && data.housing_place
++            ? data.housing_place : data.place;
++    }
++
++    function lobby_entry(data)
+@@ -1189 +1199 @@
+-        set("place", data.place);
++        set("place", housing_lobby_place(data));
+@@ -1401,6 +1411,19 @@
  
      function hash_changed()
      {

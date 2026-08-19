@@ -80,6 +80,14 @@ def parse_target(value):
     return match.group(1), match.group(2)
 
 
+def display_place(where):
+    """Return the Housing map label without replacing Crawl's place field."""
+    housing_place = where.get("housing_place")
+    if isinstance(housing_place, str) and housing_place:
+        return housing_place
+    return where.get("place", "")
+
+
 def _configured_path(name):
     path = config.get(name)
     if not isinstance(path, str) or not os.path.isabs(path):

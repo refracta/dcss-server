@@ -143,6 +143,29 @@ class HousingSessionTest(unittest.TestCase):
                 with self.assertRaises(self.housing.HousingSessionError):
                     self.housing.validate_url_targets(values)
 
+    def test_display_place_prefers_only_a_nonempty_housing_label(self):
+        standard = {"place": "D:1"}
+        self.assertEqual(self.housing.display_place(standard), "D:1")
+        self.assertEqual(standard, {"place": "D:1"})
+        self.assertEqual(
+            self.housing.display_place({
+                "place": "D:1",
+                "housing_place": "Bob:gallery",
+            }),
+            "Bob:gallery")
+        self.assertEqual(
+            self.housing.display_place({
+                "place": "D:1",
+                "housing_place": "",
+            }),
+            "D:1")
+        self.assertEqual(
+            self.housing.display_place({
+                "place": "D:1",
+                "housing_place": 17,
+            }),
+            "D:1")
+
     def test_self_target_is_canonical_owner_without_a_temp_session(self):
         launch = self.housing.prepare_launch("Alice", 1, "aLiCe:any_map")
         self.assertEqual(launch.role, "owner")
@@ -738,8 +761,14 @@ class HousingSessionTest(unittest.TestCase):
             patch.index("self.process = TerminalRecorder"))
         self.assertNotIn("housing_session_id", patch)
         self.assertNotIn("session_token", patch)
+        self.assertIn('"housing_place")', patch)
+        self.assertIn(
+            'game["place"] = housing_session.display_place(where)', patch)
+        self.assertIn(
+            'set("place", housing_lobby_place(data));', patch)
         setup = SETUP.read_text()
         self.assertEqual(setup.count("patch --batch"), 3)
+        self.assertEqual(setup.count("patch --batch --fuzz=0"), 3)
         self.assertIn('[ "$patch_file" = "$housing_patch" ] && continue',
                       setup)
         self.assertLess(setup.index('for patch_file in'),
