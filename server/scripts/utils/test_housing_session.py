@@ -773,6 +773,14 @@ class HousingSessionTest(unittest.TestCase):
                       setup)
         self.assertLess(setup.index('for patch_file in'),
                         setup.index('apply_webtiles_patch "$housing_patch"'))
+        self.assertIn("backfill_housing_bindings.py", setup)
+        self.assertIn('sudo -u "$DGL_USER"', setup)
+        self.assertLess(setup.index('apply_webtiles_patch "$housing_patch"'),
+                        setup.index("backfill_housing_bindings.py"))
+        self.assertLess(setup.index("update_cnc_dwem_modules.py"),
+                        setup.index("backfill_housing_bindings.py"))
+        self.assertLess(setup.index("backfill_housing_bindings.py"),
+                        setup.index("dgl publish --confirm"))
 
     def test_housing_metadata_probe_does_not_require_a_real_account(self):
         probe_root = self.root / "launcher-probe"

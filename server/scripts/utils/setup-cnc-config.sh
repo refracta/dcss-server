@@ -41,6 +41,18 @@ done
 if ! python3 "$(dirname "${BASH_SOURCE[0]}")/update_cnc_dwem_modules.py" "$WEBDIR/templates/client.html"; then
     exit 1
 fi
+
+# Pre-binding old numeric-only Housing snapshots is an installation migration,
+# not a WebTiles request-side operation.  Run it as Crawl's filesystem owner so
+# its 0600 immutable bindings remain readable by the game process.  The utility
+# opens the live account database read-only and is safe to repeat on updates.
+housing_maps_dir="${DGL_CHROOT%/}${CHROOT_CRAWL_BASEDIR}/crawl-housing/saves/housing-maps"
+if ! sudo -u "$DGL_USER" -- python3 \
+    "$(dirname "${BASH_SOURCE[0]}")/backfill_housing_bindings.py" \
+    --database "$LOGIN_DB" --maps-dir "$housing_maps_dir"; then
+    exit 1
+fi
+
 grep -qxF '# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt || sed -i '1i# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt
 dgl publish --confirm > /dev/null 2>&1
 echo
