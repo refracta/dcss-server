@@ -147,11 +147,28 @@ class HousingSessionTest(unittest.TestCase):
         launch = self.housing.prepare_launch("Alice", 1, "aLiCe:any_map")
         self.assertEqual(launch.role, "owner")
         self.assertIsNone(launch.session)
-        self.assertEqual(launch.environment()["CRAWL_HOUSING_ACCOUNT_ID"], "1")
-        self.assertEqual(launch.environment()["CRAWL_HOUSING_MAP_ID"], "main")
         self.assertEqual(launch.command_args(), [])
         self.assertEqual(launch.rc_path("/canonical/Alice.rc"),
                          "/canonical/Alice.rc")
+        self.assertEqual(launch.macro_path("/canonical/Alice.macro"),
+                         "/canonical/Alice.macro")
+        self.assertEqual(launch.morgue_path("/canonical/morgue"),
+                         "/canonical/morgue")
+        environment = launch.environment()
+        self.assertEqual(environment["CRAWL_HOUSING_ACCOUNT_ID"], "1")
+        self.assertEqual(environment["CRAWL_HOUSING_MAP_ID"], "main")
+        self.assertEqual(
+            environment["CRAWL_HOUSING_CANONICAL_SAVE"],
+            str(self.saves / "Alice.cs"))
+        self.assertEqual(
+            environment["CRAWL_HOUSING_CANONICAL_RC"],
+            "/canonical/Alice.rc")
+        self.assertEqual(
+            environment["CRAWL_HOUSING_CANONICAL_MACRO"],
+            "/canonical/Alice.macro")
+        self.assertEqual(
+            environment["CRAWL_HOUSING_CANONICAL_MORGUE"],
+            "/canonical/morgue")
         self.assertEqual(list(self.sessions.iterdir()), [])
 
     def test_visit_requires_own_character_and_target_snapshot(self):
@@ -199,7 +216,10 @@ class HousingSessionTest(unittest.TestCase):
         isolated_macro = pathlib.Path(launch.macro_path(str(macro)))
         self.assertEqual(isolated_macro.read_bytes(), b"macro")
         self.assertNotEqual(isolated_macro.stat().st_ino, macro.stat().st_ino)
-        self.assertEqual(launch.morgue_path("ignored"), launch.morgue_dir)
+        canonical_morgue = self.root / "canonical-morgue"
+        canonical_morgue.mkdir()
+        self.assertEqual(launch.morgue_path(str(canonical_morgue)),
+                         launch.morgue_dir)
 
         canonical_rc_dir = self.root / "canonical-rc"
         canonical_rc_dir.mkdir()
@@ -234,6 +254,12 @@ class HousingSessionTest(unittest.TestCase):
         self.assertEqual(env["CRAWL_HOUSING_TARGET_MAP_ID"], "main")
         self.assertEqual(env["CRAWL_HOUSING_SESSION_DIR"], launch.path)
         self.assertEqual(env["CRAWL_HOUSING_SNAPSHOT"], launch.snapshot_path)
+        self.assertEqual(env["CRAWL_HOUSING_CANONICAL_SAVE"],
+                         str(self.saves / "Alice.cs"))
+        self.assertEqual(env["CRAWL_HOUSING_CANONICAL_RC"], str(rc))
+        self.assertEqual(env["CRAWL_HOUSING_CANONICAL_MACRO"], str(macro))
+        self.assertEqual(env["CRAWL_HOUSING_CANONICAL_MORGUE"],
+                         str(canonical_morgue))
 
     def test_exclusive_canonical_lock_blocks_clone(self):
         self.write_save()
@@ -286,6 +312,19 @@ class HousingSessionTest(unittest.TestCase):
         isolated_rc = pathlib.Path(session.rc_path(str(canonical_rc)))
         isolated_persist = pathlib.Path(str(isolated_rc) + ".persist")
         isolated_persist.write_bytes(b"visitor preferences")
+        canonical_macro = self.root / "Alice.macro"
+        canonical_macro.write_bytes(b"macro")
+        isolated_macro = session.macro_path(str(canonical_macro))
+        canonical_morgue = self.root / "transition-morgue"
+        canonical_morgue.mkdir()
+        isolated_morgue = session.morgue_path(str(canonical_morgue))
+        original_canonical_environment = {
+            key: value for key, value in session.environment().items()
+            if key.startswith("CRAWL_HOUSING_CANONICAL_")
+        }
+        replacement_saves = self.root / "replacement-housing"
+        replacement_saves.mkdir()
+        self.config.values["housing_save_dir"] = str(replacement_saves)
 
         reused = self.housing.prepare_launch(
             "Alice", 1, "cArOl:garden", existing_session=session)
@@ -301,8 +340,52 @@ class HousingSessionTest(unittest.TestCase):
         self.assertEqual(session.environment()["CRAWL_HOUSING_TARGET_MAP_ID"],
                          "garden")
         self.assertEqual(reused.rc_path(str(canonical_rc)), str(isolated_rc))
+        self.assertEqual(reused.macro_path(str(canonical_macro)),
+                         isolated_macro)
+        self.assertEqual(reused.morgue_path(str(canonical_morgue)),
+                         isolated_morgue)
         self.assertEqual(isolated_persist.read_bytes(), b"visitor preferences")
         self.assertFalse(pathlib.Path(str(canonical_rc) + ".persist").exists())
+        self.assertEqual(
+            {key: value for key, value in reused.environment().items()
+             if key.startswith("CRAWL_HOUSING_CANONICAL_")},
+            original_canonical_environment)
+
+    def test_canonical_runtime_paths_are_pinned_and_server_owned(self):
+        self.write_save()
+        self.write_map()
+        session = self.visitor()
+        self.addCleanup(session.cleanup)
+
+        for invalid in (
+                "relative/Alice.rc",
+                str(self.root / "Mallory.rc"),
+                str(pathlib.Path(session.path) / "nested/Alice.rc")):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(
+                        self.housing.HousingSessionError,
+                        "temporarily unavailable"):
+                    session.rc_path(invalid)
+
+        canonical_rc = self.root / "Alice.rc"
+        canonical_rc.write_bytes(b"")
+        session.rc_path(str(canonical_rc))
+        other_rc = self.root / "other" / "Alice.rc"
+        with self.assertRaisesRegex(self.housing.HousingSessionError,
+                                    "temporarily unavailable"):
+            session.rc_path(str(other_rc))
+
+        with self.assertRaisesRegex(self.housing.HousingSessionError,
+                                    "temporarily unavailable"):
+            session.macro_path(str(self.root / "Bob.macro"))
+        with self.assertRaisesRegex(self.housing.HousingSessionError,
+                                    "temporarily unavailable"):
+            session.morgue_path(str(pathlib.Path(session.path) / "morgue"))
+
+        self.assertEqual(session.canonical_save_path,
+                         str(self.saves / "Alice.cs"))
+        self.assertFalse(session.canonical_save_path.startswith(
+            session.path + os.sep))
 
     def test_return_to_owner_discards_entire_session(self):
         self.write_save()

@@ -89,6 +89,64 @@ def _configured_path(name):
     return os.path.abspath(path)
 
 
+def _path_is_within(path, directory):
+    """Return whether path resolves lexically or physically below directory."""
+    path = os.path.abspath(path)
+    directory = os.path.abspath(directory)
+    try:
+        if os.path.commonpath((path, directory)) == directory:
+            return True
+        return (os.path.commonpath((os.path.realpath(path),
+                                    os.path.realpath(directory)))
+                == os.path.realpath(directory))
+    except ValueError:
+        # Different drives on platforms which expose them cannot overlap.
+        return False
+
+
+def _canonical_runtime_path(path, username=None, suffix=None,
+                            session_path=None):
+    """Validate a server-supplied path before exposing it to Crawl."""
+    if not isinstance(path, str) or not os.path.isabs(path):
+        raise HousingSessionError("Housing is temporarily unavailable.")
+    path = os.path.abspath(path)
+    if suffix is not None and os.path.basename(path) != username + suffix:
+        raise HousingSessionError("Housing is temporarily unavailable.")
+    if session_path is not None and _path_is_within(path, session_path):
+        raise HousingSessionError("Housing is temporarily unavailable.")
+    return path
+
+
+def _canonical_save_path(username, session_path=None):
+    return _canonical_runtime_path(
+        os.path.join(_configured_path("housing_save_dir"), username + ".cs"),
+        username, ".cs", session_path)
+
+
+def _pin_runtime_path(instance, attribute, path, suffix=None):
+    canonical = _canonical_runtime_path(
+        path, instance.username, suffix, getattr(instance, "path", None))
+    pinned = getattr(instance, attribute)
+    if pinned is None:
+        setattr(instance, attribute, canonical)
+    elif pinned != canonical:
+        raise HousingSessionError("Housing is temporarily unavailable.")
+    return canonical
+
+
+def _add_canonical_environment(instance, environment):
+    environment["CRAWL_HOUSING_CANONICAL_SAVE"] = \
+        instance.canonical_save_path
+    for attribute, variable in (
+            ("canonical_rc_path", "CRAWL_HOUSING_CANONICAL_RC"),
+            ("canonical_macro_path", "CRAWL_HOUSING_CANONICAL_MACRO"),
+            ("canonical_morgue_path", "CRAWL_HOUSING_CANONICAL_MORGUE")):
+        path = getattr(instance, attribute)
+        if path is not None:
+            environment[variable] = path
+    return environment
+
+
 def _canonical_user(username):
     if not isinstance(username, str) or not ACCOUNT_RE.match(username):
         raise HousingSessionError("Housing is temporarily unavailable.")
@@ -244,26 +302,33 @@ class HousingOwnerLaunch(object):
         self.username = info.username
         self.account_id = _account_id(info.id)
         self.public_dir = _configured_path("housing_maps_dir")
+        self.canonical_save_path = _canonical_save_path(self.username)
+        self.canonical_rc_path = None
+        self.canonical_macro_path = None
+        self.canonical_morgue_path = None
 
     def command_args(self):
         return []
 
     def environment(self):
-        return {
+        return _add_canonical_environment(self, {
             "CRAWL_HOUSING_ROLE": "owner",
             "CRAWL_HOUSING_ACCOUNT_ID": str(self.account_id),
             "CRAWL_HOUSING_MAP_ID": "main",
             "CRAWL_HOUSING_PUBLIC_DIR": self.public_dir,
-        }
+        })
 
     def macro_path(self, default_path):
-        return default_path
+        return _pin_runtime_path(
+            self, "canonical_macro_path", default_path, ".macro")
 
     def rc_path(self, default_path):
-        return default_path
+        return _pin_runtime_path(
+            self, "canonical_rc_path", default_path, ".rc")
 
     def morgue_path(self, default_path):
-        return default_path
+        return _pin_runtime_path(
+            self, "canonical_morgue_path", default_path)
 
     def set_pid(self, pid):
         pass
@@ -275,7 +340,8 @@ class HousingOwnerLaunch(object):
 class HousingVisitorSession(object):
     role = "visitor"
 
-    def __init__(self, path, username, account_id, target, created=None):
+    def __init__(self, path, username, account_id, target, created=None,
+                 canonical_save_path=None):
         self.path = path
         self.username = username
         self.account_id = _account_id(account_id)
@@ -291,6 +357,13 @@ class HousingVisitorSession(object):
         self.morgue_dir = os.path.join(path, "morgue")
         self.marker_path = os.path.join(path, MARKER_NAME)
         self.pid = None
+        if canonical_save_path is None:
+            canonical_save_path = _canonical_save_path(username, path)
+        self.canonical_save_path = _canonical_runtime_path(
+            canonical_save_path, username, ".cs", path)
+        self.canonical_rc_path = None
+        self.canonical_macro_path = None
+        self.canonical_morgue_path = None
         self.canonical_rc_dir = None
         self._cleaned = False
 
@@ -309,7 +382,11 @@ class HousingVisitorSession(object):
 
         path = tempfile.mkdtemp(prefix=SESSION_PREFIX, dir=sessions_root)
         os.chmod(path, 0o700)
-        session = cls(path, info.username, info.id, target)
+        canonical_save_path = _canonical_runtime_path(
+            os.path.join(saves_root, info.username + ".cs"),
+            info.username, ".cs", path)
+        session = cls(path, info.username, info.id, target,
+                      canonical_save_path=canonical_save_path)
         _live_sessions[path] = session
         try:
             os.makedirs(os.path.dirname(session.save_path), mode=0o700)
@@ -406,7 +483,7 @@ class HousingVisitorSession(object):
                 "-rcdir", self.canonical_rc_dir]
 
     def environment(self):
-        return {
+        return _add_canonical_environment(self, {
             "CRAWL_HOUSING_ROLE": "visitor",
             "CRAWL_HOUSING_ACCOUNT_ID": str(self.account_id),
             "CRAWL_HOUSING_MAP_ID": "main",
@@ -416,17 +493,19 @@ class HousingVisitorSession(object):
             "CRAWL_HOUSING_TARGET_MAP_ID": self.target.map_id,
             "CRAWL_HOUSING_SNAPSHOT": self.snapshot_path,
             "CRAWL_HOUSING_SESSION_DIR": self.path,
-        }
+        })
 
     def macro_path(self, default_path):
+        default_path = _pin_runtime_path(
+            self, "canonical_macro_path", default_path, ".macro")
         if not os.path.exists(self.macro_file):
             _copy_optional_regular(default_path, self.macro_file)
         return self.macro_file
 
     def rc_path(self, default_path):
-        if not isinstance(default_path, str) or not os.path.isabs(default_path):
-            raise HousingSessionError("Housing is temporarily unavailable.")
-        canonical_rc_dir = os.path.dirname(os.path.abspath(default_path))
+        default_path = _pin_runtime_path(
+            self, "canonical_rc_path", default_path, ".rc")
+        canonical_rc_dir = os.path.dirname(default_path)
         if self.canonical_rc_dir is None:
             self.canonical_rc_dir = canonical_rc_dir
         elif self.canonical_rc_dir != canonical_rc_dir:
@@ -436,6 +515,8 @@ class HousingVisitorSession(object):
         return self.rc_file
 
     def morgue_path(self, default_path):
+        _pin_runtime_path(
+            self, "canonical_morgue_path", default_path)
         return self.morgue_dir
 
     def set_pid(self, pid):
