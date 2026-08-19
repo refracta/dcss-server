@@ -59,6 +59,14 @@ template_game = {
     "show_save_info": True
 }
 
+# Housing visitor sessions are private, disposable copies.  Public map
+# snapshots are addressed only by the numeric account id resolved from the
+# login database; browser-provided strings are never used as path components.
+housing_game_id = "housing"
+housing_save_dir = "%%CHROOT_CRAWL_BASEDIR%%/crawl-housing/saves/housing"
+housing_maps_dir = "%%CHROOT_CRAWL_BASEDIR%%/crawl-housing/saves/housing-maps"
+housing_sessions_dir = "%%CHROOT_CRAWL_BASEDIR%%/crawl-housing/saves/housing-sessions"
+
 
 def create_game(game_key, overrides=None):
     if overrides is None:
@@ -102,7 +110,7 @@ mods = [
 forks_data = [
     ("dcssca", {"name": "DCSS Circus Animals", "allowed_mods": ["Tutorial", "Sprint"]}),
     ("hellcrawl", {"name": "HellCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("housing", {"name": "Housing", "allowed_mods": [], "options": ["-housing"]}),
+    (housing_game_id, {"name": "Housing", "allowed_mods": [], "options": ["-housing"]}),
     ("gnollcrawl", {"name": "GnollCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
     ("bcrawl", {"name": "B-Crawl", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),
     ("bloatcrawl2", {"name": "BloatCrawl 2", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]}),

@@ -93,7 +93,11 @@ fix-chroot-directory-permissions() {
 install-game() {
     mkdir -p $SAVEDIR/{,sprint,zotdef,descent}
     if [[ "$VERSION" == "housing" ]]; then
-        mkdir -p "$SAVEDIR/housing" "$SAVEDIR/housing-points"
+        mkdir -p "$SAVEDIR/housing" \
+                 "$SAVEDIR/housing-points" \
+                 "$SAVEDIR/housing-maps" \
+                 "$SAVEDIR/housing-sessions"
+        chmod 0700 "$SAVEDIR/housing-sessions"
         touch "$SAVEDIR/logfile-housing" \
               "$SAVEDIR/milestones-housing" \
               "$SAVEDIR/scores-housing"

@@ -98,8 +98,61 @@ user-is-admin() {
     [[ -n "$found" ]]
 }
 
+configure-housing-environment() {
+    [[ "$VERSION" == "housing" ]] || return 0
+
+    # Introspection commands (notably `-gametypes-json dummy`) do not launch a
+    # character and therefore have no account to bind. Keep upstream metadata
+    # discovery working; real game processes take the strict path below.
+    [[ -n "$JUST_RUN_CRAWL_ALREADY" ]] && return 0
+
+    # Crawl account names are restricted to ASCII alphanumerics by WebTiles.
+    # Check again before placing the value in a sqlite statement.
+    if [[ ! "$CHAR_NAME" =~ ^[A-Za-z0-9]{3,20}$ ]]; then
+        wecho "Invalid Housing account."
+        return 1
+    fi
+
+    local account_id
+    account_id="$(printf '%s\n' \
+        "SELECT id FROM dglusers WHERE username='$CHAR_NAME' COLLATE NOCASE LIMIT 1;" \
+        | sqlite3 "$USER_DB")"
+    if [[ ! "$account_id" =~ ^[0-9]+$ ]]; then
+        wecho "Unable to resolve Housing account."
+        return 1
+    fi
+
+    export CRAWL_HOUSING_ACCOUNT_ID="$account_id"
+    export CRAWL_HOUSING_MAP_ID="main"
+    export CRAWL_HOUSING_PUBLIC_DIR="%%CHROOT_CRAWL_BASEDIR%%/crawl-housing/saves/housing-maps"
+
+    case "${CRAWL_HOUSING_ROLE:-owner}" in
+        owner|'')
+            export CRAWL_HOUSING_ROLE="owner"
+            unset CRAWL_HOUSING_TARGET_ACCOUNT_ID \
+                  CRAWL_HOUSING_TARGET_OWNER \
+                  CRAWL_HOUSING_TARGET_MAP_ID \
+                  CRAWL_HOUSING_SNAPSHOT \
+                  CRAWL_HOUSING_SESSION_DIR
+            ;;
+        visitor)
+            # Target values and paths originate in the authenticated WebTiles
+            # process.  housing.cc validates them again before opening a save.
+            export CRAWL_HOUSING_ROLE="visitor"
+            ;;
+        *)
+            wecho "Invalid Housing role."
+            return 1
+            ;;
+    esac
+}
+
 BINARY_NAME="$CRAWL_BINARY_PATH/$BINARY_BASE_NAME"
 GAME_FOLDER="$CRAWL_GIT_DIR/$BINARY_BASE_NAME"
+
+if ! configure-housing-environment; then
+    exit 1
+fi
 
 if user-is-admin; then
     set -- "$@" -wizard
