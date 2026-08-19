@@ -166,14 +166,14 @@ class HousingSessionTest(unittest.TestCase):
         result, installed = self.run_patch_upgrade("partial\n")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(installed, "partial\n")
-        self.assertIn("unknown or partially applied", result.stderr)
+        self.assertIn("unknown, partial, or conflicting", result.stderr)
 
     def test_webtiles_patch_upgrade_restores_legacy_when_current_is_incompatible(self):
         result, installed = self.run_patch_upgrade(
             "legacy\n", current_from="different-base")
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(installed, "legacy\n")
-        self.assertIn("does not apply after legacy removal", result.stderr)
+        self.assertIn("unknown, partial, or conflicting", result.stderr)
 
     def test_target_syntax_and_query_cardinality(self):
         self.assertEqual(
@@ -820,13 +820,16 @@ class HousingSessionTest(unittest.TestCase):
         self.assertIn(
             'set("place", housing_lobby_place(data));', patch)
         setup = SETUP.read_text()
-        self.assertEqual(setup.count("patch --batch"), 3)
-        self.assertEqual(setup.count("patch --batch --fuzz=0"), 3)
+        self.assertEqual(setup.count("patch --batch"), 2)
+        self.assertEqual(setup.count("patch --force"), 1)
+        self.assertEqual(setup.count("--fuzz=0"), 3)
         self.assertIn('[ "$patch_file" = "$housing_patch" ] && continue',
                       setup)
         self.assertLess(setup.index('for patch_file in'),
                         setup.index('upgrade_webtiles_patch.sh'))
         self.assertIn("webserver-patch-migrations", setup)
+        self.assertIn("site_webtiles_patches", setup)
+        self.assertIn('"${site_webtiles_patches[@]}"', setup)
         self.assertTrue(LEGACY_PATCH.is_file())
         self.assertIn("backfill_housing_bindings.py", setup)
         self.assertIn('sudo -u "$DGL_USER"', setup)

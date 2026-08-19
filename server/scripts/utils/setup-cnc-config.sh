@@ -20,7 +20,7 @@ apply_webtiles_patch() {
     local patch_file="$1"
     if patch --batch --fuzz=0 -d "$WEBDIR" --dry-run --forward -p0 < "$patch_file" >/dev/null 2>&1; then
         patch --batch --fuzz=0 -d "$WEBDIR" --forward -p0 < "$patch_file" || exit 1
-    elif patch --batch --fuzz=0 -d "$WEBDIR" --dry-run --reverse -p0 < "$patch_file" >/dev/null 2>&1; then
+    elif patch --force --fuzz=0 -d "$WEBDIR" --dry-run --reverse -p0 < "$patch_file" >/dev/null 2>&1; then
         echo "WebTiles patch already applied: $(basename "$patch_file")"
     else
         echo "WebTiles patch does not apply cleanly: $patch_file" >&2
@@ -31,17 +31,26 @@ apply_webtiles_patch() {
 housing_patch="$DGL_CONF_HOME/server/etc/webserver-patches/housing-session.patch"
 housing_patch_migrations="$DGL_CONF_HOME/server/etc/webserver-patch-migrations"
 # Site-local WebTiles patches can touch the same import and lifecycle blocks.
-# Apply them first, then place the Housing isolation boundary on top.
+# The installer strictly peels any recognized current/legacy Housing overlay,
+# applies or recognizes every site patch, then puts the current Housing
+# isolation boundary back on top.  This is idempotent even when a later overlay
+# has changed an earlier patch's reverse context.
+site_webtiles_patches=()
 for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
     [ -f "$patch_file" ] || continue
     [ "$patch_file" = "$housing_patch" ] && continue
-    apply_webtiles_patch "$patch_file"
+    site_webtiles_patches+=("$patch_file")
 done
 if [ -f "$housing_patch" ]; then
     if ! bash "$(dirname "${BASH_SOURCE[0]}")/upgrade_webtiles_patch.sh" \
-        "$WEBDIR" "$housing_patch" "$housing_patch_migrations"; then
+        "$WEBDIR" "$housing_patch" "$housing_patch_migrations" \
+        "${site_webtiles_patches[@]}"; then
         exit 1
     fi
+else
+    for patch_file in "${site_webtiles_patches[@]}"; do
+        apply_webtiles_patch "$patch_file"
+    done
 fi
 # TODO: delete localStorage.removeItem("DWEM"); should be removed (temporal setting)
 if ! python3 "$(dirname "${BASH_SOURCE[0]}")/update_cnc_dwem_modules.py" "$WEBDIR/templates/client.html"; then
