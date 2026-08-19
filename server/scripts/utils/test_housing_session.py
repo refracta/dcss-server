@@ -19,6 +19,10 @@ HELPER = REPO_ROOT / "server/etc/webserver/webtiles/housing_session.py"
 PATCH = REPO_ROOT / "server/etc/webserver-patches/housing-session.patch"
 LAUNCHER = REPO_ROOT / "chroot/bin/crawl-stable-launcher.sh"
 SETUP = REPO_ROOT / "server/scripts/utils/setup-cnc-config.sh"
+UPGRADE_PATCH = REPO_ROOT / "server/scripts/utils/upgrade_webtiles_patch.sh"
+LEGACY_PATCH = (REPO_ROOT
+                / "server/etc/webserver-patch-migrations"
+                / "housing-session-a21765d.patch")
 
 UserInfo = collections.namedtuple("UserInfo", "id username email flags")
 
@@ -121,6 +125,54 @@ class HousingSessionTest(unittest.TestCase):
 
     def visitor(self, target="Bob:main"):
         return self.housing.prepare_launch("alice", 1, target)
+
+    def run_patch_upgrade(self, state, current_text="current\n",
+                          current_from="base"):
+        fixture_root = pathlib.Path(tempfile.mkdtemp(
+            prefix="patch-upgrade-", dir=str(self.root)))
+        webdir = fixture_root / "patch-fixture"
+        target = webdir / "webtiles/demo.txt"
+        target.parent.mkdir(parents=True)
+        target.write_text(state)
+        current = fixture_root / "housing-session-current.patch"
+        current.write_text(
+            "--- webtiles/demo.txt\n"
+            "+++ webtiles/demo.txt\n"
+            "@@ -1 +1 @@\n"
+            "-" + current_from + "\n"
+            "+" + current_text)
+        migrations = fixture_root / "patch-migrations"
+        migrations.mkdir()
+        (migrations / "housing-session-legacy.patch").write_text(
+            "--- webtiles/demo.txt\n"
+            "+++ webtiles/demo.txt\n"
+            "@@ -1 +1 @@\n"
+            "-base\n"
+            "+legacy\n")
+        result = subprocess.run(
+            [str(UPGRADE_PATCH), str(webdir), str(current), str(migrations)],
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return result, target.read_text()
+
+    def test_webtiles_patch_upgrade_accepts_pristine_legacy_and_current(self):
+        for state in ("base\n", "legacy\n", "current\n"):
+            with self.subTest(state=state):
+                result, installed = self.run_patch_upgrade(state)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(installed, "current\n")
+
+    def test_webtiles_patch_upgrade_rejects_unknown_partial_state(self):
+        result, installed = self.run_patch_upgrade("partial\n")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(installed, "partial\n")
+        self.assertIn("unknown or partially applied", result.stderr)
+
+    def test_webtiles_patch_upgrade_restores_legacy_when_current_is_incompatible(self):
+        result, installed = self.run_patch_upgrade(
+            "legacy\n", current_from="different-base")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(installed, "legacy\n")
+        self.assertIn("does not apply after legacy removal", result.stderr)
 
     def test_target_syntax_and_query_cardinality(self):
         self.assertEqual(
@@ -772,10 +824,13 @@ class HousingSessionTest(unittest.TestCase):
         self.assertIn('[ "$patch_file" = "$housing_patch" ] && continue',
                       setup)
         self.assertLess(setup.index('for patch_file in'),
-                        setup.index('apply_webtiles_patch "$housing_patch"'))
+                        setup.index('upgrade_webtiles_patch.sh'))
+        self.assertIn("webserver-patch-migrations", setup)
+        self.assertTrue(UPGRADE_PATCH.stat().st_mode & 0o111)
+        self.assertTrue(LEGACY_PATCH.is_file())
         self.assertIn("backfill_housing_bindings.py", setup)
         self.assertIn('sudo -u "$DGL_USER"', setup)
-        self.assertLess(setup.index('apply_webtiles_patch "$housing_patch"'),
+        self.assertLess(setup.index('upgrade_webtiles_patch.sh'),
                         setup.index("backfill_housing_bindings.py"))
         self.assertLess(setup.index("update_cnc_dwem_modules.py"),
                         setup.index("backfill_housing_bindings.py"))

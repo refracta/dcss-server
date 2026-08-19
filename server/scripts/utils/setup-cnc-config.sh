@@ -29,6 +29,7 @@ apply_webtiles_patch() {
 }
 
 housing_patch="$DGL_CONF_HOME/server/etc/webserver-patches/housing-session.patch"
+housing_patch_migrations="$DGL_CONF_HOME/server/etc/webserver-patch-migrations"
 # Site-local WebTiles patches can touch the same import and lifecycle blocks.
 # Apply them first, then place the Housing isolation boundary on top.
 for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
@@ -36,7 +37,12 @@ for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
     [ "$patch_file" = "$housing_patch" ] && continue
     apply_webtiles_patch "$patch_file"
 done
-[ ! -f "$housing_patch" ] || apply_webtiles_patch "$housing_patch"
+if [ -f "$housing_patch" ]; then
+    if ! "$(dirname "${BASH_SOURCE[0]}")/upgrade_webtiles_patch.sh" \
+        "$WEBDIR" "$housing_patch" "$housing_patch_migrations"; then
+        exit 1
+    fi
+fi
 # TODO: delete localStorage.removeItem("DWEM"); should be removed (temporal setting)
 if ! python3 "$(dirname "${BASH_SOURCE[0]}")/update_cnc_dwem_modules.py" "$WEBDIR/templates/client.html"; then
     exit 1
