@@ -150,7 +150,8 @@ class HousingSessionTest(unittest.TestCase):
             "-base\n"
             "+legacy\n")
         result = subprocess.run(
-            [str(UPGRADE_PATCH), str(webdir), str(current), str(migrations)],
+            ["bash", str(UPGRADE_PATCH), str(webdir), str(current),
+             str(migrations)],
             text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return result, target.read_text()
 
@@ -826,7 +827,6 @@ class HousingSessionTest(unittest.TestCase):
         self.assertLess(setup.index('for patch_file in'),
                         setup.index('upgrade_webtiles_patch.sh'))
         self.assertIn("webserver-patch-migrations", setup)
-        self.assertTrue(UPGRADE_PATCH.stat().st_mode & 0o111)
         self.assertTrue(LEGACY_PATCH.is_file())
         self.assertIn("backfill_housing_bindings.py", setup)
         self.assertIn('sudo -u "$DGL_USER"', setup)

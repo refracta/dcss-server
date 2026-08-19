@@ -38,7 +38,7 @@ for patch_file in "$DGL_CONF_HOME"/server/etc/webserver-patches/*.patch; do
     apply_webtiles_patch "$patch_file"
 done
 if [ -f "$housing_patch" ]; then
-    if ! "$(dirname "${BASH_SOURCE[0]}")/upgrade_webtiles_patch.sh" \
+    if ! bash "$(dirname "${BASH_SOURCE[0]}")/upgrade_webtiles_patch.sh" \
         "$WEBDIR" "$housing_patch" "$housing_patch_migrations"; then
         exit 1
     fi
