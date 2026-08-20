@@ -1,5 +1,11 @@
 #!/bin/bash
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+housing_git_ref="$("$script_dir/resolve-housing-git-ref.sh")" || {
+    status=$?
+    exit "$status"
+}
+
 # Define the commands and their schedules
 command1="env - \$(cat /proc/1/environ | tr '\\0' '\\n') /home/crawl-dev/dgamelaunch-config/bin/dgl update-trunk >> /home/crawl-dev/logs/trunk.log 2>&1"
 # Container cron runs in UTC. During fork update hours, let the fork take the
@@ -25,7 +31,7 @@ schedule6="0 5 * * *"
 command7="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc dcst dcst/test >> /home/crawl-dev/logs/dcst.log 2>&1"
 schedule7="0 4 * * *"
 
-command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc housing housing/housing >> /home/crawl-dev/logs/housing.log 2>&1"
+command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc housing $housing_git_ref >> /home/crawl-dev/logs/housing.log 2>&1"
 schedule8="0 6 * * *"
 
 

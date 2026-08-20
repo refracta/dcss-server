@@ -27,4 +27,5 @@ services:
       - USE_REVERSE_PROXY
       - USE_DWEM
       - USE_CNC_CONFIG
+      - HOUSING_GIT_REF
       - GH_TOKEN

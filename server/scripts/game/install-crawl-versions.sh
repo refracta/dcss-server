@@ -1,4 +1,11 @@
 #!/bin/bash
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+housing_git_ref="$("$script_dir/resolve-housing-git-ref.sh")" || {
+    status=$?
+    exit "$status"
+}
+
 source "$DGL_CONF_HOME/dgl-manage.conf"
 source "$DGL_CONF_HOME/versions.conf"
 
@@ -19,7 +26,7 @@ dgl update-gcc oofcrawl crawl-forks/oofcrawl/bugfix 6 2>&1 | tee -a /home/crawl-
 dgl update-gcc boggartcrawl crawl-forks/boggartcrawl/bugfix 6 2>&1 tee -a /home/crawl-dev/logs/forks.log
 dgl update-gcc dcssca crawl-forks/dcssca/bugfix 6 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
 dgl update-gcc hellcrawl crawl-forks/hellcrawl/bugfix 6 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
-dgl update-gcc housing housing/housing 2>&1 | tee -a /home/crawl-dev/logs/forks.log
+dgl update-gcc housing "$housing_git_ref" 2>&1 | tee -a /home/crawl-dev/logs/forks.log
 dgl update-gcc gnollcrawl crawl-forks/gnollcrawl/bugfix 6 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
 dgl update-gcc bcrawl bcrawl/master 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
 dgl update-gcc bloatcrawl2 bloatcrawl2/master 7 2>&1 | tee -a /home/crawl-dev/logs/forks.log 
