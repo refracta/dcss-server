@@ -26,6 +26,8 @@ class HousingGitRefTest(unittest.TestCase):
             text=True, check=False)
 
     def test_unset_and_empty_use_production_default(self):
+        self.assertTrue(os.access(RESOLVER, os.X_OK),
+                        "Housing ref resolver must be executable")
         for value in (None, ""):
             with self.subTest(value=value):
                 result = self.resolve(value)
