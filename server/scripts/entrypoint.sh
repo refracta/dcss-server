@@ -2,6 +2,14 @@
 
 git config --global --add safe.directory '*'
 if [ -z "$CMD" ]; then
+    # The previous container may have stopped in the middle of a Git update.
+    # Clean up before starting cron, not on exit while an updater can still
+    # own or recreate these locks. One-off CMD containers must leave them alone.
+    echo "Removing stale Crawl update locks..."
+    rm -f -- "$DGL_CONF_HOME/locks/crawl-update.lock" \
+        "$DGL_CONF_HOME/crawl-build/crawl-git-repository/.git/index.lock" \
+        "$DGL_CONF_HOME/crawl-build/crawl-git-repository/.git/HEAD.lock" || exit 1
+
     "$SCRIPTS"/dgl/generate-conf.sh
     dgl create-versions-db
     dgl create-crawl-gamedir
@@ -23,10 +31,8 @@ if [ ! -f "$INIT_FLAG_FILE" ]; then
 fi
 
 function safe-exit {
-    echo "Removing crawl-update.lock..."
-    rm -rf /home/crawl-dev/dgamelaunch-config/locks/crawl-update.lock
-    echo "Removing git index.lock..."
-    rm -rf /home/crawl-dev/dgamelaunch-config/crawl-build/crawl-git-repository/.git/index.lock
+    echo "Stopping cron service..."
+    service cron stop
     echo "Stopping SSH service..."
     service ssh stop
     echo "Stopping webtiles service..."
