@@ -9,6 +9,11 @@ if [ -z "$CMD" ]; then
     rm -f -- "$DGL_CONF_HOME/locks/crawl-update.lock" \
         "$DGL_CONF_HOME/crawl-build/crawl-git-repository/.git/index.lock" \
         "$DGL_CONF_HOME/crawl-build/crawl-git-repository/.git/HEAD.lock" || exit 1
+    git_refs="$DGL_CONF_HOME/crawl-build/crawl-git-repository/.git/refs"
+    if [ -d "$git_refs" ]; then
+        # Reset/checkout also lock the branch that HEAD points to.
+        find "$git_refs" -type f -name '*.lock' -delete || exit 1
+    fi
 
     "$SCRIPTS"/dgl/generate-conf.sh
     dgl create-versions-db

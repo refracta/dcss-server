@@ -22,6 +22,7 @@ class EntrypointTest(unittest.TestCase):
             self.config / "locks/crawl-update.lock",
             self.config / "crawl-build/crawl-git-repository/.git/index.lock",
             self.config / "crawl-build/crawl-git-repository/.git/HEAD.lock",
+            self.config / "crawl-build/crawl-git-repository/.git/refs/heads/origin/master.lock",
         ]
         for lock in self.locks:
             lock.parent.mkdir(parents=True, exist_ok=True)
@@ -41,14 +42,14 @@ class EntrypointTest(unittest.TestCase):
         executable(self.root / "webtiles", 'echo "webtiles:$*" >> "$EVENTS"')
         executable(
             self.scripts / "run.sh",
-            'for lock in "$BUILD_LOCK" "$INDEX_LOCK" "$HEAD_LOCK"; do\n'
+            'for lock in "$BUILD_LOCK" "$INDEX_LOCK" "$HEAD_LOCK" "$REF_LOCK"; do\n'
             '    if [ -e "$lock" ]; then echo "run:stale" >> "$EVENTS"; exit 23; fi\n'
             'done\necho "run:clean" >> "$EVENTS"',
         )
         # Simulate an updater still owning locks when shutdown begins.
         executable(
             self.bin / "tail",
-            'for lock in "$BUILD_LOCK" "$INDEX_LOCK" "$HEAD_LOCK"; do\n'
+            'for lock in "$BUILD_LOCK" "$INDEX_LOCK" "$HEAD_LOCK" "$REF_LOCK"; do\n'
             '    echo active > "$lock"\ndone',
         )
 
@@ -70,6 +71,7 @@ class EntrypointTest(unittest.TestCase):
             "BUILD_LOCK": str(self.locks[0]),
             "INDEX_LOCK": str(self.locks[1]),
             "HEAD_LOCK": str(self.locks[2]),
+            "REF_LOCK": str(self.locks[3]),
             "CMD": "",
         }
 
