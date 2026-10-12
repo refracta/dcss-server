@@ -25,6 +25,9 @@ schedule6="0 5 * * *"
 command7="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc dcst dcst/test >> /home/crawl-dev/logs/dcst.log 2>&1"
 schedule7="0 4 * * *"
 
+command8="/home/crawl-dev/dgamelaunch-config/bin/dgl update-gcc alphabetsoup alphabetsoup/alphabet_soup-0.27 >> /home/crawl-dev/logs/alphabetsoup.log 2>&1"
+schedule8="0 1 * * *"
+
 
 # Check if a crontab file exists for the user, create one if not
 if [ ! -e "$HOME/crontab.txt" ]; then
@@ -40,6 +43,7 @@ fi
 { echo "$schedule5 $command5"; } >> "$HOME/crontab.txt"
 { echo "$schedule6 $command6"; } >> "$HOME/crontab.txt"
 { echo "$schedule7 $command7"; } >> "$HOME/crontab.txt"
+#{ echo "$schedule8 $command8"; } >> "$HOME/crontab.txt"
 
 crontab -r
 # Install the updated crontab file

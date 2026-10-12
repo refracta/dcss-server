@@ -115,7 +115,8 @@ forks_data = [
     ("nostalgia", {"name": "Stone Soup Nostalgia", "allowed_mods": ["Tutorial", "Sprint", "Zot Defense"]}),
     ("yiufcrawl", {"name": "YiufCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
     ("oofcrawl", {"name": "OOFCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
-    ("boggartcrawl", {"name": "BoggartCrawl", "allowed_mods": ["Tutorial", "Sprint"]})
+    ("boggartcrawl", {"name": "BoggartCrawl", "allowed_mods": ["Tutorial", "Sprint"]}),
+    ("alphabetsoup", {"name": "Alphabet Soup (German)", "allowed_mods": ["Tutorial", "Sprint", "Seeded"]})
 ]
 variants = [fork[0] for fork in forks_data] + [f"0.{i}" for i in versions]
 
@@ -209,7 +210,8 @@ forks_milestones = [
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-nostalgia/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-yiufcrawl/saves/milestones",
     "%%CHROOT_CRAWL_BASEDIR%%/crawl-oofcrawl/saves/milestones",
-    "%%CHROOT_CRAWL_BASEDIR%%/crawl-boggartcrawl/saves/milestones"
+    "%%CHROOT_CRAWL_BASEDIR%%/crawl-boggartcrawl/saves/milestones",
+    "%%CHROOT_CRAWL_BASEDIR%%/crawl-alphabetsoup/saves/milestones"
 ]
 
 version_milestones = [
