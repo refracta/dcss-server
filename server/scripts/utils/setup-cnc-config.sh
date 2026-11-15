@@ -11,5 +11,9 @@ if ! python3 "$(dirname "${BASH_SOURCE[0]}")/update_cnc_dwem_modules.py" "$WEBDI
     exit 1
 fi
 grep -qxF '# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt || sed -i '1i# CRAWL.NEMELEX.CARDS' /dgldir/data/crawl-git-settings/init.txt
+# Apply private settings to the source config before publishing.
+if ! bash "$(dirname "${BASH_SOURCE[0]}")/setup-cnc-private-config.sh"; then
+    exit 1
+fi
 dgl publish --confirm > /dev/null 2>&1
 echo
